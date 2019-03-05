@@ -1,6 +1,5 @@
 
 // TO-DO:
-//  * Import bootstrap.
 //  * Use the name in the JSON to put a title on the top of the page,
 //    followed by a horizontal separator.
 //  * Create a disclosure menu item in that same title zone that reveals a
@@ -211,7 +210,13 @@ function renderEggBoxDiagram ( diagram ) {
         result.appendChild( oneHotTableRow(
             elt( more( diagram.size - numToShow, 'D-class' ), 'td' ),
             numToShow, tableSize ) );
-    return result;
+    const wrapper = elt( null, 'div' );
+    wrapper.innerHTML =
+        '<style scoped>'
+      + '@import url( "https://bootswatch.com/4/yeti/bootstrap.min.css" );'
+      + '</style>';
+    wrapper.appendChild( result );
+    return wrapper;
 }
 
 window.VisualizationTools['egg-box'] =
