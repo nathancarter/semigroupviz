@@ -82,14 +82,16 @@ function renderHClass ( hclass, options ) {
     // put all element names into the expanded view, then a
     // subset of them into the default view
     expandedView.appendChild(
-        elt( hclass.elements.join( '<br>' ) ) );
+        elt( '<nobr>' + hclass.elements.join( '</nobr><br><nobr>' )
+           + '</nobr>' ) );
     const numToShow = getLimit( hclass, options );
     var eltsToShow = hclass.elements.slice( 0, numToShow );
     if ( numToShow < hclass.size )
         eltsToShow.push( options.HSize ? '...'
             : more( hclass.size - numToShow, 'element' ) );
     defaultView.appendChild(
-        elt( eltsToShow.join( '<br>' ) ) );
+        elt( '<nobr>' + eltsToShow.join( '</nobr><br><nobr>' )
+           + '</nobr>' ) );
     // make the default view show expanded info on hover, but
     // make the expanded view say you can click to shrink
     expandedView.setAttribute( 'title', 'Click to collapse' );
@@ -106,7 +108,7 @@ function renderHClass ( hclass, options ) {
 }
 
 function renderRClass ( rclass, options ) {
-    var result = elt( null, 'tr' );
+    var result = elt( null, 'tr', { class : 'table-active' } );
     const numToShow = getLimit( rclass, options );
     for ( var i = 0 ; i < numToShow ; i++ )
         result.appendChild( renderHClass( rclass.HClasses[i], options ) );
@@ -117,8 +119,7 @@ function renderRClass ( rclass, options ) {
 }
 
 function renderDClass ( dclass, options ) {
-    var result = elt( null, 'table',
-        { border : 1, cellspacing : 0, cellpadding : 5 } );
+    var result = elt( null, 'table', { class : 'd-class table-bordered' } );
     const numToShow = getLimit( dclass, options );
     for ( var i = 0 ; i < numToShow ; i++ )
         result.appendChild( renderRClass( dclass.RClasses[i], options ) );
@@ -156,9 +157,14 @@ function renderEggBoxDiagram ( diagram ) {
             numToShow, tableSize ) );
     const wrapper = elt( null, 'div' );
     wrapper.innerHTML =
-        '<style scoped>'
-      + '@import url( "https://bootswatch.com/4/yeti/bootstrap.min.css" );'
+        '<style scoped>\n'
+      + '@import url( "https://bootswatch.com/4/yeti/bootstrap.min.css" );\n'
+      + '.d-class td {\n'
+      + '  border: 2px solid #999;\n'
+      + '  padding: 0.5em 1em 0.5em 1em;\n'
+      + '}\n'
       + '</style>';
+    wrapper.appendChild( elt( `Egg-box Diagram for "${diagram.name}"`, 'h2' ) );
     wrapper.appendChild( result );
     return wrapper;
 }

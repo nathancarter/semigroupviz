@@ -1,11 +1,6 @@
 
 # To-do list
 
-## Styling
-
- * Use the name in the JSON to put a title on the top of the page,
-   followed by a horizontal separator.
-
 ## Options
 
  * Create a disclosure menu item in that same title zone that reveals a
