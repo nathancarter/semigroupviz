@@ -7,7 +7,7 @@
 
 window.requirejs.config( {
     paths : {
-        dialog : 'https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.10/dialog-polyfill.min',
+        dialog : 'https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.10/dialog-polyfill.min'
     }
 } );
 
@@ -143,6 +143,23 @@ function oneHotTableRow ( content, index, length ) {
     return result;
 }
 
+function diagramControlsDiv () {
+    const result = elt( null, 'div', {
+        class : 'card border-primary',
+        style : 'margin: 1em;'
+    } );
+    result.appendChild( elt( 'Diagram settings', 'div', { class : 'card-header' } ) );
+    const body = elt( null, 'div', { class : 'card-body' } );
+    body.appendChild( elt( 'Section heading here', 'h4', { class : 'card-title' } ) );
+    body.appendChild( elt( 'Section content here...', 'p', { class : 'card-text' } ) );
+    body.appendChild( elt( 'Section heading here', 'h4', { class : 'card-title' } ) );
+    body.appendChild( elt( 'Section content here...', 'p', { class : 'card-text' } ) );
+    body.appendChild( elt( 'Section heading here', 'h4', { class : 'card-title' } ) );
+    body.appendChild( elt( 'Section content here...', 'p', { class : 'card-text' } ) );
+    result.appendChild( body );
+    return result;
+}
+
 function renderEggBoxDiagram ( diagram ) {
     var result = elt( null, 'table', { border : 0 } );
     const numToShow = getLimit( diagram, diagram.options );
@@ -159,13 +176,31 @@ function renderEggBoxDiagram ( diagram ) {
     wrapper.innerHTML =
         '<style scoped>\n'
       + '@import url( "https://bootswatch.com/4/yeti/bootstrap.min.css" );\n'
+      + '@import url( "https://use.fontawesome.com/releases/v5.7.2/css/all.css" );\n'
       + '.d-class td {\n'
       + '  border: 2px solid #999;\n'
       + '  padding: 0.5em 1em 0.5em 1em;\n'
       + '}\n'
       + '</style>';
     wrapper.appendChild( elt( `Egg-box Diagram for "${diagram.name}"`, 'h2' ) );
+    const exposer = elt( '<i class="fas fa-cog"></i>', 'button', {
+        class : 'btn btn-primary',
+        type : 'button',
+        style : 'position: absolute; top: 0.5em; right: 0.5em'
+    } );
+    const controls = diagramControlsDiv();
+    controls.style.display = 'none'
+    exposer.addEventListener( 'click', function ( event ) {
+        if ( controls.style.display == 'none' ) {
+            controls.style.display = 'block';
+        } else {
+            controls.style.display = 'none';
+        }
+    } );
+    wrapper.appendChild( exposer );
+    wrapper.appendChild( controls );
     wrapper.appendChild( result );
+    wrapper.style.margin = '1em';
     return wrapper;
 }
 

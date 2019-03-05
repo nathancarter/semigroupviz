@@ -3,8 +3,6 @@
 
 ## Options
 
- * Create a disclosure menu item in that same title zone that reveals a
-   div containing an options form, empty at the start.
  * Store at the top level of the semigroup's JSON a setting of whether
    we are showing the sizes of H-classes (yes, no, or only when there
    are hidden elements).  Initialize this to the third setting and
