@@ -3,13 +3,8 @@
 
 ## Options
 
- * Store in each D-class the number of elements that each of its
-   H-classes should display.  Initialize this value to something small,
-   such as 5.  Respect it in renderHClass().
- * Add to the settings div some controls for popping up a dialog in
-   which you can enter the number and check a box for whether you're
-   changing it for just one D-class or all D-classes.
-   Upon any change, update the JSON and re-render.
+ * Create in the settings controls a drop-down for choosing a D-class
+   and then a spinner for updating that D-class's number.
 
 ## Interactivity
 

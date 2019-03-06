@@ -37,7 +37,7 @@ function more ( num, type ) {
     return `...${num} more ${type}${num==1?'':/s$/.test(type)?'es':'s'}`;
 }
 
-function elt ( html, tag, attrs ) {
+function elt ( html, tag, attrs, children ) {
     if ( typeof( tag ) == 'undefined' ) tag = 'p';
     var result = document.createElement( tag );
     if ( attrs )
@@ -45,6 +45,11 @@ function elt ( html, tag, attrs ) {
             if ( attrs.hasOwnProperty( key ) )
                 result.setAttribute( key, attrs[key] );
     if ( html ) result.innerHTML = html;
+    if ( children ) {
+        if ( !( children instanceof Array ) )
+            children = [ children ];
+        children.map( c => result.appendChild( c ) );
+    }
     return result;
 }
 
@@ -79,7 +84,7 @@ function renderHClass ( hclass ) {
     const heading = elt( hclass.size == 1 ?
         '1 element:' : `${hclass.size} elements:` );
     expandedView.appendChild( heading );
-    const numToShow = getLimit( hclass );
+    const numToShow = hclass.DClass.numHClassElementsToShow;
     const showHSize = options.showHClassSizes == 'yes'
       || ( options.showHClassSizes == 'if-hidden-elements'
         && numToShow < hclass.size );
@@ -105,9 +110,8 @@ function renderHClass ( hclass ) {
     hoverText += hclass.elements.join( '\n' );
     defaultView.setAttribute( 'title', hoverText );
     // put both views into the result, but hide one
-    var result = elt( null, 'td' );
-    result.appendChild( defaultView );
-    result.appendChild( expandedView );
+    var result = elt( null, 'td', null,
+        [ defaultView, expandedView ] );
     expandedView.style.display = 'none';
     return result;
 }
@@ -131,73 +135,83 @@ function renderDClass ( dclass ) {
     for ( var i = 0 ; i < numToShow ; i++ )
         result.appendChild( renderRClass( dclass.RClasses[i], options ) );
     if ( numToShow < dclass.size ) {
-        const row = elt( null, 'tr' );
         var rowLength = getLimit( dclass.RClasses[0] );
         if ( rowLength < dclass.RClasses[0].size ) rowLength++;
-        row.appendChild( elt( more( dclass.size - numToShow, 'R-class' ),
-            'td', { colspan : rowLength } ) );
-        result.appendChild( row );
+        result.appendChild( elt( null, 'tr', null,
+            elt( more( dclass.size - numToShow, 'R-class' ),
+                'td', { colspan : rowLength } ) ) );
     }
     return result;
 }
 
 function oneHotTableRow ( content, index, length ) {
     var result = elt( null, 'tr' );
-    var cell = elt( null, 'td' );
-    cell.appendChild( content );
+    var cell = elt( null, 'td', null, content );
     for ( var i = 0 ; i < length ; i++ )
         result.appendChild( i == index ? cell : elt( null, 'td' ) );
     return result;
 }
 
-function diagramControlsDiv () {
-    const result = elt( null, 'div', {
-        class : 'card border-primary',
-        style : 'margin: 1em;'
+const radioButton = ( text, value, category, checked, id, cb ) => {
+    const result = elt( text, 'div', { class : 'form-check' } );
+    const label = elt( null, 'input', {
+        type : 'radio',
+        class : 'form-check-input',
+        name : category,
+        value : value
     } );
-    result.appendChild( elt( 'Diagram settings', 'div', { class : 'card-header' } ) );
-    const body = elt( null, 'div', { class : 'card-body' } );
-    const showHClassSizeOptions = elt( null, 'fieldset', { class : 'form-group' } );
-    const radioButton = ( text, value, category, checked, id, cb ) => {
-        const result = elt( text, 'div', { class : 'form-check' } );
-        const label = elt( null, 'input', {
-            type : 'radio',
-            class : 'form-check-input',
-            name : category,
-            value : value
-        } );
-        if ( id ) label.setAttribute( 'id', id );
-        if ( checked ) label.setAttribute( 'checked', true );
-        result.insertBefore( label, result.childNodes[0] );
-        label.addEventListener( 'change', cb );
-        return result;
+    if ( id ) label.setAttribute( 'id', id );
+    if ( checked ) label.setAttribute( 'checked', true );
+    result.insertBefore( label, result.childNodes[0] );
+    label.addEventListener( 'change', cb );
+    return result;
+}
+const getRadioGroupValue = ( category ) => {
+    const theOne = Array.prototype.slice.apply(
+        document.getElementsByTagName( 'input' )
+    ).find( button =>
+        button.getAttribute( 'type' ) == 'radio'
+     && button.getAttribute( 'name' ) == category
+     && button.checked );
+    return theOne ? theOne.getAttribute( 'value' ) : undefined;
+}
+
+function diagramControlsDiv () {
+    // make big settings container
+    const container = elt( null, 'div',
+        { class : 'container', style : 'padding: 1em;' } );
+    // create tools for appending new settings sections as cards
+    // that fit 3 per row and then wrap to the next row
+    var cardCount = 0, rowInUse = null;
+    const addSettingsSection = ( title, elts ) => {
+        if ( cardCount % 3 == 0 )
+            container.appendChild(
+                rowInUse = elt( null, 'div', { class : 'row' } ) );
+        rowInUse.appendChild( elt( null, 'div', { class : 'col-sm' },
+            elt( null, 'div', { class : 'card border-primary' }, [
+                elt( title, 'div', { class : 'card-header' } ),
+                elt( null, 'div', { class : 'card-body' }, elts )
+            ] ) ) );
+        cardCount++;
     }
-    const getGroupValue = ( category ) => {
-        const theOne = Array.prototype.slice.apply(
-            document.getElementsByTagName( 'input' )
-        ).find( button =>
-            button.getAttribute( 'type' ) == 'radio'
-         && button.getAttribute( 'name' ) == category
-         && button.checked );
-        return theOne ? theOne.getAttribute( 'value' ) : undefined;
-    }
-    showHClassSizeOptions.appendChild(
-        elt( 'Show size of H-classes', 'legend' ) );
+    // create the settings section for H-class size headings
     const updateHClassSizes = () =>
         setDiagramOption( 'showHClassSizes',
-            getGroupValue( 'hclass-size-options' ) );
-    showHClassSizeOptions.appendChild( radioButton(
-        'Always', 'yes', 'hclass-size-options', false, null,
-        updateHClassSizes ) );
-    showHClassSizeOptions.appendChild( radioButton(
-        'When needed', 'if-hidden-elements',
-        'hclass-size-options', true, null, updateHClassSizes ) );
-    showHClassSizeOptions.appendChild( radioButton(
-        'Never', 'no', 'hclass-size-options', false, null,
-        updateHClassSizes ) );
-    body.appendChild( showHClassSizeOptions );
-    result.appendChild( body );
-    return result;
+            getRadioGroupValue( 'hclass-size-options' ) );
+    addSettingsSection( 'Show H-Class Headings', elt( null,
+        'fieldset', { class : 'form-group' }, [
+            radioButton( 'Always', 'yes', 'hclass-size-options',
+                false, null, updateHClassSizes ),
+            radioButton( 'When needed', 'if-hidden-elements',
+                'hclass-size-options', true, null,
+                updateHClassSizes ),
+            radioButton( 'Never', 'no', 'hclass-size-options',
+                false, null, updateHClassSizes )
+        ] ) );
+    // create the settings section for H-class sizes
+    // (to do)
+    // return the container that holds all the sections
+    return container;
 }
 
 function wrapDiagram ( diagram ) {
@@ -259,13 +273,14 @@ function initializeSemigroup ( semigroup ) {
     //   'if-hidden-elements' - show them iff there are too many
     // elements to display, so some are hidden behind an ellipsis
     semigroup.options.showHClassSizes = 'if-hidden-elements';
-    semigroup.options.HLimit = 2;
     // add pointers from each subobject to the whole semigroup
     // data structure, for convenience
     for ( var i = 0 ; i < semigroup.DClasses.length ; i++ ) {
         const dclass = semigroup.DClasses[i];
         dclass.semigroup = semigroup;
-        dclass.options = { numHClassElementsToShow : 5 };
+        dclass.options = {
+            numHClassElementsToShow : semigroup.options.HLimit
+        };
         for ( var j = 0 ; j < dclass.RClasses.length ; j++ ) {
             const rclass = dclass.RClasses[j];
             rclass.DClass = dclass;
