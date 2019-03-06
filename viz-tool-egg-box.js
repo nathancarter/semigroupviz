@@ -241,14 +241,6 @@ function initializeSemigroup ( semigroup ) {
 
 window.VisualizationTools['egg-box'] =
 function ( element, json, callback ) {
-    // var tmp = document.createElement( 'pre' );
-    // tmp.textContent = JSON.stringify( JSON.parse( json.data ), null, 4 );
-    // tmp.setAttribute( 'title', 'foo' );
-    // tmp.addEventListener( 'click', function ( event ) {
-    //     goodAlert( '<p><b>HELLO!</b></p>' );
-    // } );
-    // element.appendChild( tmp );
-    // callback( element, tmp );
     const diagram = renderEggBoxDiagram( initializeSemigroup(
         JSON.parse( json.data ) ) );
     element.appendChild( diagram );
