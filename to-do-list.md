@@ -3,10 +3,6 @@
 
 ## Options
 
- * Store at the top level of the semigroup's JSON a setting of whether
-   we are showing the sizes of H-classes (yes, no, or only when there
-   are hidden elements).  Initialize this to the third setting and
-   respect it in renderHClass().
  * Create options controls for H-classes that let you choose which of
    these options you want.  Every time they change, update the JSON and
    re-render.

@@ -48,7 +48,8 @@ function elt ( html, tag, attrs ) {
     return result;
 }
 
-function getLimit ( obj, options ) {
+function getLimit ( obj ) {
+    const options = obj.options || obj.semigroup.options;
     if ( obj.hasOwnProperty( 'DClasses' ) ) {
         var limit = options.DLimit;
         var count = obj.DClasses.length;
@@ -67,7 +68,8 @@ function getLimit ( obj, options ) {
     return limit > 0 ? Math.min( limit, count ) : count;
 }
 
-function renderHClass ( hclass, options ) {
+function renderHClass ( hclass ) {
+    const options = hclass.semigroup.options;
     // create both expanded and default views, between which
     // the user can toggle
     const expandedView = elt( null, 'div' );
@@ -77,18 +79,21 @@ function renderHClass ( hclass, options ) {
     const heading = elt( hclass.size == 1 ?
         '1 element:' : `${hclass.size} elements:` );
     expandedView.appendChild( heading );
-    if ( options.HSize )
+    const numToShow = getLimit( hclass );
+    const showHSize = options.showHClassSizes == 'yes'
+      || ( options.showHClassSizes == 'if-hidden-elements'
+        && numToShow < hclass.size );
+    if ( showHSize )
         defaultView.appendChild( heading.cloneNode( true ) );
     // put all element names into the expanded view, then a
     // subset of them into the default view
     expandedView.appendChild(
         elt( '<nobr>' + hclass.elements.join( '</nobr><br><nobr>' )
            + '</nobr>' ) );
-    const numToShow = getLimit( hclass, options );
     var eltsToShow = hclass.elements.slice( 0, numToShow );
     if ( numToShow < hclass.size )
-        eltsToShow.push( options.HSize ? '...'
-            : more( hclass.size - numToShow, 'element' ) );
+        eltsToShow.push( showHSize ? '&vellip;'
+            : more( hclass.size - numToShow, 'elements' ) );
     defaultView.appendChild(
         elt( '<nobr>' + eltsToShow.join( '</nobr><br><nobr>' )
            + '</nobr>' ) );
@@ -107,9 +112,10 @@ function renderHClass ( hclass, options ) {
     return result;
 }
 
-function renderRClass ( rclass, options ) {
+function renderRClass ( rclass ) {
+    const options = rclass.semigroup.options;
     var result = elt( null, 'tr', { class : 'table-active' } );
-    const numToShow = getLimit( rclass, options );
+    const numToShow = getLimit( rclass );
     for ( var i = 0 ; i < numToShow ; i++ )
         result.appendChild( renderHClass( rclass.HClasses[i], options ) );
     if ( numToShow < rclass.size )
@@ -118,14 +124,15 @@ function renderRClass ( rclass, options ) {
     return result;
 }
 
-function renderDClass ( dclass, options ) {
+function renderDClass ( dclass ) {
+    const options = dclass.semigroup.options;
     var result = elt( null, 'table', { class : 'd-class table-bordered' } );
-    const numToShow = getLimit( dclass, options );
+    const numToShow = getLimit( dclass );
     for ( var i = 0 ; i < numToShow ; i++ )
         result.appendChild( renderRClass( dclass.RClasses[i], options ) );
     if ( numToShow < dclass.size ) {
         const row = elt( null, 'tr' );
-        var rowLength = getLimit( dclass.RClasses[0], options );
+        var rowLength = getLimit( dclass.RClasses[0] );
         if ( rowLength < dclass.RClasses[0].size ) rowLength++;
         row.appendChild( elt( more( dclass.size - numToShow, 'R-class' ),
             'td', { colspan : rowLength } ) );
@@ -162,7 +169,7 @@ function diagramControlsDiv () {
 
 function renderEggBoxDiagram ( diagram ) {
     var result = elt( null, 'table', { border : 0 } );
-    const numToShow = getLimit( diagram, diagram.options );
+    const numToShow = getLimit( diagram );
     const tableSize = numToShow + ( numToShow < diagram.size ? 1 : 0 );
     for ( var i = 0 ; i < numToShow ; i++ )
         result.appendChild( oneHotTableRow(
@@ -204,6 +211,34 @@ function renderEggBoxDiagram ( diagram ) {
     return wrapper;
 }
 
+function initializeSemigroup ( semigroup ) {
+    // first setting must be one of:
+    //   'yes' - always show sizes of H-classes
+    //   'no' - never show them
+    //   'if-hidden-elements' - show them iff there are too many
+    // elements to display, so some are hidden behind an ellipsis
+    semigroup.options.showHClassSizes = 'if-hidden-elements';
+    semigroup.options.HLimit = 2;
+    // add pointers from each subobject to the whole semigroup
+    // data structure, for convenience
+    for ( var i = 0 ; i < semigroup.DClasses.length ; i++ ) {
+        const dclass = semigroup.DClasses[i];
+        dclass.semigroup = semigroup;
+        for ( var j = 0 ; j < dclass.RClasses.length ; j++ ) {
+            const rclass = dclass.RClasses[j];
+            rclass.DClass = dclass;
+            rclass.semigroup = semigroup;
+            for ( var k = 0 ; k < rclass.HClasses.length ; k++ ) {
+                const hclass = rclass.HClasses[k];
+                hclass.RClass = rclass;
+                hclass.DClass = dclass;
+                hclass.semigroup = semigroup;
+            }
+        }
+    }
+    return semigroup;
+}
+
 window.VisualizationTools['egg-box'] =
 function ( element, json, callback ) {
     // var tmp = document.createElement( 'pre' );
@@ -214,7 +249,8 @@ function ( element, json, callback ) {
     // } );
     // element.appendChild( tmp );
     // callback( element, tmp );
-    const diagram = renderEggBoxDiagram( JSON.parse( json.data ) );
+    const diagram = renderEggBoxDiagram( initializeSemigroup(
+        JSON.parse( json.data ) ) );
     element.appendChild( diagram );
     callback( element, diagram );
 };
