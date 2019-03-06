@@ -3,9 +3,6 @@
 
 ## Options
 
- * Create options controls for H-classes that let you choose which of
-   these options you want.  Every time they change, update the JSON and
-   re-render.
  * Store in each D-class the number of elements that each of its
    H-classes should display.  Initialize this value to something small,
    such as 5.  Respect it in renderHClass().

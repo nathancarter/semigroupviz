@@ -93,7 +93,7 @@ function renderHClass ( hclass ) {
     var eltsToShow = hclass.elements.slice( 0, numToShow );
     if ( numToShow < hclass.size )
         eltsToShow.push( showHSize ? '&vellip;'
-            : more( hclass.size - numToShow, 'elements' ) );
+            : more( hclass.size - numToShow, 'element' ) );
     defaultView.appendChild(
         elt( '<nobr>' + eltsToShow.join( '</nobr><br><nobr>' )
            + '</nobr>' ) );
@@ -157,28 +157,50 @@ function diagramControlsDiv () {
     } );
     result.appendChild( elt( 'Diagram settings', 'div', { class : 'card-header' } ) );
     const body = elt( null, 'div', { class : 'card-body' } );
-    body.appendChild( elt( 'Section heading here', 'h4', { class : 'card-title' } ) );
-    body.appendChild( elt( 'Section content here...', 'p', { class : 'card-text' } ) );
-    body.appendChild( elt( 'Section heading here', 'h4', { class : 'card-title' } ) );
-    body.appendChild( elt( 'Section content here...', 'p', { class : 'card-text' } ) );
-    body.appendChild( elt( 'Section heading here', 'h4', { class : 'card-title' } ) );
-    body.appendChild( elt( 'Section content here...', 'p', { class : 'card-text' } ) );
+    const showHClassSizeOptions = elt( null, 'fieldset', { class : 'form-group' } );
+    const radioButton = ( text, value, category, checked, id, cb ) => {
+        const result = elt( text, 'div', { class : 'form-check' } );
+        const label = elt( null, 'input', {
+            type : 'radio',
+            class : 'form-check-input',
+            name : category,
+            value : value
+        } );
+        if ( id ) label.setAttribute( 'id', id );
+        if ( checked ) label.setAttribute( 'checked', true );
+        result.insertBefore( label, result.childNodes[0] );
+        label.addEventListener( 'change', cb );
+        return result;
+    }
+    const getGroupValue = ( category ) => {
+        const theOne = Array.prototype.slice.apply(
+            document.getElementsByTagName( 'input' )
+        ).find( button =>
+            button.getAttribute( 'type' ) == 'radio'
+         && button.getAttribute( 'name' ) == category
+         && button.checked );
+        return theOne ? theOne.getAttribute( 'value' ) : undefined;
+    }
+    showHClassSizeOptions.appendChild(
+        elt( 'Show size of H-classes', 'legend' ) );
+    const updateHClassSizes = () =>
+        setDiagramOption( 'showHClassSizes',
+            getGroupValue( 'hclass-size-options' ) );
+    showHClassSizeOptions.appendChild( radioButton(
+        'Always', 'yes', 'hclass-size-options', false, null,
+        updateHClassSizes ) );
+    showHClassSizeOptions.appendChild( radioButton(
+        'When needed', 'if-hidden-elements',
+        'hclass-size-options', true, null, updateHClassSizes ) );
+    showHClassSizeOptions.appendChild( radioButton(
+        'Never', 'no', 'hclass-size-options', false, null,
+        updateHClassSizes ) );
+    body.appendChild( showHClassSizeOptions );
     result.appendChild( body );
     return result;
 }
 
-function renderEggBoxDiagram ( diagram ) {
-    var result = elt( null, 'table', { border : 0 } );
-    const numToShow = getLimit( diagram );
-    const tableSize = numToShow + ( numToShow < diagram.size ? 1 : 0 );
-    for ( var i = 0 ; i < numToShow ; i++ )
-        result.appendChild( oneHotTableRow(
-            renderDClass( diagram.DClasses[i], diagram.options ),
-            i, tableSize ) );
-    if ( numToShow < tableSize )
-        result.appendChild( oneHotTableRow(
-            elt( more( diagram.size - numToShow, 'D-class' ), 'td' ),
-            numToShow, tableSize ) );
+function wrapDiagram ( diagram ) {
     const wrapper = elt( null, 'div' );
     wrapper.innerHTML =
         '<style scoped>\n'
@@ -189,7 +211,9 @@ function renderEggBoxDiagram ( diagram ) {
       + '  padding: 0.5em 1em 0.5em 1em;\n'
       + '}\n'
       + '</style>';
-    wrapper.appendChild( elt( `Egg-box Diagram for "${diagram.name}"`, 'h2' ) );
+    wrapper.appendChild( elt(
+        `Egg-box Diagram for "${diagram.renderedFrom.name}"`,
+        'h2' ) );
     const exposer = elt( '<i class="fas fa-cog"></i>', 'button', {
         class : 'btn btn-primary',
         type : 'button',
@@ -206,9 +230,26 @@ function renderEggBoxDiagram ( diagram ) {
     } );
     wrapper.appendChild( exposer );
     wrapper.appendChild( controls );
-    wrapper.appendChild( result );
+    wrapper.appendChild( diagram );
     wrapper.style.margin = '1em';
     return wrapper;
+}
+
+function renderEggBoxDiagram ( diagram ) {
+    var result = elt( null, 'table',
+        { border : 0, id : 'eggBoxDiagram' } );
+    const numToShow = getLimit( diagram );
+    const tableSize = numToShow + ( numToShow < diagram.size ? 1 : 0 );
+    for ( var i = 0 ; i < numToShow ; i++ )
+        result.appendChild( oneHotTableRow(
+            renderDClass( diagram.DClasses[i], diagram.options ),
+            i, tableSize ) );
+    if ( numToShow < tableSize )
+        result.appendChild( oneHotTableRow(
+            elt( more( diagram.size - numToShow, 'D-class' ), 'td' ),
+            numToShow, tableSize ) );
+    result.renderedFrom = diagram;
+    return result;
 }
 
 function initializeSemigroup ( semigroup ) {
@@ -224,6 +265,7 @@ function initializeSemigroup ( semigroup ) {
     for ( var i = 0 ; i < semigroup.DClasses.length ; i++ ) {
         const dclass = semigroup.DClasses[i];
         dclass.semigroup = semigroup;
+        dclass.options = { numHClassElementsToShow : 5 };
         for ( var j = 0 ; j < dclass.RClasses.length ; j++ ) {
             const rclass = dclass.RClasses[j];
             rclass.DClass = dclass;
@@ -239,10 +281,21 @@ function initializeSemigroup ( semigroup ) {
     return semigroup;
 }
 
+const diagramElement = () =>
+    document.getElementById( 'eggBoxDiagram' );
+const diagramModel = () => diagramElement().renderedFrom;
+const updateDiagram = () =>
+    diagramElement().parentNode.replaceChild(
+        renderEggBoxDiagram( diagramModel() ), diagramElement() );
+const setDiagramOption = ( key, value ) => {
+    diagramModel().options[key] = value;
+    updateDiagram();
+}
+
 window.VisualizationTools['egg-box'] =
 function ( element, json, callback ) {
-    const diagram = renderEggBoxDiagram( initializeSemigroup(
-        JSON.parse( json.data ) ) );
+    const diagram = wrapDiagram( renderEggBoxDiagram(
+        initializeSemigroup( JSON.parse( json.data ) ) ) );
     element.appendChild( diagram );
     callback( element, diagram );
 };
