@@ -1,11 +1,6 @@
 
 # To-do list
 
-## Options
-
- * Create in the settings controls a drop-down for choosing a D-class
-   and then a spinner for updating that D-class's number.
-
 ## Interactivity
 
  * Make each H-class clickable, with a mouse cursor that is a hand, to

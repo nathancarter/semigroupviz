@@ -43,7 +43,10 @@ function elt ( html, tag, attrs, children ) {
     if ( attrs )
         for ( var key in attrs )
             if ( attrs.hasOwnProperty( key ) )
-                result.setAttribute( key, attrs[key] );
+                if ( typeof( attrs[key] ) != 'function' )
+                    result.setAttribute( key, attrs[key] );
+                else
+                    result.addEventListener( key, attrs[key] );
     if ( html ) result.innerHTML = html;
     if ( children ) {
         if ( !( children instanceof Array ) )
@@ -84,7 +87,8 @@ function renderHClass ( hclass ) {
     const heading = elt( hclass.size == 1 ?
         '1 element:' : `${hclass.size} elements:` );
     expandedView.appendChild( heading );
-    const numToShow = hclass.DClass.numHClassElementsToShow;
+    const numToShow = hclass.DClass.getOption(
+        'numHClassElementsToShow' );
     const showHSize = options.showHClassSizes == 'yes'
       || ( options.showHClassSizes == 'if-hidden-elements'
         && numToShow < hclass.size );
@@ -176,6 +180,21 @@ const getRadioGroupValue = ( category ) => {
     return theOne ? theOne.getAttribute( 'value' ) : undefined;
 }
 
+function form ( /* arguments */ ) {
+    const result = elt( null, 'form' );
+    for ( var i = 0 ; i < arguments.length - 1 ; i += 2 ) {
+        var label = arguments[i];
+        if ( typeof( label ) == 'string' ) label = elt( label, 'label' );
+        const control = arguments[i+1];
+        label.setAttribute( 'for', control.getAttribute( 'id' ) );
+        result.appendChild( elt( null, 'div', { class : 'row' }, [
+            elt( null, 'div', { class : 'col' }, label ),
+            elt( null, 'div', { class : 'col' }, control )
+        ] ) );
+    }
+    return result;
+}
+
 function diagramControlsDiv () {
     // make big settings container
     const container = elt( null, 'div',
@@ -196,9 +215,9 @@ function diagramControlsDiv () {
     }
     // create the settings section for H-class size headings
     const updateHClassSizes = () =>
-        setDiagramOption( 'showHClassSizes',
+        diagramModel().setOption( 'showHClassSizes',
             getRadioGroupValue( 'hclass-size-options' ) );
-    addSettingsSection( 'Show H-Class Headings', elt( null,
+    addSettingsSection( 'Show H-class Headings', elt( null,
         'fieldset', { class : 'form-group' }, [
             radioButton( 'Always', 'yes', 'hclass-size-options',
                 false, null, updateHClassSizes ),
@@ -209,9 +228,52 @@ function diagramControlsDiv () {
                 false, null, updateHClassSizes )
         ] ) );
     // create the settings section for H-class sizes
-    // (to do)
+    var display, slider, picker;
+    addSettingsSection( 'H-class Sizes', form(
+        'Choose a D-class by representative:',
+        picker = elt( null, 'select', {
+            class : 'form-control',
+            id : 'chooseDClass',
+            change : ( event ) => {
+                const max = diagramModel().DClasses[picker.value]
+                    .RClasses[0].HClasses[0].size;
+                slider.setAttribute( 'max', max );
+                slider.disabled = max == 1;
+                display.textContent = slider.value =
+                    diagramModel().DClasses[picker.value].getOption(
+                        'numHClassElementsToShow' );
+            }
+        } ),
+        'Then how many elements should be shown in its H-classes:',
+        elt( null, 'div', null, [
+            display = elt( '', 'div',
+                { style : 'text-align: center;', 'id' : 'hClassSizeNum' } ),
+            slider = elt( null, 'input', {
+                type : 'range',
+                class : 'form-control-range',
+                id : 'sliderForHClasses',
+                min : 1, max : 2, value : 1, // these are changed later
+                input : ( event ) => {
+                    display.textContent = slider.value;
+                    diagramModel().DClasses[picker.value].setOption(
+                        'numHClassElementsToShow', slider.value );
+                }
+            } )
+        ] )
+    ) );
     // return the container that holds all the sections
     return container;
+}
+
+function setupControlsFromModel () {
+    const dClassChooser = document.getElementById( 'chooseDClass' );
+    diagramModel().DClasses.map( ( dclass, index ) => {
+        const repr = dclass.RClasses[0].HClasses[0].representative;
+        dClassChooser.appendChild( elt(
+            `Class #${index+1}:  ${repr}`, 'option', { value : index } ) );
+    } );
+    document.getElementById( 'chooseDClass' ).dispatchEvent(
+        new Event( 'change' ) );
 }
 
 function wrapDiagram ( diagram ) {
@@ -266,6 +328,10 @@ function renderEggBoxDiagram ( diagram ) {
     return result;
 }
 
+const diagramElement = () =>
+    document.getElementById( 'eggBoxDiagram' );
+const diagramModel = () => diagramElement().renderedFrom;
+
 function initializeSemigroup ( semigroup ) {
     // first setting must be one of:
     //   'yes' - always show sizes of H-classes
@@ -279,7 +345,8 @@ function initializeSemigroup ( semigroup ) {
         const dclass = semigroup.DClasses[i];
         dclass.semigroup = semigroup;
         dclass.options = {
-            numHClassElementsToShow : semigroup.options.HLimit
+            numHClassElementsToShow :
+                Math.min( 5, dclass.RClasses[0].HClasses[0].size )
         };
         for ( var j = 0 ; j < dclass.RClasses.length ; j++ ) {
             const rclass = dclass.RClasses[j];
@@ -293,18 +360,23 @@ function initializeSemigroup ( semigroup ) {
             }
         }
     }
+    // add functionality for querying/updating options and re-rendering
+    semigroup.update = () =>
+        diagramElement().parentNode.replaceChild(
+            renderEggBoxDiagram( semigroup ), diagramElement() );
+    semigroup.setOption = ( key, value ) => {
+        semigroup.options[key] = value;
+        semigroup.update();
+    };
+    semigroup.getOption = key => semigroup.options[key];
+    semigroup.DClasses.map( dclass => {
+        dclass.setOption = ( key, value ) => {
+            dclass.options[key] = value;
+            semigroup.update();
+        };
+        dclass.getOption = key => dclass.options[key];
+    } );
     return semigroup;
-}
-
-const diagramElement = () =>
-    document.getElementById( 'eggBoxDiagram' );
-const diagramModel = () => diagramElement().renderedFrom;
-const updateDiagram = () =>
-    diagramElement().parentNode.replaceChild(
-        renderEggBoxDiagram( diagramModel() ), diagramElement() );
-const setDiagramOption = ( key, value ) => {
-    diagramModel().options[key] = value;
-    updateDiagram();
 }
 
 window.VisualizationTools['egg-box'] =
@@ -312,5 +384,6 @@ function ( element, json, callback ) {
     const diagram = wrapDiagram( renderEggBoxDiagram(
         initializeSemigroup( JSON.parse( json.data ) ) ) );
     element.appendChild( diagram );
+    setupControlsFromModel();
     callback( element, diagram );
 };
