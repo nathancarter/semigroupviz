@@ -243,20 +243,6 @@ function diagramControlsDiv () {
             ] ) ) );
         cardCount++;
     }
-    // create the settings section for H-class size headings
-    const updateHClassSizes = () =>
-        diagramModel().setOption( 'showHClassSizes',
-            getRadioGroupValue( 'hclass-size-options' ) );
-    addSettingsSection( 'Show H-class Headings', elt( null,
-        'fieldset', { class : 'form-group' }, [
-            radioButton( 'Always', 'yes', 'hclass-size-options',
-                false, null, updateHClassSizes ),
-            radioButton( 'When needed', 'if-hidden-elements',
-                'hclass-size-options', true, null,
-                updateHClassSizes ),
-            radioButton( 'Never', 'no', 'hclass-size-options',
-                false, null, updateHClassSizes )
-        ] ) );
     // create the settings section for H-class sizes
     var display, slider, picker;
     addSettingsSection( 'H-class Sizes', form(
@@ -291,6 +277,20 @@ function diagramControlsDiv () {
             } )
         ] )
     ) );
+    // create the settings section for H-class size headings
+    const updateHClassSizes = () =>
+        diagramModel().setOption( 'showHClassSizes',
+            getRadioGroupValue( 'hclass-size-options' ) );
+    addSettingsSection( 'Show H-class Headings', elt( null,
+        'fieldset', { class : 'form-group' }, [
+            radioButton( 'Always', 'yes', 'hclass-size-options',
+                false, null, updateHClassSizes ),
+            radioButton( 'When needed', 'if-hidden-elements',
+                'hclass-size-options', true, null,
+                updateHClassSizes ),
+            radioButton( 'Never', 'no', 'hclass-size-options',
+                false, null, updateHClassSizes )
+        ] ) );
     // return the container that holds all the sections
     return container;
 }

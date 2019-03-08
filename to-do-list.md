@@ -13,8 +13,6 @@
  * Copy the code for the H-class slider controls, creating L-class
    slider controls that govern the number of L-classes shown in each
    D-class.  Place this third in the settings pane.
- * Ensure that the controls for how many elements are to be shown in
-   each H-class is fourth, and the heading settings are last.
 
 ## Fixing mistakes and cleaning up code
 
