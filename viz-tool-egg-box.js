@@ -113,6 +113,21 @@ function renderHClass ( hclass ) {
         `All ${hclass.size} elements:\n` : 'One element:<br>';
     hoverText += hclass.elements.join( '\n' );
     defaultView.setAttribute( 'title', hoverText );
+    // make the two views have the hand cursor, and swap
+    // between one another.
+    const toggleViews = () => {
+        if ( defaultView.style.display == 'none' ) {
+            defaultView.style.display = 'block';
+            expandedView.style.display = 'none';
+        } else {
+            defaultView.style.display = 'none';
+            expandedView.style.display = 'block';
+        }
+    }
+    defaultView.addEventListener( 'click', toggleViews );
+    expandedView.addEventListener( 'click', toggleViews );
+    defaultView.style.cursor = 'pointer';
+    expandedView.style.cursor = 'pointer';
     // put both views into the result, but hide one
     var result = elt( null, 'td', null,
         [ defaultView, expandedView ] );

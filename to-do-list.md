@@ -3,18 +3,6 @@
 
 ## Interactivity
 
- * Make each H-class clickable, with a mouse cursor that is a hand, to
-   toggle between "...n more elements" mode and a version with all the
-   details available in the JSON.
-   (Whenever you create an H-class td, create two divs inside, one with
-   class 'default-view' and one with class 'expanded-view'.  Give the
-   parent td the class 'view-container'.  After putting the diagram in
-   the DOM, find all things in the document with class 'default-view'
-   and give them a click event that does this:  Find the nearest ances-
-   tor with class 'view-container' and then within that ancestor,
-   recursively search downward for each thing with class 'default-view'
-   or 'expanded-view' and toggle its visibility; do not recur inside.
-   Also, do not recur inside other 'view-container's.)
  * Make the hover text for a row's "...n more" cell show the represent-
    atives for all the hidden H-classes.
  * Make "...n more H-classes" a link that expands all rows of the table
