@@ -1,15 +1,6 @@
 
 # To-do list
 
-## Finishing settings, first draft
-
- * Copy the code for the H-class slider controls, creating R-class
-   slider controls that govern the number of R-classes shown in each
-   D-class.  Place this second in the settings pane.
- * Copy the code for the H-class slider controls, creating L-class
-   slider controls that govern the number of L-classes shown in each
-   D-class.  Place this third in the settings pane.
-
 ## Fixing mistakes and cleaning up code
 
  * Extend `ShowSemigroup` so that it caps each of these values below

@@ -243,64 +243,63 @@ function diagramControlsDiv () {
             ] ) ) );
         cardCount++;
     }
+    var picker;
+    const displayName = letter => `num${letter.toUpperCase()}ToShow`;
+    const sliderName = letter => `sliderFor${letter.toUpperCase()}`;
+    const display = letter => document.getElementById( displayName( letter ) );
+    const slider = letter => document.getElementById( sliderName( letter ) );
+    const makePair = ( letter, key ) => elt( null, 'div', null, [
+        elt( '', 'div', {
+            style : 'text-align: center;',
+            id : displayName( letter )
+        } ),
+        elt( null, 'input', {
+            type : 'range',
+            class : 'form-control-range',
+            id : sliderName( letter ),
+            min : 1, max : 2, value : 1, // these are changed later
+            input : ( event ) => {
+                display( letter ).textContent = slider( letter ).value;
+                diagramModel.setOption( key, slider( letter ).value );
+            }
+        } )
+    ] );
     // create the settings section for number of D-classes to show
-    ( function () {
-        var display, slider, picker;
-        addSettingsSection( 'Diagram size', form(
-            'Show this many D-classes:',
-            elt( null, 'div', null, [
-                display = elt( '', 'div',
-                    { style : 'text-align: center;', 'id' : 'numDClassesToShow' } ),
-                slider = elt( null, 'input', {
-                    type : 'range',
-                    class : 'form-control-range',
-                    id : 'sliderForNumDClasses',
-                    min : 1, max : 2, value : 1, // these are changed later
-                    input : ( event ) => {
-                        display.textContent = slider.value;
-                        diagramModel().setOption(
-                            'numDClassesToShow', slider.value );
-                    }
-                } )
-            ] )
-        ) );
-    } )();
+    addSettingsSection( 'Diagram size', form(
+        'Show this many D-classes:',
+        makePair( 'd', 'numDClassesToShow' )
+    ) );
     // create the settings section for H-class sizes
-    ( function () {
-        var display, slider, picker;
-        addSettingsSection( 'H-class Sizes', form(
-            'Choose a D-class by representative:',
-            picker = elt( null, 'select', {
-                class : 'form-control',
-                id : 'chooseDClass',
-                change : ( event ) => {
-                    const max = diagramModel().DClasses[picker.value]
-                        .RClasses[0].HClasses[0].size;
-                    slider.setAttribute( 'max', max );
-                    slider.disabled = max == 1;
-                    display.textContent = slider.value =
-                        diagramModel().DClasses[picker.value].getOption(
-                            'numHClassElementsToShow' );
+    addSettingsSection( 'D-class options', form(
+        'Choose a D-class by representative:',
+        picker = elt( null, 'select', {
+            class : 'form-control',
+            id : 'chooseDClass',
+            change : ( event ) => {
+                // how to update a slider and display pair
+                const updatePair = ( letter, optionkey, maxkey ) => {
+                    const dclass = diagramModel().DClasses[picker.value]
+                    const option = dclass.getOption( optionkey );
+                    const max = dclass.getOption( maxkey );
+                    console.log( letter, optionkey, option, maxkey, max );
+                    slider( letter ).setAttribute( 'max', max );
+                    slider( letter ).disabled = max == 1;
+                    display( letter ).textContent =
+                        slider( letter ).value = option;
                 }
-            } ),
-            'Then how many elements should be shown in its H-classes:',
-            elt( null, 'div', null, [
-                display = elt( '', 'div',
-                    { style : 'text-align: center;', 'id' : 'hClassSizeNum' } ),
-                slider = elt( null, 'input', {
-                    type : 'range',
-                    class : 'form-control-range',
-                    id : 'sliderForHClasses',
-                    min : 1, max : 2, value : 1, // these are changed later
-                    input : ( event ) => {
-                        display.textContent = slider.value;
-                        diagramModel().DClasses[picker.value].setOption(
-                            'numHClassElementsToShow', slider.value );
-                    }
-                } )
-            ] )
-        ) );
-    } )();
+                // update each slider-display pair
+                updatePair( 'r', 'numRClassesToShow', 'numRClasses' );
+                updatePair( 'l', 'numLClassesToShow', 'numLClasses' );
+                updatePair( 'h', 'numHClassElementsToShow', 'numElements' );
+            }
+        } ),
+        'Then how many of its R-classes to show:',
+        makePair( 'r', 'numRClassesToShow' ),
+        'And how many of its L-classes to show:',
+        makePair( 'l', 'numLClassesToShow' ),
+        'And how many elements should be shown in its H-classes:',
+        makePair( 'h', 'numHClassElementsToShow' )
+    ) );
     // create the settings section for H-class size headings
     const updateHClassSizes = () =>
         diagramModel().setOption( 'showHClassSizes',
@@ -329,10 +328,10 @@ function setupControlsFromModel () {
     document.getElementById( 'chooseDClass' ).dispatchEvent(
         new Event( 'change' ) );
     const max = diagramModel().size;
-    var slider = document.getElementById( 'sliderForNumDClasses' );
+    var slider = document.getElementById( 'sliderForD' );
     slider.setAttribute( 'max', max );
     slider.disabled = max == 1;
-    document.getElementById( 'numDClassesToShow' ).textContent =
+    document.getElementById( 'numDToShow' ).textContent =
         slider.value = diagramModel().getOption( 'numDClassesToShow' );
 }
 
@@ -406,6 +405,8 @@ function initializeSemigroup ( semigroup ) {
     //   'if-hidden-elements' - show them iff there are too many
     // elements to display, so some are hidden behind an ellipsis
     semigroup.options.showHClassSizes = 'if-hidden-elements';
+    // since the Nr*Classes* settings might be 0, which implies that
+    // everything should be included,
     semigroup.options.numDClassesToShow =
         semigroup.options.NrDClassesIncluded;
     // add pointers from each subobject to the whole semigroup
@@ -413,9 +414,16 @@ function initializeSemigroup ( semigroup ) {
     semigroup.DClasses.map( dclass => {
         dclass.semigroup = semigroup;
         dclass.options = {
-            numHClassElementsToShow :
-                Math.min( 5, dclass.RClasses[0].HClasses[0].size )
+            numRClasses : dclass.RClasses.length,
+            numLClasses : dclass.RClasses[0].HClasses.length,
+            numElements : dclass.RClasses[0].HClasses[0].elements.length
         };
+        dclass.options.numRClassesToShow =
+            Math.min( 5, dclass.options.numRClasses );
+        dclass.options.numLClassesToShow =
+            Math.min( 5, dclass.options.numLClasses );
+        dclass.options.numHClassElementsToShow =
+            Math.min( 5, dclass.options.numElements );
         dclass.RClasses.map( rclass => {
             rclass.DClass = dclass;
             rclass.semigroup = semigroup;
