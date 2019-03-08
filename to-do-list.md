@@ -3,10 +3,6 @@
 
 ## Finishing settings, first draft
 
- * Copy the code for the H-class slider controls, creating D-class
-   slider controls that govern the number of D-classes shown, except
-   this will be one global number rather than one for each D-class.
-   Place this first in the settings pane.
  * Copy the code for the H-class slider controls, creating R-class
    slider controls that govern the number of R-classes shown in each
    D-class.  Place this second in the settings pane.

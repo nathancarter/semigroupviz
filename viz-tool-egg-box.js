@@ -243,40 +243,64 @@ function diagramControlsDiv () {
             ] ) ) );
         cardCount++;
     }
+    // create the settings section for number of D-classes to show
+    ( function () {
+        var display, slider, picker;
+        addSettingsSection( 'Diagram size', form(
+            'Show this many D-classes:',
+            elt( null, 'div', null, [
+                display = elt( '', 'div',
+                    { style : 'text-align: center;', 'id' : 'numDClassesToShow' } ),
+                slider = elt( null, 'input', {
+                    type : 'range',
+                    class : 'form-control-range',
+                    id : 'sliderForNumDClasses',
+                    min : 1, max : 2, value : 1, // these are changed later
+                    input : ( event ) => {
+                        display.textContent = slider.value;
+                        diagramModel().setOption(
+                            'numDClassesToShow', slider.value );
+                    }
+                } )
+            ] )
+        ) );
+    } )();
     // create the settings section for H-class sizes
-    var display, slider, picker;
-    addSettingsSection( 'H-class Sizes', form(
-        'Choose a D-class by representative:',
-        picker = elt( null, 'select', {
-            class : 'form-control',
-            id : 'chooseDClass',
-            change : ( event ) => {
-                const max = diagramModel().DClasses[picker.value]
-                    .RClasses[0].HClasses[0].size;
-                slider.setAttribute( 'max', max );
-                slider.disabled = max == 1;
-                display.textContent = slider.value =
-                    diagramModel().DClasses[picker.value].getOption(
-                        'numHClassElementsToShow' );
-            }
-        } ),
-        'Then how many elements should be shown in its H-classes:',
-        elt( null, 'div', null, [
-            display = elt( '', 'div',
-                { style : 'text-align: center;', 'id' : 'hClassSizeNum' } ),
-            slider = elt( null, 'input', {
-                type : 'range',
-                class : 'form-control-range',
-                id : 'sliderForHClasses',
-                min : 1, max : 2, value : 1, // these are changed later
-                input : ( event ) => {
-                    display.textContent = slider.value;
-                    diagramModel().DClasses[picker.value].setOption(
-                        'numHClassElementsToShow', slider.value );
+    ( function () {
+        var display, slider, picker;
+        addSettingsSection( 'H-class Sizes', form(
+            'Choose a D-class by representative:',
+            picker = elt( null, 'select', {
+                class : 'form-control',
+                id : 'chooseDClass',
+                change : ( event ) => {
+                    const max = diagramModel().DClasses[picker.value]
+                        .RClasses[0].HClasses[0].size;
+                    slider.setAttribute( 'max', max );
+                    slider.disabled = max == 1;
+                    display.textContent = slider.value =
+                        diagramModel().DClasses[picker.value].getOption(
+                            'numHClassElementsToShow' );
                 }
-            } )
-        ] )
-    ) );
+            } ),
+            'Then how many elements should be shown in its H-classes:',
+            elt( null, 'div', null, [
+                display = elt( '', 'div',
+                    { style : 'text-align: center;', 'id' : 'hClassSizeNum' } ),
+                slider = elt( null, 'input', {
+                    type : 'range',
+                    class : 'form-control-range',
+                    id : 'sliderForHClasses',
+                    min : 1, max : 2, value : 1, // these are changed later
+                    input : ( event ) => {
+                        display.textContent = slider.value;
+                        diagramModel().DClasses[picker.value].setOption(
+                            'numHClassElementsToShow', slider.value );
+                    }
+                } )
+            ] )
+        ) );
+    } )();
     // create the settings section for H-class size headings
     const updateHClassSizes = () =>
         diagramModel().setOption( 'showHClassSizes',
@@ -304,6 +328,12 @@ function setupControlsFromModel () {
     } );
     document.getElementById( 'chooseDClass' ).dispatchEvent(
         new Event( 'change' ) );
+    const max = diagramModel().size;
+    var slider = document.getElementById( 'sliderForNumDClasses' );
+    slider.setAttribute( 'max', max );
+    slider.disabled = max == 1;
+    document.getElementById( 'numDClassesToShow' ).textContent =
+        slider.value = diagramModel().getOption( 'numDClassesToShow' );
 }
 
 function wrapDiagram ( diagram ) {
@@ -344,7 +374,7 @@ function wrapDiagram ( diagram ) {
 function renderEggBoxDiagram ( diagram ) {
     var result = elt( null, 'table',
         { border : 0, id : 'eggBoxDiagram' } );
-    const numToShow = getLimit( diagram );
+    const numToShow = diagram.getOption( 'numDClassesToShow' );
     const tableSize = numToShow + ( numToShow < diagram.size ? 1 : 0 );
     for ( var i = 0 ; i < numToShow ; i++ )
         result.appendChild( oneHotTableRow(
@@ -376,27 +406,26 @@ function initializeSemigroup ( semigroup ) {
     //   'if-hidden-elements' - show them iff there are too many
     // elements to display, so some are hidden behind an ellipsis
     semigroup.options.showHClassSizes = 'if-hidden-elements';
+    semigroup.options.numDClassesToShow =
+        semigroup.options.NrDClassesIncluded;
     // add pointers from each subobject to the whole semigroup
     // data structure, for convenience
-    for ( var i = 0 ; i < semigroup.DClasses.length ; i++ ) {
-        const dclass = semigroup.DClasses[i];
+    semigroup.DClasses.map( dclass => {
         dclass.semigroup = semigroup;
         dclass.options = {
             numHClassElementsToShow :
                 Math.min( 5, dclass.RClasses[0].HClasses[0].size )
         };
-        for ( var j = 0 ; j < dclass.RClasses.length ; j++ ) {
-            const rclass = dclass.RClasses[j];
+        dclass.RClasses.map( rclass => {
             rclass.DClass = dclass;
             rclass.semigroup = semigroup;
-            for ( var k = 0 ; k < rclass.HClasses.length ; k++ ) {
-                const hclass = rclass.HClasses[k];
+            rclass.HClasses.map( hclass => {
                 hclass.RClass = rclass;
                 hclass.DClass = dclass;
                 hclass.semigroup = semigroup;
-            }
-        }
-    }
+            } );
+        } );
+    } );
     // add functionality for querying/updating options and re-rendering
     semigroup.update = () =>
         diagramElement().parentNode.replaceChild(
