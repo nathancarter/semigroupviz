@@ -165,5 +165,5 @@ Size( DP );;
 ShowSemigroup(
     SingularTransformationSemigroup( 4 ),
     rec( ToString := x -> String( ListTransformation( x ) ),
-         HLimit := 0, LLimit := 0, RLimit := 0, DLimit := 0 )
+         HLimit := 0, LLimit := 0, RLimit := 0, DLimit := 2 )
 );

@@ -129,7 +129,7 @@ function renderHClass ( hclass ) {
     defaultView.style.cursor = 'pointer';
     expandedView.style.cursor = 'pointer';
     // put both views into the result, but hide one
-    var result = elt( null, 'td', null,
+    var result = elt( null, 'td', { class : 'table-active' },
         [ defaultView, expandedView ] );
     expandedView.style.display = 'none';
     return result;
@@ -137,13 +137,21 @@ function renderHClass ( hclass ) {
 
 function renderRClass ( rclass ) {
     const options = rclass.semigroup.options;
-    var result = elt( null, 'tr', { class : 'table-active' } );
+    var result = elt( null, 'tr' );//, { class : 'table-active' } );
     const numToShow = getLimit( rclass );
     for ( var i = 0 ; i < numToShow ; i++ )
         result.appendChild( renderHClass( rclass.HClasses[i], options ) );
-    if ( numToShow < rclass.size )
-        result.appendChild( elt( more( rclass.size - numToShow, 'H-class' ),
-            'td' ) );
+    if ( numToShow < rclass.size ) {
+        const otherHClassReps = rclass.HClasses.map( hclass =>
+            hclass.representative ).join( '\n' );
+        const moreCell = elt(
+            more( rclass.size - numToShow, 'H-class' ), 'td', {
+                title : 'Representatives of other\nH-classes '
+                      + 'in this R-class:\n' + otherHClassReps
+            }
+        );
+        result.appendChild( moreCell );
+    }
     return result;
 }
 
@@ -156,9 +164,16 @@ function renderDClass ( dclass ) {
     if ( numToShow < dclass.size ) {
         var rowLength = getLimit( dclass.RClasses[0] );
         if ( rowLength < dclass.RClasses[0].size ) rowLength++;
-        result.appendChild( elt( null, 'tr', null,
-            elt( more( dclass.size - numToShow, 'R-class' ),
-                'td', { colspan : rowLength } ) ) );
+        const otherRClassReps = dclass.RClasses.map( rclass =>
+            rclass.HClasses[0].representative ).join( '\n' );
+        const moreCell = elt(
+            more( dclass.size - numToShow, 'R-class' ), 'td', {
+                colspan : rowLength,
+                title : 'Representatives of other\nR-classes '
+                      + 'in this D-class:\n' + otherRClassReps
+            }
+        );
+        result.appendChild( elt( null, 'tr', null, moreCell ) );
     }
     return result;
 }
@@ -335,10 +350,17 @@ function renderEggBoxDiagram ( diagram ) {
         result.appendChild( oneHotTableRow(
             renderDClass( diagram.DClasses[i], diagram.options ),
             i, tableSize ) );
-    if ( numToShow < tableSize )
+    if ( numToShow < tableSize ) {
+        const otherDClassReps = diagram.DClasses.map( dclass =>
+            dclass.RClasses[0].HClasses[0].representative )
+            .join( '\n' );
         result.appendChild( oneHotTableRow(
-            elt( more( diagram.size - numToShow, 'D-class' ), 'td' ),
+            elt( more( diagram.size - numToShow, 'D-class' ), 'td', {
+                title : 'Representatives of other\nD-classes '
+                      + 'in this semigroup:\n' + otherDClassReps
+            } ),
             numToShow, tableSize ) );
+    }
     result.renderedFrom = diagram;
     return result;
 }
