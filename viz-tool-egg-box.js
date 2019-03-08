@@ -59,16 +59,16 @@ function elt ( html, tag, attrs, children ) {
 function getLimit ( obj ) {
     const options = obj.options || obj.semigroup.options;
     if ( obj.hasOwnProperty( 'DClasses' ) ) {
-        var limit = options.DLimit;
+        var limit = options.NrDClassesIncluded;
         var count = obj.DClasses.length;
     } else if ( obj.hasOwnProperty( 'RClasses' ) ) {
-        var limit = options.RLimit;
+        var limit = options.NrRClassesIncludedPerDClass;
         var count = obj.RClasses.length;
     } else if ( obj.hasOwnProperty( 'HClasses' ) ) {
-        var limit = options.LLimit;
+        var limit = options.NrLClassesIncludedPerRClass;
         var count = obj.HClasses.length;
     } else if ( obj.hasOwnProperty( 'elements' ) ) {
-        var limit = options.HLimit;
+        var limit = options.NrElementsIncludedPerHClass;
         var count = obj.elements.length;
     } else {
         throw obj;

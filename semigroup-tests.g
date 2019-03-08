@@ -28,11 +28,12 @@ HClassToRecord := function ( semigroup, hclass, options )
         size := Size( hclass ),
         representative := options.ToString( repr )
     );
-    if options.HLimit = 1 then
+    if options.NrElementsIncludedPerHClass = 1 then
         hclass := [ repr ];
-    elif options.HLimit > 1
-            and options.HLimit <= Length( hclass ) then
-        hclass := hclass{[ 1 .. options.HLimit ]};
+    elif options.NrElementsIncludedPerHClass > 1
+            and options.NrElementsIncludedPerHClass
+             <= Length( hclass ) then
+        hclass := hclass{[ 1 .. options.NrElementsIncludedPerHClass ]};
         if repr in hclass then
             Remove( hclass, Position( hclass, repr ) );
             Add( hclass, repr, 1 );
@@ -55,11 +56,15 @@ DClassToRecord := function ( semigroup, dclass, options )
     rclasses := RClasses( dclass );
     origl := Size( lclasses );
     origr := Size( rclasses );
-    if options.LLimit > 0 and options.LLimit < origl then
-        lclasses := lclasses{[ 1 .. options.LLimit ]};
+    if options.NrLClassesIncludedPerRClass > 0
+            and options.NrLClassesIncludedPerRClass < origl then
+        lclasses := lclasses{[ 1 ..
+            options.NrLClassesIncludedPerRClass ]};
     fi;
-    if options.RLimit > 0 and options.RLimit < origr then
-        rclasses := rclasses{[ 1 .. options.RLimit ]};
+    if options.NrRClassesIncludedPerDClass > 0
+            and options.NrRClassesIncludedPerDClass < origr then
+        rclasses := rclasses{[ 1 ..
+            options.NrRClassesIncludedPerDClass ]};
     fi;
     result.RClasses := List( rclasses, rclass -> rec(
         size := NrLClasses( dclass ),
@@ -94,8 +99,9 @@ EggBoxDiagramJSON := function ( semigroup, options )
     for dclass in dclasses do
         Add( result.DClasses,
              DClassToRecord( semigroup, dclass, options ) );
-        if options.DLimit > 0
-                and options.DLimit <= Length( result.DClasses ) then
+        if options.NrDClassesIncluded > 0
+                and options.NrDClassesIncluded
+                 <= Length( result.DClasses ) then
             break;
         fi;
     od;
@@ -107,14 +113,24 @@ end;
 # ToString: a function mapping elements of the semigroup to strings.
 #   This defaults to PrintString, but if you have something better,
 #   go ahead and provide it.
-# DLimit: maximum number of D-classes to show in the diagram
+# NrDClassesIncluded: maximum number of D-classes to compute and
+#   include in the JSON object to be visualized.
+#   This is useful if the semigroup is extremely large, and you want
+#   to send a manageable amount of JSON data to the visualization,
+#   to see a subset of the semigroup.
 #   (defaults to 20, set to 0 for no limit)
-# RLimit: maximum number of R-classes to show in any one D-class
+# NrRClassesIncludedPerDClass: maximum number of R-classes to
+#   compute for any one D-class and include in the JSON.
 #   (defaults to 20, set to 0 for no limit)
-# LLimit: maximum number of L-classes to show in any one D-class
+#   See above for explanation of why you might want to do this.
+# NrLClassesIncludedPerRClass: maximum number of L-classes to
+#   compute for any one D/R-class and include in the JSON.
 #   (defaults to 20, set to 0 for no limit)
-# HLimit: maximum number of H elements to show in any one H-class
+#   See above for explanation of why you might want to do this.
+# NrElementsIncludedPerHClass: maximum number of elements to
+#   compute for any one H-class and include in the JSON.
 #   (defaults to 20, set to 0 for no limit)
+#   See above for explanation of why you might want to do this.
 ShowSemigroup := function ( semigroup, options... )
     # Ensure options object exists
     if Length( options ) = 0 then
@@ -126,17 +142,17 @@ ShowSemigroup := function ( semigroup, options... )
     if not IsBound( options.ToString ) then
         options.ToString := PrintString;
     fi;
-    if not IsBound( options.DLimit ) then
-        options.DLimit := 20;
+    if not IsBound( options.NrDClassesIncluded ) then
+        options.NrDClassesIncluded := 20;
     fi;
-    if not IsBound( options.LLimit ) then
-        options.LLimit := 20;
+    if not IsBound( options.NrRClassesIncludedPerDClass ) then
+        options.NrRClassesIncludedPerDClass := 20;
     fi;
-    if not IsBound( options.RLimit ) then
-        options.RLimit := 20;
+    if not IsBound( options.NrLClassesIncludedPerRClass ) then
+        options.NrLClassesIncludedPerRClass := 20;
     fi;
-    if not IsBound( options.HLimit ) then
-        options.HLimit := 20;
+    if not IsBound( options.NrElementsIncludedPerHClass ) then
+        options.NrElementsIncludedPerHClass := 20;
     fi;
     # Create JSON and pass to visualization library
     return CreateVisualization( rec(
@@ -164,6 +180,11 @@ Size( DP );;
 # ShowSemigroup( CatalanMonoid( 4 ) );
 ShowSemigroup(
     SingularTransformationSemigroup( 4 ),
-    rec( ToString := x -> String( ListTransformation( x ) ),
-         HLimit := 0, LLimit := 0, RLimit := 0, DLimit := 2 )
+    rec(
+        ToString := x -> String( ListTransformation( x ) ),
+        NrDClassesIncluded := 2,
+        NrRClassesIncludedPerDClass := 0,
+        NrLClassesIncludedPerRClass := 0,
+        NrElementsIncludedPerHClass := 0
+    )
 );
