@@ -3,6 +3,7 @@
 
 ## Fixing mistakes and cleaning up code
 
+ * Make diagram update respect R and L sliders.
  * Extend `ShowSemigroup` so that it caps each of these values below
    at zero and above at the maximum useful value for that semigroup.
  * Write a GAP test script that verifies that the correct JSON is

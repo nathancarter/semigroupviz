@@ -211,13 +211,15 @@ const getRadioGroupValue = ( category ) => {
 }
 
 function form ( /* arguments */ ) {
-    const result = elt( null, 'form' );
+    const result = elt( null, 'form', { class : 'form-horizontal' } );
     for ( var i = 0 ; i < arguments.length - 1 ; i += 2 ) {
         var label = arguments[i];
         if ( typeof( label ) == 'string' ) label = elt( label, 'label' );
         const control = arguments[i+1];
         label.setAttribute( 'for', control.getAttribute( 'id' ) );
-        result.appendChild( elt( null, 'div', { class : 'row' }, [
+        result.appendChild( elt( null, 'div', {
+            class : 'row', style : 'padding-bottom: 1em;'
+        }, [
             elt( null, 'div', { class : 'col' }, label ),
             elt( null, 'div', { class : 'col' }, control )
         ] ) );
@@ -231,18 +233,18 @@ function diagramControlsDiv () {
         { class : 'container', style : 'padding: 1em;' } );
     // create tools for appending new settings sections as cards
     // that fit 3 per row and then wrap to the next row
-    var cardCount = 0, rowInUse = null;
-    const addSettingsSection = ( title, elts ) => {
-        if ( cardCount % 3 == 0 )
-            container.appendChild(
-                rowInUse = elt( null, 'div', { class : 'row' } ) );
+    var rowInUse = null;
+    const startNewRow = () => container.appendChild(
+        rowInUse = elt( null, 'div', { class : 'row' } ) );
+    function addColumn ( /* contents... */ ) {
         rowInUse.appendChild( elt( null, 'div', { class : 'col-sm' },
-            elt( null, 'div', { class : 'card border-primary' }, [
-                elt( title, 'div', { class : 'card-header' } ),
-                elt( null, 'div', { class : 'card-body' }, elts )
-            ] ) ) );
-        cardCount++;
+            Array.prototype.slice.apply( arguments ) ) );
     }
+    const card = ( title, elts ) =>
+        elt( null, 'div', { class : 'card border-primary' }, [
+            elt( title, 'div', { class : 'card-header' } ),
+            elt( null, 'div', { class : 'card-body' }, elts )
+        ] );
     var picker;
     const displayName = letter => `num${letter.toUpperCase()}ToShow`;
     const sliderName = letter => `sliderFor${letter.toUpperCase()}`;
@@ -259,18 +261,38 @@ function diagramControlsDiv () {
             id : sliderName( letter ),
             min : 1, max : 2, value : 1, // these are changed later
             input : ( event ) => {
+                console.log( letter, key, 'slider moved' );
                 display( letter ).textContent = slider( letter ).value;
-                diagramModel.setOption( key, slider( letter ).value );
+                ( ( letter == 'd' ) ? diagramModel()
+                                    : diagramModel().DClasses[picker.value] )
+                    .setOption( key, slider( letter ).value );
             }
         } )
     ] );
     // create the settings section for number of D-classes to show
-    addSettingsSection( 'Diagram size', form(
-        'Show this many D-classes:',
-        makePair( 'd', 'numDClassesToShow' )
-    ) );
+    // and the settings section for H-class size headings
+    startNewRow();
+    const updateHClassSizes = () =>
+        diagramModel().setOption( 'showHClassSizes',
+            getRadioGroupValue( 'hclass-size-options' ) );
+    addColumn(
+        card( 'General options', form(
+            'Show this many D-classes:',
+            makePair( 'd', 'numDClassesToShow' ),
+            'When to show H-class Headings:',
+            elt( null, 'fieldset', { class : 'form-group' }, [
+                radioButton( 'Always', 'yes', 'hclass-size-options',
+                    false, null, updateHClassSizes ),
+                radioButton( 'When needed', 'if-hidden-elements',
+                    'hclass-size-options', true, null,
+                    updateHClassSizes ),
+                radioButton( 'Never', 'no', 'hclass-size-options',
+                    false, null, updateHClassSizes )
+            ] )
+        ) )
+    );
     // create the settings section for H-class sizes
-    addSettingsSection( 'D-class options', form(
+    addColumn( card( 'Options for each D-class', form(
         'Choose a D-class by representative:',
         picker = elt( null, 'select', {
             class : 'form-control',
@@ -281,7 +303,6 @@ function diagramControlsDiv () {
                     const dclass = diagramModel().DClasses[picker.value]
                     const option = dclass.getOption( optionkey );
                     const max = dclass.getOption( maxkey );
-                    console.log( letter, optionkey, option, maxkey, max );
                     slider( letter ).setAttribute( 'max', max );
                     slider( letter ).disabled = max == 1;
                     display( letter ).textContent =
@@ -299,21 +320,7 @@ function diagramControlsDiv () {
         makePair( 'l', 'numLClassesToShow' ),
         'And how many elements should be shown in its H-classes:',
         makePair( 'h', 'numHClassElementsToShow' )
-    ) );
-    // create the settings section for H-class size headings
-    const updateHClassSizes = () =>
-        diagramModel().setOption( 'showHClassSizes',
-            getRadioGroupValue( 'hclass-size-options' ) );
-    addSettingsSection( 'Show H-class Headings', elt( null,
-        'fieldset', { class : 'form-group' }, [
-            radioButton( 'Always', 'yes', 'hclass-size-options',
-                false, null, updateHClassSizes ),
-            radioButton( 'When needed', 'if-hidden-elements',
-                'hclass-size-options', true, null,
-                updateHClassSizes ),
-            radioButton( 'Never', 'no', 'hclass-size-options',
-                false, null, updateHClassSizes )
-        ] ) );
+    ) ) );
     // return the container that holds all the sections
     return container;
 }
@@ -439,12 +446,14 @@ function initializeSemigroup ( semigroup ) {
         diagramElement().parentNode.replaceChild(
             renderEggBoxDiagram( semigroup ), diagramElement() );
     semigroup.setOption = ( key, value ) => {
+        console.log( 'setting diagram option', key, value );
         semigroup.options[key] = value;
         semigroup.update();
     };
     semigroup.getOption = key => semigroup.options[key];
     semigroup.DClasses.map( dclass => {
         dclass.setOption = ( key, value ) => {
+            console.log( 'setting dclass option', key, value );
             dclass.options[key] = value;
             semigroup.update();
         };
