@@ -56,26 +56,6 @@ function elt ( html, tag, attrs, children ) {
     return result;
 }
 
-function getLimit ( obj ) {
-    const options = obj.options || obj.semigroup.options;
-    if ( obj.hasOwnProperty( 'DClasses' ) ) {
-        var limit = options.NrDClassesIncluded;
-        var count = obj.DClasses.length;
-    } else if ( obj.hasOwnProperty( 'RClasses' ) ) {
-        var limit = options.NrRClassesIncludedPerDClass;
-        var count = obj.RClasses.length;
-    } else if ( obj.hasOwnProperty( 'HClasses' ) ) {
-        var limit = options.NrLClassesIncludedPerRClass;
-        var count = obj.HClasses.length;
-    } else if ( obj.hasOwnProperty( 'elements' ) ) {
-        var limit = options.NrElementsIncludedPerHClass;
-        var count = obj.elements.length;
-    } else {
-        throw obj;
-    }
-    return limit > 0 ? Math.min( limit, count ) : count;
-}
-
 function renderHClass ( hclass ) {
     const options = hclass.semigroup.options;
     // create both expanded and default views, between which
@@ -138,7 +118,7 @@ function renderHClass ( hclass ) {
 function renderRClass ( rclass ) {
     const options = rclass.semigroup.options;
     var result = elt( null, 'tr' );//, { class : 'table-active' } );
-    const numToShow = getLimit( rclass );
+    const numToShow = rclass.DClass.options.numLClassesToShow;
     for ( var i = 0 ; i < numToShow ; i++ )
         result.appendChild( renderHClass( rclass.HClasses[i], options ) );
     if ( numToShow < rclass.size ) {
@@ -156,13 +136,14 @@ function renderRClass ( rclass ) {
 }
 
 function renderDClass ( dclass ) {
+    console.log( dclass );
     const options = dclass.semigroup.options;
     var result = elt( null, 'table', { class : 'd-class table-bordered' } );
-    const numToShow = getLimit( dclass );
+    const numToShow = dclass.options.numRClassesToShow;
     for ( var i = 0 ; i < numToShow ; i++ )
         result.appendChild( renderRClass( dclass.RClasses[i], options ) );
     if ( numToShow < dclass.size ) {
-        var rowLength = getLimit( dclass.RClasses[0] );
+        var rowLength = dclass.options.numLClassesToShow;
         if ( rowLength < dclass.RClasses[0].size ) rowLength++;
         const otherRClassReps = dclass.RClasses.map( rclass =>
             rclass.HClasses[0].representative ).join( '\n' );
@@ -334,7 +315,10 @@ function setupControlsFromModel () {
     } );
     document.getElementById( 'chooseDClass' ).dispatchEvent(
         new Event( 'change' ) );
-    const max = diagramModel().size;
+    const max = diagramModel().options.NrDClassesIncluded > 0 ?
+        Math.min( diagramModel().options.NrDClassesIncluded,
+                  diagramModel().DClasses.length ) :
+        diagramModel().DClasses.length;
     var slider = document.getElementById( 'sliderForD' );
     slider.setAttribute( 'max', max );
     slider.disabled = max == 1;
