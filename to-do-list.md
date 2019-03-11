@@ -7,21 +7,9 @@
    constructed for each of the following cases:
    `NrDClassesIncluded=0`, `0<NrDClassesIncluded<NrDClasses(S)`, and
    `NrDClassesIncluded=NrDClasses(S)`.
- * Throw together some quick documentation notes on how the code
-   behaves in each of those cases, for reference later when writing the
-   package manual.
  * Repeat those same tests for `NrRClassesIncludedPerDClass` as well.
- * Throw together some quick documentation notes on how the code
-   behaves in each of those cases, for reference later when writing the
-   package manual.
  * Repeat those same tests for `NrLClassesIncludedPerRClass` as well.
- * Throw together some quick documentation notes on how the code
-   behaves in each of those cases, for reference later when writing the
-   package manual.
  * Repeat those same tests for `NrElementsIncludedPerHClass` as well.
- * Throw together some quick documentation notes on how the code
-   behaves in each of those cases, for reference later when writing the
-   package manual.
  * Create an example visualization in which `NrDClassesIncluded=0` and
    check that all of the following properties hold in the visualization.
     * All D-classes are shown, even if the semigroup has many of them.
