@@ -132,6 +132,7 @@ end;
 #   (defaults to 20, set to 0 for no limit)
 #   See above for explanation of why you might want to do this.
 ShowSemigroup := function ( semigroup, options... )
+    local dclass, rmax, lmax, emax;
     # Ensure options object exists
     if Length( options ) = 0 then
         options := rec();
@@ -153,6 +154,40 @@ ShowSemigroup := function ( semigroup, options... )
     fi;
     if not IsBound( options.NrElementsIncludedPerHClass ) then
         options.NrElementsIncludedPerHClass := 20;
+    fi;
+    # Ensure that the options have sensible values
+    if options.NrDClassesIncluded < 0 then
+        options.NrDClassesIncluded := 0;
+    fi;
+    if options.NrDClassesIncluded > NrDClasses( semigroup ) then
+        options.NrDClassesIncluded := NrDClasses( semigroup );
+    fi;
+    rmax := 0;
+    lmax := 0;
+    emax := 0;
+    for dclass in IteratorOfDClasses( semigroup ) do
+        rmax := Maximum( rmax, NrRClasses( dclass ) );
+        lmax := Maximum( lmax, NrLClasses( dclass ) );
+        emax := Maximum( emax, Size( Intersection(
+            LClasses( dclass )[1], RClasses( dclass )[1] ) ) );
+    od;
+    if options.NrRClassesIncludedPerDClass < 0 then
+        options.NrRClassesIncludedPerDClass := 0;
+    fi;
+    if options.NrRClassesIncludedPerDClass > rmax then
+        options.NrRClassesIncludedPerDClass := rmax;
+    fi;
+    if options.NrLClassesIncludedPerRClass < 0 then
+        options.NrLClassesIncludedPerRClass := 0;
+    fi;
+    if options.NrLClassesIncludedPerRClass > lmax then
+        options.NrLClassesIncludedPerRClass := lmax;
+    fi;
+    if options.NrElementsIncludedPerHClass < 0 then
+        options.NrElementsIncludedPerHClass := 0;
+    fi;
+    if options.NrElementsIncludedPerHClass > emax then
+        options.NrElementsIncludedPerHClass := emax;
     fi;
     # Create JSON and pass to visualization library
     return CreateVisualization( rec(
@@ -181,10 +216,10 @@ Size( DP );;
 ShowSemigroup(
     SingularTransformationSemigroup( 4 ),
     rec(
-        ToString := x -> String( ListTransformation( x ) ),
-        NrDClassesIncluded := 2,
-        NrRClassesIncludedPerDClass := 0,
-        NrLClassesIncludedPerRClass := 0,
-        NrElementsIncludedPerHClass := 0
+        ToString := x -> String( ListTransformation( x ) )#,
+        #NrDClassesIncluded := -20,
+        #NrRClassesIncludedPerDClass := -20,
+        #NrLClassesIncludedPerRClass := -20,
+        #NrElementsIncludedPerHClass := -20
     )
 );

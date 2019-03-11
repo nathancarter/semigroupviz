@@ -3,8 +3,6 @@
 
 ## Fixing mistakes and cleaning up code
 
- * Extend `ShowSemigroup` so that it caps each of these values below
-   at zero and above at the maximum useful value for that semigroup.
  * Write a GAP test script that verifies that the correct JSON is
    constructed for each of the following cases:
    `NrDClassesIncluded=0`, `0<NrDClassesIncluded<NrDClasses(S)`, and

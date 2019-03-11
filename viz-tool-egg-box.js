@@ -399,7 +399,7 @@ function initializeSemigroup ( semigroup ) {
     // since the Nr*Classes* settings might be 0, which implies that
     // everything should be included,
     semigroup.options.numDClassesToShow =
-        semigroup.options.NrDClassesIncluded;
+        Math.max( 1, semigroup.options.NrDClassesIncluded );
     // add pointers from each subobject to the whole semigroup
     // data structure, for convenience
     semigroup.DClasses.map( dclass => {
