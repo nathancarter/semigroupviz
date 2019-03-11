@@ -10,11 +10,6 @@
  * Repeat those same tests for `NrRClassesIncludedPerDClass` as well.
  * Repeat those same tests for `NrLClassesIncludedPerRClass` as well.
  * Repeat those same tests for `NrElementsIncludedPerHClass` as well.
- * Create an example visualization in which `NrDClassesIncluded=0` and
-   check that all of the following properties hold in the visualization.
-    * All D-classes are shown, even if the semigroup has many of them.
-    * Ensure that the D-class slider has the correct range of values.
-    * Ensure that all positions on that slider do something sensible.
  * Create an example visualization in which
    `NrDClassesIncluded=NrDClasses(S)` and ensure that all the same results
    hold (in fact exactly the same behavior in all cases).
