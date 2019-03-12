@@ -196,15 +196,36 @@ function form ( /* arguments */ ) {
         var label = arguments[i];
         if ( typeof( label ) == 'string' ) label = elt( label, 'label' );
         const control = arguments[i+1];
-        label.setAttribute( 'for', control.getAttribute( 'id' ) );
+        const id = control.getAttribute( 'id' )
+                || control.childNodes[1].getAttribute( 'id' );
+        label.setAttribute( 'for', id );
         result.appendChild( elt( null, 'div', {
             class : 'row', style : 'padding-bottom: 1em;'
         }, [
             elt( null, 'div', { class : 'col' }, label ),
             elt( null, 'div', { class : 'col' }, control )
         ] ) );
+        result.appendChild( elt( null, 'div', {
+            class : 'row', style : 'padding-bottom: 1em;'
+        }, [
+            elt( '', 'div', {
+                class : 'col alert alert-primary',
+                id : id + 'Warning',
+                style : 'display : none;'
+            } )
+        ] ) );
     }
     return result;
+}
+
+function showWarning ( warningId, html ) {
+    const warning = document.getElementById( warningId );
+    warning.innerHTML = html;
+    warning.style.display = 'block';
+}
+function hideWarning ( warningId ) {
+    const warning = document.getElementById( warningId );
+    warning.style.display = 'none';
 }
 
 function diagramControlsDiv () {
@@ -278,9 +299,9 @@ function diagramControlsDiv () {
             class : 'form-control',
             id : 'chooseDClass',
             change : ( event ) => {
+                const dclass = diagramModel().DClasses[picker.value]
                 // how to update a slider and display pair
                 const updatePair = ( letter, optionkey, maxkey ) => {
-                    const dclass = diagramModel().DClasses[picker.value]
                     const option = dclass.getOption( optionkey );
                     const max = dclass.getOption( maxkey );
                     slider( letter ).setAttribute( 'max', max );
@@ -292,6 +313,37 @@ function diagramControlsDiv () {
                 updatePair( 'r', 'numRClassesToShow', 'numRClasses' );
                 updatePair( 'l', 'numLClassesToShow', 'numLClasses' );
                 updatePair( 'h', 'numHClassElementsToShow', 'numElements' );
+                // show any relevant warnings related to those sliders
+                if ( dclass.size > dclass.RClasses.length )
+                    showWarning( 'sliderForRWarning', 'The selected '
+                      + `D-class contains ${dclass.size} R-classes, `
+                      + 'but the GAP code that created this visualization '
+                      + 'chose to include in this page the data for only '
+                      + `${dclass.RClasses.length} of them.` );
+                else
+                    hideWarning( 'sliderForRWarning' );
+                if ( dclass.RClasses[0].size >
+                        dclass.RClasses[0].HClasses.length )
+                    showWarning( 'sliderForLWarning', 'The selected '
+                      + `D-class contains ${dclass.RClasses[0].size} `
+                      + 'R-classes, but the GAP code that created this '
+                      + 'visualization chose to include in this page '
+                      + 'the data for only '
+                      + `${dclass.RClasses[0].HClasses.length} of them.` );
+                else
+                    hideWarning( 'sliderForLWarning' );
+                if ( dclass.RClasses[0].HClasses[0].size >
+                        dclass.RClasses[0].HClasses[0].elements.length )
+                    showWarning( 'sliderForHWarning', 'The selected '
+                      + 'D-class contains H-classes with '
+                      + `${dclass.RClasses[0].HClasses[0].size} elements `
+                      + 'each, but the GAP code that created this '
+                      + 'visualization chose to include in this page '
+                      + 'the data for only '
+                      + dclass.RClasses[0].HClasses[0].elements.length
+                      + ' elements in each H-class.' );
+                else
+                    hideWarning( 'sliderForHWarning' );
             }
         } ),
         'Then how many of its R-classes to show:',
@@ -306,23 +358,35 @@ function diagramControlsDiv () {
 }
 
 function setupControlsFromModel () {
+    const model = diagramModel();
+    // fill drop-down list with all D-class representatives
     const dClassChooser = document.getElementById( 'chooseDClass' );
-    diagramModel().DClasses.map( ( dclass, index ) => {
+    model.DClasses.map( ( dclass, index ) => {
         const repr = dclass.RClasses[0].HClasses[0].representative;
         dClassChooser.appendChild( elt(
             `Class #${index+1}:  ${repr}`, 'option', { value : index } ) );
     } );
+    // tell it that it changed so it will set up all other controls
     document.getElementById( 'chooseDClass' ).dispatchEvent(
         new Event( 'change' ) );
-    const max = diagramModel().options.NrDClassesIncluded > 0 ?
-        Math.min( diagramModel().options.NrDClassesIncluded,
-                  diagramModel().DClasses.length ) :
-        diagramModel().DClasses.length;
+    // set up slider for number of D-classes
+    const max = model.options.NrDClassesIncluded > 0 ?
+        Math.min( model.options.NrDClassesIncluded,
+                  model.DClasses.length ) :
+        model.DClasses.length;
     var slider = document.getElementById( 'sliderForD' );
     slider.setAttribute( 'max', max );
     slider.disabled = max == 1;
     document.getElementById( 'numDToShow' ).textContent =
-        slider.value = diagramModel().getOption( 'numDClassesToShow' );
+        slider.value = model.getOption( 'numDClassesToShow' );
+    // add warnings for any data that GAP didn't include in the JSON
+    if ( model.size > model.DClasses.length )
+        showWarning( 'sliderForDWarning', 'The semigroup contains '
+          + `${model.size} D-classes, but the GAP code that created `
+          + 'this visualization chose to include in this page the '
+          + `data for only ${model.DClasses.length} of them.` );
+    else
+        hideWarning( 'sliderForDWarning' );
 }
 
 function wrapDiagram ( diagram ) {

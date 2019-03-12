@@ -28,11 +28,11 @@ Size( DP );;
 ShowSemigroup(
     SingularTransformationSemigroup( 4 ),
     rec(
-        ToString := x -> String( ListTransformation( x ) )#,
-        #NrDClassesIncluded := -20,
-        #NrRClassesIncludedPerDClass := -20,
-        #NrLClassesIncludedPerRClass := -20,
-        #NrElementsIncludedPerHClass := -20
+        ToString := x -> String( ListTransformation( x ) ),
+        NrDClassesIncluded := 2,
+        NrRClassesIncludedPerDClass := 2,
+        NrLClassesIncludedPerRClass := 2,
+        NrElementsIncludedPerHClass := 2
     )
 );
 # Sm := Semigroup( [
