@@ -3,31 +3,6 @@
 
 ## Fixing mistakes and cleaning up code
 
- * Write a GAP test script that verifies that the correct JSON is
-   constructed for each of the following cases:
-   `NrDClassesIncluded=0`, `0<NrDClassesIncluded<NrDClasses(S)`, and
-   `NrDClassesIncluded=NrDClasses(S)`.
- * Repeat those same tests for `NrRClassesIncludedPerDClass` as well.
- * Repeat those same tests for `NrLClassesIncludedPerRClass` as well.
- * Repeat those same tests for `NrElementsIncludedPerHClass` as well.
- * Create an example visualization in which
-   `NrDClassesIncluded=NrDClasses(S)` and ensure that all the same results
-   hold (in fact exactly the same behavior in all cases).
- * Create an example visualization in which `NrRClassesIncludedPerDClass=0`
-   and check that all of the same properties hold, but for R-classes
-   instead.
- * Repeat previous test with `NrRClassesIncludedPerDClass=x` for various
-   values of `x` equal to `NrRClasses(dclass)` as `dclass` varies.
- * Create an example visualization in which `NrLClassesIncludedPerRClass=0`
-   and check that all of the same properties hold, but for L-classes
-   instead.
- * Repeat previous test with `NrLClassesIncludedPerRClass=x` for various
-   values of `x` equal to `NrLClasses(dclass)` as `dclass` varies.
- * Create an example visualization in which `NrElementsIncludedPerHClass=0`
-   and check that all of the same properties hold, but for element lists.
- * Repeat previous test with `NrElementsIncludedPerHClass=x` for various
-   values of `x` equal to `Size(dclass.RClasses[0].HClasses[0])` as `dclass`
-   varies.
  * Create an example visualization in which
    `0<NrDClassesIncluded<NrDClasses(S)` and ensure that the following
    properties hold in the visualization.

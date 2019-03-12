@@ -35,3 +35,14 @@ ShowSemigroup(
         #NrElementsIncludedPerHClass := -20
     )
 );
+# Sm := Semigroup( [
+#     Transformation( [ 1, 1, 1 ] ),
+#     Transformation( [ 1, 2, 2 ] )
+# ] );
+# Print( EggBoxDiagramRecord( Sm, rec(
+#     ToString := x -> String( ListTransformation( x ) ),
+#     NrDClassesIncluded := 0,
+#     NrRClassesIncludedPerDClass := 0,
+#     NrLClassesIncludedPerRClass := 0,
+#     NrElementsIncludedPerHClass := 0
+# ) ), "\n" );
