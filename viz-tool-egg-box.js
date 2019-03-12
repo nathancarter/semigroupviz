@@ -136,7 +136,6 @@ function renderRClass ( rclass ) {
 }
 
 function renderDClass ( dclass ) {
-    console.log( dclass );
     const options = dclass.semigroup.options;
     var result = elt( null, 'table', { class : 'd-class table-bordered' } );
     const numToShow = dclass.options.numRClassesToShow;
