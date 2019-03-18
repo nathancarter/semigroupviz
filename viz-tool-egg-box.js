@@ -262,7 +262,6 @@ function diagramControlsDiv () {
             id : sliderName( letter ),
             min : 1, max : 2, value : 1, // these are changed later
             input : ( event ) => {
-                console.log( letter, key, 'slider moved' );
                 display( letter ).textContent = slider( letter ).value;
                 ( ( letter == 'd' ) ? diagramModel()
                                     : diagramModel().DClasses[picker.value] )
