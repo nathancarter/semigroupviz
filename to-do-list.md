@@ -1,15 +1,6 @@
 
 # To-do list
 
-## Finishing first draft of desired features
-
- * Make "...n more H-classes" a link that expands all rows of the table
-   to show them.  Imitate the `toggleViews()` code in `renderHClass()`.
- * Make "...n more R-classes" a link that expands the table to show
-   more rows.  Imitate the `toggleViews()` code in `renderHClass()`.
- * Make "...n more D-classes" a link that expands the table to show
-   more rows.  Imitate the `toggleViews()` code in `renderHClass()`.
-
 ## Feedback
 
  * Show the package to Steve to see if it's what he was looking for.

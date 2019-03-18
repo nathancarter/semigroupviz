@@ -80,9 +80,12 @@ function renderHClass ( hclass ) {
         elt( '<nobr>' + hclass.elements.join( '</nobr><br><nobr>' )
            + '</nobr>' ) );
     var eltsToShow = hclass.elements.slice( 0, numToShow );
-    if ( numToShow < hclass.size )
-        eltsToShow.push( showHSize ? '&vellip;'
-            : more( hclass.size - numToShow, 'element' ) );
+    if ( numToShow < hclass.size ) {
+        const text = showHSize ? '&vellip;'
+            : more( hclass.size - numToShow, 'element' );
+        const script = `showAll(${hclass.DClass.index},'H'); return false;`;
+        eltsToShow.push( `<a href="#" onclick="${script}">${text}</a>` );
+    }
     defaultView.appendChild(
         elt( '<nobr>' + eltsToShow.join( '</nobr><br><nobr>' )
            + '</nobr>' ) );
@@ -124,8 +127,10 @@ function renderRClass ( rclass ) {
     if ( numToShow < rclass.size ) {
         const otherHClassReps = rclass.HClasses.map( hclass =>
             hclass.representative ).join( '\n' );
+        const text = more( rclass.size - numToShow, 'H-class' );
+        const script = `showAll(${rclass.DClass.index},'L'); return false;`;
         const moreCell = elt(
-            more( rclass.size - numToShow, 'H-class' ), 'td', {
+            `<a href="#" onclick="${script}">${text}</a>`, 'td', {
                 title : 'Representatives of other\nH-classes '
                       + 'in this R-class:\n' + otherHClassReps
             }
@@ -146,8 +151,10 @@ function renderDClass ( dclass ) {
         if ( rowLength < dclass.RClasses[0].size ) rowLength++;
         const otherRClassReps = dclass.RClasses.map( rclass =>
             rclass.HClasses[0].representative ).join( '\n' );
+        const text = more( dclass.size - numToShow, 'R-class' );
+        const script = `showAll(${dclass.index},'R'); return false;`;
         const moreCell = elt(
-            more( dclass.size - numToShow, 'R-class' ), 'td', {
+            `<a href="#" onclick="${script}">${text}</a>`, 'td', {
                 colspan : rowLength,
                 title : 'Representatives of other\nR-classes '
                       + 'in this D-class:\n' + otherRClassReps
@@ -388,6 +395,25 @@ function setupControlsFromModel () {
         hideWarning( 'sliderForDWarning' );
 }
 
+function showAll ( dclassIndex, classLetter ) {
+    if ( dclassIndex == null ) {
+        // they want to show all the D-classes to which we have access
+        diagramModel().setOption( 'numDClassesToShow',
+            diagramModel().getOption( 'NrDClassesIncluded' ) );
+    } else {
+        // they want to show all the R/L/H-classes inside this D-class
+        const dclass = diagramModel().DClasses[dclassIndex];
+        if ( classLetter == 'R' || classLetter == 'L' )
+            dclass.setOption( `num${classLetter}ClassesToShow`,
+                dclass.getOption( `num${classLetter}Classes` ) );
+        else if ( classLetter == 'H' )
+            dclass.setOption( 'numHClassElementsToShow',
+                dclass.getOption( 'numElements' ) );
+    }
+    document.getElementById( 'chooseDClass' ).dispatchEvent(
+        new Event( 'change' ) );
+}
+
 function wrapDiagram ( diagram ) {
     const wrapper = elt( null, 'div' );
     wrapper.innerHTML =
@@ -464,7 +490,8 @@ function initializeSemigroup ( semigroup ) {
         Math.max( 1, semigroup.options.NrDClassesIncluded );
     // add pointers from each subobject to the whole semigroup
     // data structure, for convenience
-    semigroup.DClasses.map( dclass => {
+    semigroup.DClasses.map( ( dclass, index ) => {
+        dclass.index = index;
         dclass.semigroup = semigroup;
         dclass.options = {
             numRClasses : dclass.RClasses.length,
