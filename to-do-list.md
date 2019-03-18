@@ -8,7 +8,6 @@
 
 ## Packaging
 
- * Document the whole `.js` file.
  * Factor the `.g` file into `.gi` and `.gd`.
  * Document the `.gd` file.
  * Go through the process for turning this repo into a GAP package repo.
