@@ -5,34 +5,6 @@
 // The JSON data should have the following attributes:
 // ( DOCUMENTATION TO-DO )
 
-window.requirejs.config( {
-    paths : {
-        dialog : 'https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.10/dialog-polyfill.min'
-    }
-} );
-
-function goodAlert ( html ) {
-    var dialog = document.createElement( 'dialog' );
-    var button = document.createElement( 'a' );
-    button.href = '#';
-    button.textContent = String.fromCharCode( 10006 );
-    button.style.position = 'absolute';
-    button.style.right = '5px';
-    button.style.top = '5px';
-    button.style.textDecoration = 'none';
-    button.style.color = '#000';
-    button.addEventListener( 'click', function ( event ) {
-        dialog.close();
-    } );
-    dialog.appendChild( button );
-    var div = document.createElement( 'div' );
-    div.innerHTML = html;
-    dialog.appendChild( div );
-    document.body.appendChild( dialog );
-    dialog.showModal();
-    document.activeElement.blur();
-}
-
 function more ( num, type ) {
     return `...${num} more ${type}${num==1?'':/s$/.test(type)?'es':'s'}`;
 }

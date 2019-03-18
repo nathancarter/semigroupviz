@@ -8,7 +8,6 @@
 
 ## Packaging
 
- * Remove any vestigial code from the `.js` file.
  * Document the whole `.js` file.
  * Factor the `.g` file into `.gi` and `.gd`.
  * Document the `.gd` file.
