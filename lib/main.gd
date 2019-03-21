@@ -1,15 +1,5 @@
 
 
-############
-#
-# Load visualization package and semigroups package
-#
-############
-
-LoadPackage( "jupyterviz" );
-LoadPackage( "semigroups" );
-
-
 # This function converts the given H-class from the given semigroup
 # into a GAP record, obeying the options passed in the third argument.
 #
