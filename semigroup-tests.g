@@ -6,7 +6,7 @@
 #
 ############
 
-Read( "semigroup-setup.g" );
+LoadPackage( "semigroupviz" );
 
 
 ############

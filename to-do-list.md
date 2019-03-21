@@ -8,9 +8,7 @@
 
 ## Packaging
 
- * Factor the `.g` file into `.gi` and `.gd`.
- * Document the `.gd` file.
- * Go through the process for turning this repo into a GAP package repo.
+ * Update the documentation in the `.gd` file to use GAPDoc's format.
  * Create the other files necessary to create a manual.
  * Make a build script for the manual.
  * Write code for testing this package together with a master test script.
