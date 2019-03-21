@@ -14,6 +14,6 @@
  * Create the other files necessary to create a manual.
  * Make a build script for the manual.
  * Write code for testing this package together with a master test script.
- * Add a README and publish this to GitHub.
+ * Publish this to GitHub.
  * If Steve's changes have been included, ask Alex if we can include this
    in the next GAP release.
