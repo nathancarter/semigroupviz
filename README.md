@@ -40,7 +40,7 @@ Thus Green's relations are the _L_, _R_, _J_, _D_, and _H_.  They give us the fo
 
 Hence the name "egg box" (or "egg carton") which is also a grid of cells.
 
-![An egg-carton](https://upload.wikimedia.org/wikipedia/commons/e/e1/DRFCartons_%282%29.jpg =300x300)
+![An egg-carton](real-egg-box.jpg =300x300)
 
 For example, if _S_ is
 [the semigroup of non-invertible transformations](https://www.gap-system.org/Manuals/pkg/semigroups-3.0.20/doc/chap8.html#X7894EE357D103806)
