@@ -411,7 +411,7 @@ function diagramControlsDiv () {
         card( 'General options', form(
             'Show this many D-classes:',
             makePair( 'd', 'numDClassesToShow' ),
-            'When to show H-class Headings:',
+            'When to show H-class headings:',
             elt( null, 'fieldset', { class : 'form-group' }, [
                 radioButton( 'Always', 'yes', 'hclass-size-options',
                     false, null, updateHClassSizes ),
