@@ -7,18 +7,19 @@ gap> START_TEST("SemigroupViz package: json-form.tst");
 # Ensure that the JSON form produced by EggBoxDiagramJSON is correct.
 
 # Tell the package we're inside a Jupyter notebook.
-gap> Read( "semigroup-setup.g" ); # later this will be LoadPackage(_,false);
+gap> LoadPackage( "semigroupviz", false );
 #I  method installed for Matrix matches more than one declaration
+true
 
 # Verify the function exists
-gap> IsBound( EggBoxDiagramRecord );
+gap> IsBound( SGPVIZ_EggBoxDiagramRecord );
 true
 
 # Create a small semigroup (two elements)
 gap> twoelts := Semigroup( [ Transformation( [ 1, 1, 1 ] ), Transformation( [ 1, 2, 2 ] ) ] );;
 
 # Compute its default Egg-Box Diagram record and verify that it's correct.
-gap> EggBoxDiagramRecord( twoelts, rec( ToString := x -> String( ListTransformation( x ) ), NrDClassesIncluded := 0, NrRClassesIncludedPerDClass := 0, NrLClassesIncludedPerRClass := 0, NrElementsIncludedPerHClass := 0 ) );
+gap> SGPVIZ_EggBoxDiagramRecord( twoelts, rec( ToString := x -> String( ListTransformation( x ) ), NrDClassesIncluded := 0, NrRClassesIncludedPerDClass := 0, NrLClassesIncludedPerRClass := 0, NrElementsIncludedPerHClass := 0 ) );
 rec(
   DClasses := [ rec(
           RClasses := [ rec(
@@ -44,7 +45,7 @@ rec(
   size := 2 )
 
 # Compute a small subset of that diagram record and verify that it's correct.
-gap> EggBoxDiagramRecord( twoelts, rec( ToString := x -> String( ListTransformation( x ) ), NrDClassesIncluded := 1, NrRClassesIncludedPerDClass := 1, NrLClassesIncludedPerRClass := 1, NrElementsIncludedPerHClass := 1 ) );
+gap> SGPVIZ_EggBoxDiagramRecord( twoelts, rec( ToString := x -> String( ListTransformation( x ) ), NrDClassesIncluded := 1, NrRClassesIncludedPerDClass := 1, NrLClassesIncludedPerRClass := 1, NrElementsIncludedPerHClass := 1 ) );
 rec(
   DClasses := [ rec(
           RClasses := [ rec(
@@ -66,7 +67,7 @@ rec(
 gap> larger := SingularTransformationSemigroup( 4 );;
 
 # Compute its full Egg Box Diagram and verify the sizes of things.
-gap> tmp := EggBoxDiagramRecord( larger, rec( ToString := x -> String( ListTransformation( x ) ), NrDClassesIncluded := 0, NrRClassesIncludedPerDClass := 0, NrLClassesIncludedPerRClass := 0, NrElementsIncludedPerHClass := 0 ) );;
+gap> tmp := SGPVIZ_EggBoxDiagramRecord( larger, rec( ToString := x -> String( ListTransformation( x ) ), NrDClassesIncluded := 0, NrRClassesIncludedPerDClass := 0, NrLClassesIncludedPerRClass := 0, NrElementsIncludedPerHClass := 0 ) );;
 gap> tmp.options.NrDClassesIncluded; # option was set to 0
 0
 gap> tmp.size; # thus we included all three D-classes
@@ -117,7 +118,7 @@ gap> Length( tmp.DClasses[3].RClasses[1].HClasses[1].elements );
 1
 
 # Compute a portion of the same Egg Box Diagram and verify the sizes of things.
-gap> tmp := EggBoxDiagramRecord( larger, rec( ToString := x -> String( ListTransformation( x ) ), NrDClassesIncluded := 2, NrRClassesIncludedPerDClass := 2, NrLClassesIncludedPerRClass := 2, NrElementsIncludedPerHClass := 2 ) );;
+gap> tmp := SGPVIZ_EggBoxDiagramRecord( larger, rec( ToString := x -> String( ListTransformation( x ) ), NrDClassesIncluded := 2, NrRClassesIncludedPerDClass := 2, NrLClassesIncludedPerRClass := 2, NrElementsIncludedPerHClass := 2 ) );;
 gap> tmp.options.NrDClassesIncluded; # option was set to 2
 2
 gap> tmp.size; # thus we included only 2 D-classes
