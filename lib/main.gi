@@ -11,7 +11,7 @@ InstallVisualizationTool( "egg-box", ReadAll( InputTextFile(
 ) ) );
 
 
-InstallGlobalFunction( HClassToRecord,
+InstallGlobalFunction( SGPVIZ_HClassToRecord,
 function ( semigroup, hclass, options )
     local result, repr;
     repr := Representative( hclass );
@@ -38,7 +38,7 @@ function ( semigroup, hclass, options )
 end );
 
 
-InstallGlobalFunction( DClassToRecord,
+InstallGlobalFunction( SGPVIZ_DClassToRecord,
 function ( semigroup, dclass, options )
     local result, next,
           lclass, lclasses, origl, rclass, rclasses, origr;
@@ -62,14 +62,14 @@ function ( semigroup, dclass, options )
     result.RClasses := List( rclasses, rclass -> rec(
         size := NrLClasses( dclass ),
         HClasses := List( lclasses, lclass ->
-            HClassToRecord( semigroup,
+            SGPVIZ_HClassToRecord( semigroup,
                 Intersection( lclass, rclass ), options ) )
     ) );
     return result;
 end );
 
 
-InstallGlobalFunction( EggBoxDiagramRecord,
+InstallGlobalFunction( SGPVIZ_EggBoxDiagramRecord,
 function ( semigroup, options )
     local dclass, dclasses, result, smallerOptions, name;
     smallerOptions := rec( );
@@ -92,7 +92,7 @@ function ( semigroup, options )
     dclasses := IteratorOfDClasses( semigroup );
     for dclass in dclasses do
         Add( result.DClasses,
-             DClassToRecord( semigroup, dclass, options ) );
+             SGPVIZ_DClassToRecord( semigroup, dclass, options ) );
         if options.NrDClassesIncluded > 0
                 and options.NrDClassesIncluded
                  <= Length( result.DClasses ) then
@@ -165,7 +165,7 @@ function ( semigroup, options... )
     # Create JSON and pass to visualization library
     return CreateVisualization( rec(
         tool := "egg-box",
-        data := GapToJsonString( EggBoxDiagramRecord(
+        data := GapToJsonString( SGPVIZ_EggBoxDiagramRecord(
             semigroup, options ) )
     ) );
 end );

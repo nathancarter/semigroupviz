@@ -12,7 +12,78 @@
 #! @Chapter Function reference
 #! @ChapterLabel funcref
 
+#! @Section Public API
+
+#! @Arguments semigroup[, options]
+#! @Returns nothing
+#! @Description
+#!  This function displays a visualization of the given semigroup to the
+#!  user by calling the display tools in the underlying
+#!  <Package>JupyterViz</Package> package.  This means that one of two
+#!  methods will be used for showing the user the resulting visualization:
+#!  <List>
+#!    <Item>If this function is called in a Jupyter Notebook, it returns
+#!      an object that, when rendered by that notebook, will result in
+#!      the visualization appearing in the correct output cell.</Item>
+#!    <Item>If run outside of a Jupyter Notebook, such as in the &GAP;
+#!      REPL, this function creates an HTML page containing the given
+#!      visualization and then opens the page in the system default web
+#!      browser.</Item>
+#!  </List>
+#!
+#!  It accepts the following arguments.
+#!  <List>
+#!    <Item>The first parameter must be a semigroup, as created by &GAP;'s
+#!      <Package>Semigroups</Package> Package.</Item>
+#!    <Item>The second argument is optional but if it is present, it
+#!      should be a &GAP; record whose contents will
+#!      govern how this function does its work, as indicated below.</Item>
+#!  </List>
+#!
+#!  The fields you can provide in the <Code>options</Code> parameter are
+#!  as follows.  Each is optional, and its default value is documented
+#!  below.
+#!  <List>
+#!    <Item><Code>ToString</Code> can be a function mapping elements of
+#!      the semigroup to strings, as documented in
+#!      <Ref Func="SGPVIZ_HClassToRecord"/>.</Item>
+#!    <Item><Code>NrDClassesIncluded</Code> can be the maximum number of
+#!      D-classes to compute and include in the JSON object to be
+#!      visualized.  This is useful if the semigroup is extremely large,
+#!      and you want to send only a manageable amount of JSON data to
+#!      be displayed, so that the computation becomes feasible.
+#!      This defaults to 20.  Set it to 0 for no limit (if you know your
+#!      semigroup is of a reasonable size).</Item>
+#!    <Item><Code>NrRClassesIncludedPerDClass</Code> can be the maximum
+#!      number of R-classes to compute for any one D-class and include
+#!      in the JSON, for the same reasons as described above for
+#!      <Code>NrDClassesIncluded</Code>.
+#!      This defaults to 20.  Set it to 0 for no limit (if you know your
+#!      semigroup's D-classes have a reasonable number of R-classes
+#!      each).</Item>
+#!    <Item><Code>NrLClassesIncludedPerRClass</Code> can be the maximum
+#!      number of L-classes to compute for any one D/R-class and include
+#!      in the JSON, for the same reasons as described above for
+#!      <Code>NrDClassesIncluded</Code>.
+#!      This defaults to 20.  Set it to 0 for no limit (if you know your
+#!      semigroup's D-classes have a reasonable number of L-classes
+#!      each).</Item>
+#!    <Item><Code>NrElementsIncludedPerHClass</Code> can be the maximum
+#!      number of elements to compute for any one H-class and include
+#!      in the JSON, for the same reasons as described above for
+#!      <Code>NrDClassesIncluded</Code>.
+#!      This defaults to 20.  Set it to 0 for no limit (if you know your
+#!      semigroup's H-classes have a reasonable number of elements
+#!      each).</Item>
+#!  </List>
+DeclareGlobalFunction( "ShowSemigroup" );
+
+
 #! @Section Private API
+#!
+#! **None of these methods should need to be called by a client of this
+#! package.  We provide this documentation here for completeness, not out of
+#! necessity.**
 
 #! @Arguments semigroup, hclass, options
 #! @Returns a &GAP; record obeying the options passed in the third argument
@@ -49,7 +120,7 @@
 #!      representations are also computed by <Code>options.ToString</Code>.
 #!       </Item>
 #!  </List>
-DeclareGlobalFunction( "HClassToRecord" );
+DeclareGlobalFunction( "SGPVIZ_HClassToRecord" );
 
 
 #! @Arguments semigroup, dclass, options
@@ -83,7 +154,7 @@ DeclareGlobalFunction( "HClassToRecord" );
 #!          <Code>options.NrRClassesIncludedPerDClass</Code>)</Item>
 #!        <Item><Code>HClasses</Code> is an array of records,
 #!          each of which is produced by a call to
-#!          <Ref Func="HClassToRecord"/>, passing this
+#!          <Ref Func="SGPVIZ_HClassToRecord"/>, passing this
 #!          <Code>semigroup</Code>, one of its H-classes, and the same
 #!          <Code>options</Code> object passed to us.  See that function,
 #!          above, for details on its output format.
@@ -94,7 +165,7 @@ DeclareGlobalFunction( "HClassToRecord" );
 #!      </List>
 #!    </Item>
 #!  </List>
-DeclareGlobalFunction( "DClassToRecord" );
+DeclareGlobalFunction( "SGPVIZ_DClassToRecord" );
 
 
 #! @Arguments semigroup, options
@@ -123,7 +194,7 @@ DeclareGlobalFunction( "DClassToRecord" );
 #!      semigroup</Item>
 #!    <Item><Code>DClasses</Code> is an array of records,
 #!      each of which is produced by a call to
-#!      <Ref Func="DClassToRecord"/>, passing this
+#!      <Ref Func="SGPVIZ_DClassToRecord"/>, passing this
 #!      <Code>semigroup</Code>, one of its D-classes, and the same
 #!      <Code>options</Code> object passed to us.  See that function,
 #!      above, for details on its output format.
@@ -138,71 +209,4 @@ DeclareGlobalFunction( "DClassToRecord" );
 #!      field has already been included as the <Code>name</Code> field
 #!      of the entire return value.)</Item>
 #!  </List>
-DeclareGlobalFunction( "EggBoxDiagramRecord" );
-
-
-#! @Section Public API
-
-#! @Arguments semigroup[, options]
-#! @Returns nothing
-#! @Description
-#!  This function displays a visualization of the given semigroup to the
-#!  user by calling the display tools in the underlying
-#!  <Package>JupyterViz</Package> package.  This means that one of two
-#!  methods will be used for showing the user the resulting visualization:
-#!  <List>
-#!    <Item>If this function is called in a Jupyter Notebook, it returns
-#!      an object that, when rendered by that notebook, will result in
-#!      the visualization appearing in the correct output cell.</Item>
-#!    <Item>If run outside of a Jupyter Notebook, such as in the &GAP;
-#!      REPL, this function creates an HTML page containing the given
-#!      visualization and then opens the page in the system default web
-#!      browser.</Item>
-#!  </List>
-#!
-#!  It accepts the following arguments.
-#!  <List>
-#!    <Item>The first parameter must be a semigroup, as created by &GAP;'s
-#!      <Package>Semigroups</Package> Package.</Item>
-#!    <Item>The second argument is optional but if it is present, it
-#!      should be a &GAP; record whose contents will
-#!      govern how this function does its work, as indicated below.</Item>
-#!  </List>
-#!
-#!  The fields you can provide in the <Code>options</Code> parameter are
-#!  as follows.  Each is optional, and its default value is documented
-#!  below.
-#!  <List>
-#!    <Item><Code>ToString</Code> can be a function mapping elements of
-#!      the semigroup to strings, as documented in
-#!      <Ref Func="HClassToRecord"/>.</Item>
-#!    <Item><Code>NrDClassesIncluded</Code> can be the maximum number of
-#!      D-classes to compute and include in the JSON object to be
-#!      visualized.  This is useful if the semigroup is extremely large,
-#!      and you want to send only a manageable amount of JSON data to
-#!      be displayed, so that the computation becomes feasible.
-#!      This defaults to 20.  Set it to 0 for no limit (if you know your
-#!      semigroup is of a reasonable size).</Item>
-#!    <Item><Code>NrRClassesIncludedPerDClass</Code> can be the maximum
-#!      number of R-classes to compute for any one D-class and include
-#!      in the JSON, for the same reasons as described above for
-#!      <Code>NrDClassesIncluded</Code>.
-#!      This defaults to 20.  Set it to 0 for no limit (if you know your
-#!      semigroup's D-classes have a reasonable number of R-classes
-#!      each).</Item>
-#!    <Item><Code>NrLClassesIncludedPerRClass</Code> can be the maximum
-#!      number of L-classes to compute for any one D/R-class and include
-#!      in the JSON, for the same reasons as described above for
-#!      <Code>NrDClassesIncluded</Code>.
-#!      This defaults to 20.  Set it to 0 for no limit (if you know your
-#!      semigroup's D-classes have a reasonable number of L-classes
-#!      each).</Item>
-#!    <Item><Code>NrElementsIncludedPerHClass</Code> can be the maximum
-#!      number of elements to compute for any one H-class and include
-#!      in the JSON, for the same reasons as described above for
-#!      <Code>NrDClassesIncluded</Code>.
-#!      This defaults to 20.  Set it to 0 for no limit (if you know your
-#!      semigroup's H-classes have a reasonable number of elements
-#!      each).</Item>
-#!  </List>
-DeclareGlobalFunction( "ShowSemigroup" );
+DeclareGlobalFunction( "SGPVIZ_EggBoxDiagramRecord" );
