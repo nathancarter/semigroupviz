@@ -1,12 +1,6 @@
 
 # To-do list
 
-## Bug fixing
-
- * Re-capture the screenshot for page 8 of the manual, so that the
-   text is the correct color, matching the link color in the other
-   screenshots.
-
 ## Polishing
 
  * Create the other files necessary to create a manual.
