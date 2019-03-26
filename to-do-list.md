@@ -3,8 +3,6 @@
 
 ## Bug fixing
 
- * Same as the previous, but for R-classes in a D-class.
- * Same as the previous, but for L-classes in a D-class.
  * If the number of elements included in each H-class is smaller than
    the actual number in the H-class in the semigroup, then hovering
    the mouse over a cell claims to show all _n_ elements of the

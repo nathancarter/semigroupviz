@@ -168,7 +168,7 @@ function renderRClass ( rclass ) {
         result.appendChild( renderHClass( rclass.HClasses[i], options ) );
     // if we didn't show all of them, create a cell with a "...more"
     // message and make it a link that shows the missing cells
-    if ( numToShow < rclass.size ) {
+    if ( numToShow < rclass.HClasses.length ) {
         const otherHClassReps = rclass.HClasses.map( hclass =>
             hclass.representative ).join( '\n' );
         const text = more( rclass.size - numToShow, 'H-class' );
@@ -182,6 +182,9 @@ function renderRClass ( rclass ) {
             }
         );
         result.appendChild( moreCell );
+    } else if ( numToShow < rclass.size ) {
+        result.appendChild( elt(
+            `(${rclass.size-rclass.HClasses.length} more unavailable)` ) );
     }
     return result;
 }
@@ -210,7 +213,7 @@ function renderDClass ( dclass ) {
         result.appendChild( renderRClass( dclass.RClasses[i], options ) );
     // if we didn't show all of them, create a row with a "...more"
     // message and make it a link that shows the missing rows
-    if ( numToShow < dclass.size ) {
+    if ( numToShow < dclass.RClasses.length ) {
         var rowLength = dclass.options.numLClassesToShow;
         if ( rowLength < dclass.RClasses[0].size ) rowLength++;
         const otherRClassReps = dclass.RClasses.map( rclass =>
@@ -227,6 +230,12 @@ function renderDClass ( dclass ) {
             }
         );
         result.appendChild( elt( null, 'tr', null, moreCell ) );
+    } else if ( numToShow < dclass.size ) {
+        var rowLength = dclass.options.numLClassesToShow;
+        if ( rowLength < dclass.RClasses[0].size ) rowLength++;
+        result.appendChild( elt( null, 'tr', null,
+            elt( `(${dclass.size-dclass.RClasses.length} more unavailable)`,
+                'td', { colspan : rowLength } ) ) );
     }
     return result;
 }
