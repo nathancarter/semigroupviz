@@ -75,6 +75,9 @@ function elt ( html, tag, attrs, children ) {
  */
 function renderHClass ( hclass ) {
     const options = hclass.semigroup.options;
+    const elements = hclass.elements.slice();
+    if ( elements.length < hclass.size )
+        elements.push( `(${hclass.size-elements.length} more unavailable)` );
     // create both expanded and default views, between which
     // the user can toggle
     const expandedView = elt( null, 'div' );
@@ -93,10 +96,9 @@ function renderHClass ( hclass ) {
         defaultView.appendChild( heading.cloneNode( true ) );
     // put all element names into the expanded view, then a
     // subset of them into the default view
-    expandedView.appendChild(
-        elt( '<nobr>' + hclass.elements.join( '</nobr><br><nobr>' )
-           + '</nobr>' ) );
-    var eltsToShow = hclass.elements.slice( 0, numToShow );
+    expandedView.appendChild( elt( elements.map(
+        elt => `<nobr>${elt}</nobr>` ).join( '<br>' ) ) );
+    var eltsToShow = elements.slice( 0, numToShow );
     if ( numToShow < hclass.size ) {
         const text = showHSize ? '&vellip;'
             : more( hclass.size - numToShow, 'element' );
@@ -105,15 +107,14 @@ function renderHClass ( hclass ) {
         eltsToShow.push(
             `<a href="#" onclick="${script}" title="${title}">${text}</a>` );
     }
-    defaultView.appendChild(
-        elt( '<nobr>' + eltsToShow.join( '</nobr><br><nobr>' )
-           + '</nobr>' ) );
+    defaultView.appendChild( elt( eltsToShow.map(
+        elt => `<nobr>${elt}</nobr>` ).join( '<br>' ) ) );
     // make the default view show expanded info on hover, but
     // make the expanded view say you can click to shrink
     expandedView.setAttribute( 'title', 'Click to collapse' );
     var hoverText = hclass.size > 1 ?
         `All ${hclass.size} elements:\n` : 'One element:<br>';
-    hoverText += hclass.elements.join( '\n' );
+    hoverText += elements.join( '\n' );
     defaultView.setAttribute( 'title', hoverText );
     // make the two views have the hand cursor, and swap
     // between one another.
