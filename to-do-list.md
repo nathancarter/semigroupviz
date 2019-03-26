@@ -3,9 +3,7 @@
 
 ## Bug fixing
 
- * The note that there are more D-classes not shown is not a
-   hyperlink for exposing them.  Once you've fixed this bug,
-   re-capture the screenshot for page 8 of the manual, so that the
+ * Re-capture the screenshot for page 8 of the manual, so that the
    text is the correct color, matching the link color in the other
    screenshots.
 

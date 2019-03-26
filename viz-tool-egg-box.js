@@ -700,21 +700,26 @@ function renderEggBoxDiagram ( diagram ) {
             i, tableSize ) );
     // add an ellipsis to the end if there are rows we have not
     // shown, making it a link to disclose them if possible.
-    if ( numToShow < tableSize ) {
+    if ( numToShow < diagram.DClasses.length ) {
+        const text = more( diagram.size - numToShow, 'D-class' );
+        const script = `showAll(); return false;`;
+        const title = 'Click to expand all available D-classes.';
         const otherDClassReps = diagram.DClasses.map( dclass =>
             dclass.RClasses[0].HClasses[0].representative )
             .join( '\n' );
         result.appendChild( oneHotTableRow(
-            elt( more( diagram.size - numToShow, 'D-class' ), 'td', {
+            elt( `<a href="#" onclick="${script}" title="${title}">${text}</a>`,
+            'td', {
                 title : 'Representatives of other\nD-classes '
                       + 'in this semigroup:\n' + otherDClassReps
             } ),
             numToShow, tableSize ) );
     } else if ( numToShow < diagram.size ) {
-        result.appendChild( elt(
-            `There are ${diagram.size-numToShow} more D-classes in this `
-          + 'semigroup that GAP did not include in the data for this '
-          + 'visualization.' ) );
+        result.appendChild( oneHotTableRow( elt(
+            `There are ${diagram.size-diagram.DClasses.length} more D-classes `
+          + 'in this semigroup that GAP did not include in the data for this '
+          + 'visualization.' ),
+            numToShow, tableSize ) );
     }
     // in the HTML element, embed the semigroup data itself,
     // for later lookup by any function in this page
