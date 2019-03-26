@@ -76,8 +76,9 @@ function elt ( html, tag, attrs, children ) {
 function renderHClass ( hclass ) {
     const options = hclass.semigroup.options;
     const elements = hclass.elements.slice();
-    if ( elements.length < hclass.size )
-        elements.push( `(${hclass.size-elements.length} more unavailable)` );
+    if ( hclass.elements.length < hclass.size )
+        elements.push(
+            `(${hclass.size-hclass.elements.length} more unavailable)` );
     // create both expanded and default views, between which
     // the user can toggle
     const expandedView = elt( null, 'div' );
@@ -99,13 +100,16 @@ function renderHClass ( hclass ) {
     expandedView.appendChild( elt( elements.map(
         elt => `<nobr>${elt}</nobr>` ).join( '<br>' ) ) );
     var eltsToShow = elements.slice( 0, numToShow );
-    if ( numToShow < hclass.size ) {
+    if ( numToShow < hclass.elements.length ) {
         const text = showHSize ? '&vellip;'
             : more( hclass.size - numToShow, 'element' );
         const script = `showAll(${hclass.DClass.index},'H'); return false;`;
         const title = 'Click to expand all H-classes in this D-class.';
         eltsToShow.push(
             `<a href="#" onclick="${script}" title="${title}">${text}</a>` );
+    } else if ( numToShow < hclass.size ) {
+        eltsToShow.push(
+            `(${hclass.size-hclass.elements.length} more unavailable)` );
     }
     defaultView.appendChild( elt( eltsToShow.map(
         elt => `<nobr>${elt}</nobr>` ).join( '<br>' ) ) );

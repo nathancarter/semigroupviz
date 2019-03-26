@@ -3,13 +3,6 @@
 
 ## Bug fixing
 
- * If the number of elements included in each H-class is smaller than
-   the actual number in the H-class in the semigroup, then two bugs
-   show up:
-    1. Even after clicking the ellipsis to expand to show the number
-       included, the ellipsis remains.
-    2. While the ellipsis remains, it is still a link, but clicking
-       it does nothing.
  * Same as the previous, but for R-classes in a D-class.
  * Same as the previous, but for L-classes in a D-class.
  * If the number of elements included in each H-class is smaller than
