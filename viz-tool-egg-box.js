@@ -78,7 +78,9 @@ function renderHClass ( hclass ) {
     const elements = hclass.elements.slice();
     if ( hclass.elements.length < hclass.size )
         elements.push(
-            `(${hclass.size-hclass.elements.length} more unavailable)` );
+            `There are ${hclass.size-hclass.elements.length} more elements\n`
+          + 'in this H-class that were not\nincluded by GAP in the data\n'
+          + 'for this visualization.' );
     // create both expanded and default views, between which
     // the user can toggle
     const expandedView = elt( null, 'div' );
@@ -184,7 +186,9 @@ function renderRClass ( rclass ) {
         result.appendChild( moreCell );
     } else if ( numToShow < rclass.size ) {
         result.appendChild( elt(
-            `(${rclass.size-rclass.HClasses.length} more unavailable)` ) );
+            `There are ${rclass.size-rclass.HClasses.length} more L-classes `
+          + 'in this D-class that GAP did not include in the data for this '
+          + 'visualization.' ) );
     }
     return result;
 }
@@ -234,8 +238,9 @@ function renderDClass ( dclass ) {
         var rowLength = dclass.options.numLClassesToShow;
         if ( rowLength < dclass.RClasses[0].size ) rowLength++;
         result.appendChild( elt( null, 'tr', null,
-            elt( `(${dclass.size-dclass.RClasses.length} more unavailable)`,
-                'td', { colspan : rowLength } ) ) );
+            elt( `There are ${dclass.size-dclass.RClasses.length} more R-classes `
+               + 'in this D-class that GAP did not include in the data for this '
+               + 'visualization.', 'td', { colspan : rowLength } ) ) );
     }
     return result;
 }
@@ -705,6 +710,11 @@ function renderEggBoxDiagram ( diagram ) {
                       + 'in this semigroup:\n' + otherDClassReps
             } ),
             numToShow, tableSize ) );
+    } else if ( numToShow < diagram.size ) {
+        result.appendChild( elt(
+            `There are ${diagram.size-numToShow} more D-classes in this `
+          + 'semigroup that GAP did not include in the data for this '
+          + 'visualization.' ) );
     }
     // in the HTML element, embed the semigroup data itself,
     // for later lookup by any function in this page

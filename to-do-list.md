@@ -3,10 +3,6 @@
 
 ## Bug fixing
 
- * If the number of elements included in each H-class is smaller than
-   the actual number in the H-class in the semigroup, then hovering
-   the mouse over a cell claims to show all _n_ elements of the
-   H-class, but that is incorrect.
  * The note that there are more D-classes not shown is not a
    hyperlink for exposing them.  Once you've fixed this bug,
    re-capture the screenshot for page 8 of the manual, so that the
