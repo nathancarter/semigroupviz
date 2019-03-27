@@ -249,9 +249,15 @@ function ( semigroup, options... )
     if not IsBound( options.ToString ) then
         options.ToString := PrintString;
     fi;
-    if not IsBound( options.generators ) then
+    if not IsBound( options.Generators ) then
         options.Generators := SGPVIZ_GeneratorsSmallSubset(
             semigroup, GeneratorsOfSemigroup( semigroup ) );
+    fi;
+    if not IsBound( options.ShowElementNames ) then
+        options.ShowElementNames := true;
+    fi;
+    if not IsBound( options.ShowActionNames ) then
+        options.ShowActionNames := false;
     fi;
     # Create JSON for graph vertices
     elements := List( Elements( semigroup ), elt ->
@@ -272,6 +278,7 @@ function ( semigroup, options... )
                     data := rec(
                         id := Concatenation( options.ToString( elt ),
                             "*", options.ToString( generator ) ),
+                        label := options.ToString( generator ),
                         source := options.ToString( elt ),
                         target := options.ToString( elt * generator ),
                         bgcolor := color
@@ -294,18 +301,28 @@ function ( semigroup, options... )
         data := rec(
             elements := elements,
             layout := rec( name := "cose" ),
-            style := [
-                rec(
-                    selector := "node",
-                    style := rec(
-                        content := "data(id)",
-                        ("font-size") := 6,
-                        ("text-halign") := "center",
-                        ("text-valign") := "center"
-                    )
-                )
-            ]
+            style := [ ]
         )
     );
+    if options.ShowElementNames then
+        Add( json.data.style, rec(
+            selector := "node",
+            style := rec(
+                content := "data(id)",
+                ("font-size") := 6,
+                ("text-halign") := "center",
+                ("text-valign") := "center"
+            )
+        ) );
+    fi;
+    if options.ShowActionNames then
+        Add( json.data.style, rec(
+            selector := "edge",
+            style := rec(
+                content := "data(label)",
+                ("font-size") := 6
+            )
+        ) );
+    fi;
     return CreateVisualization( json );
 end );

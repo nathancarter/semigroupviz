@@ -3,8 +3,6 @@
 
 ## Cayley graphs
 
- * Write the chapter on Cayley graphs.
- * Document the functions on Cayley graphs in `main.gd`.
  * Add option for left-multiplication and document that.
  * Add option to return JSON form rather than render it, so the user can
    manipulate the cytoscape options however they choose; document this.

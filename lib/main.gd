@@ -124,9 +124,15 @@ DeclareGlobalFunction( "ShowEggBoxDiagram" );
 #!      semigroup to use as generators (which are drawn as arrows in the
 #!      Cayley graph).  If this is not provided, the function
 #!      <Code>GeneratorsOfSemigroup</Code> is called to find a
-#!      generating set (which is often not be minimal), and then a simple
-#!      greedy algorithm is run to try to reduce its size before using it.
-#!      </Item>
+#!      generating set and then a small subset of that is chosen,
+#!      just enough to ensure the resulting graph is connected.</Item>
+#!    <Item><Code>ShowElementNames</Code> may be a boolean, whether to
+#!      show names of elements on the graph's vertices.  The default is
+#!      true.</Item>
+#!    <Item><Code>ShowActionNames</Code> may be a boolean, whether to
+#!      show names of elements on the graph's edges, indicating which
+#!      element's multiplication the edge represents.  The default is
+#!      false.</Item>
 #!  </List>
 DeclareGlobalFunction( "ShowCayleyGraph" );
 
@@ -264,13 +270,80 @@ DeclareGlobalFunction( "SGPVIZ_DClassToRecord" );
 DeclareGlobalFunction( "SGPVIZ_EggBoxDiagramRecord" );
 
 
-# To be documented
+#! @Arguments hue, saturation, value
+#! @Returns a &GAP; list containing three integers in the range
+#!   <Code>[0..255]</Code>, to be interpreted as a point in RGB color space
+#! @Description
+#!  This function converts a point in HSV color space into a point in RGB
+#!  color space using the standard algorithm for doing so, available from
+#!  many sources on the web.
+#!
+#!  <List>
+#!    <Item><Code>hue</Code> should be a number in the range
+#!      <Code>[0..360]</Code>, where 0 is the beginning of the color
+#!      wheel (red) and 360 is the end (violet, becoming red again).</Item>
+#!    <Item><Code>saturation</Code> should be a float in the range
+#!      <Math>[0,1]</Math>, where 0 means no saturation of the chosen
+#!      hue (white/gray/black only) and 1 means full saturation (a vibrant
+#!      color from the chosen hue).</Item>
+#!    <Item><Code>value</Code> (sometimes called brightness or lightness)
+#!      should be a float in the range <Math>[0,1]</Math>, where 0 means
+#!      a fully dark color (always black) and 1 means a fully bright
+#!      color (the brightest color in RGB color space, subject to the
+#!      constraints set by <Code>hue</Code> and <Code>saturation</Code>).
+#!      </Item>
+#!  </List>
+#!
+#!  This function is used internally by <Ref Func="ShowCayleyGraph"/>
+#!  to create distinct colors for each generator's edges.
 DeclareGlobalFunction( "SGPVIZ_HSV2RGB" );
 
 
-# To be documented
+#! @Arguments semigroup, generators
+#! @Returns a boolean indicating whether the given list of generators is
+#!   sufficient to make a Cayley graph for the given semigroup connected
+#! @Description
+#!  This function defines a binary relation on the elements of the
+#!  semigroup, meaning "there is a generator connecting these elements."
+#!  It then asks &GAP; to compute the smallest equivalence relation
+#!  containing that relation.  If that equivalence relation has just one
+#!  equivalence class, the Cayley graph would be connected.
+#!
+#!  <List>
+#!    <Item><Code>semigroup</Code> must be a semigroup, as defined by
+#!      &GAP;'s <Package>Semigroups</Package> package.</Item>
+#!    <Item><Code>generators</Code> should be a list of elements from
+#!      that semigroup, to be treated as generators in this
+#!      computation.</Item>
+#!  </List>
+#!
+#!  This function is used internally by <Ref Func="ShowCayleyGraph"/>
+#!  to choose as few generators as possible to obtain a connected
+#!  graph.  See also <Ref Func="SGPVIZ_GeneratorsSmallSubset"/>.
 DeclareGlobalFunction( "SGPVIZ_GeneratorsAreSufficient" );
 
 
-# To be documented
+#! @Arguments semigroup, generators
+#! @Returns a sublist of the given list of generators, one just large
+#!   enough to ensure that the Cayley graph of the given semigroup is
+#!   connected
+#! @Description
+#!  This function removes generators from the given list as long as
+#!  doing so does not cause <Ref Func="SGPVIZ_GeneratorsAreSufficient"/>
+#!  to return false.  When it cannot remove any more generators
+#!  without violating that constraint, it returns the list it reached.
+#!  This is done recursively.  Note that not all branches of the
+#!  recursion are followed, for the sake of efficiency.
+#!
+#!  <List>
+#!    <Item><Code>semigroup</Code> must be a semigroup, as defined by
+#!      &GAP;'s <Package>Semigroups</Package> package.</Item>
+#!    <Item><Code>generators</Code> should be a list of elements from
+#!      that semigroup, to be treated as generators in this
+#!      computation.</Item>
+#!  </List>
+#!
+#!  This function is used internally by <Ref Func="ShowCayleyGraph"/>
+#!  to choose as few generators as possible to obtain a connected
+#!  graph.  See also <Ref Func="SGPVIZ_GeneratorsAreSufficient"/>.
 DeclareGlobalFunction( "SGPVIZ_GeneratorsSmallSubset" );
