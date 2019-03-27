@@ -23,10 +23,10 @@ Size( T );;
 DP := DirectProduct( S, T );;
 Size( DP );;
 
-# ShowSemigroup( DP );
-# ShowSemigroup( CatalanMonoid( 4 ) );
-ShowSemigroup(
-    SingularTransformationSemigroup( 4 ),
+# ShowEggBoxDiagram( DP );
+# ShowEggBoxDiagram( CatalanMonoid( 4 ) );
+ShowEggBoxDiagram(
+    SingularTransformationSemigroup( 5 ),
     rec(
         ToString := x -> String( ListTransformation( x ) )#,
         #NrDClassesIncluded := 2,

@@ -2,7 +2,7 @@
 #! @Chapter Egg-Box Diagrams
 #! @ChapterLabel eggbox
 #!
-#! @Section Preliminaries: Green's Relations
+#! @Section Preliminaries: Green's relations
 #!
 #! Let <Math>S</Math> be a semigroup and
 #! let <Math>S^1</Math> be the monoid corresponding to <Math>S</Math>,
@@ -106,7 +106,7 @@
 #!
 #! @Example
 #! LoadPackage( "semigroupviz" );
-#! ShowSemigroup( S );
+#! ShowEggBoxDiagram( S );
 #! @EndExample
 #!
 #! (Technically, that code will generate a much more verbose figure.
@@ -139,7 +139,7 @@
 #! @SectionLabel eltnames
 #!
 #! If the elements of your semigroup have a compact representation,
-#! then the <Ref Func="ShowSemigroup"/> function introduced in Section
+#! then the <Ref Func="ShowEggBoxDiagram"/> function introduced in Section
 #! <Ref Sect="Section_makeeggbox"/> will produce readable diagrams.
 #! But if the elements of the semigroup have very long names, then each
 #! <Math>H</Math>-class will be very wide, making the diagram less
@@ -148,7 +148,7 @@
 #! To solve this problem, you can provide a function that maps elements
 #! of your semigroup to whatever (typically more compact) notation you'd
 #! like to use in the diagram.  You pass this as one of the options to
-#! <Ref Func="ShowSemigroup"/>, under the name <Code>ToString</Code>.
+#! <Ref Func="ShowEggBoxDiagram"/>, under the name <Code>ToString</Code>.
 #!
 #! For instance, the elements of the semigroup
 #! shown in Section <Ref Sect="Section_makeeggbox"/> are
@@ -157,17 +157,17 @@
 #! section was made with the following code.
 #!
 #! @Example
-#! ShowSemigroup(
+#! ShowEggBoxDiagram(
 #!   SingularTransformationSemigroup( 3 ),
 #!   rec( ToString := elt -> String( ListTransformation( elt ) ) )
 #! );
 #! @EndExample
 #!
 #! Detailed documentation of all the options of the
-#! <Ref Func="ShowSemigroup"/> function can be found in its documentation
+#! <Ref Func="ShowEggBoxDiagram"/> function can be found in its documentation
 #! in Section <Ref Chap="Chapter_funcref"/>.
 #!
-#! @Section Interacting with Egg Box Diagrams
+#! @Section Interacting with egg-box diagrams
 #! @SectionLabel interact
 #!
 #! Semigroups can be of arbitrary size, and if they become too large,
@@ -179,7 +179,7 @@
 #! @Subsection Generating only a portion of a diagram
 #! @SubsectionLabel portion
 #!
-#! In the documentation for <Ref Func="ShowSemigroup"/>, you can see that
+#! In the documentation for <Ref Func="ShowEggBoxDiagram"/>, you can see that
 #! the options object permits you to provide options entitled
 #! <Code>NrDClassesIncluded</Code>, <Code>NrRClassesIncludedPerDClass</Code>,
 #! <Code>NrLClassesIncludedPerRClass</Code>, and
@@ -262,7 +262,7 @@
 #!
 #! If you want to make such warnings go away, so that all (or at least more)
 #! elements are included in the diagram, you must regenerate the diagram
-#! with another call to <Ref Func="ShowSemigroup"/>, this time providing
+#! with another call to <Ref Func="ShowEggBoxDiagram"/>, this time providing
 #! larger values for the relevant option(s),
 #! <Code>NrDClassesIncluded</Code>, <Code>NrRClassesIncludedPerDClass</Code>,
 #! <Code>NrLClassesIncludedPerRClass</Code>, and/or

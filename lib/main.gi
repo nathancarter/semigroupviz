@@ -103,7 +103,7 @@ function ( semigroup, options )
 end );
 
 
-InstallGlobalFunction( ShowSemigroup,
+InstallGlobalFunction( ShowEggBoxDiagram,
 function ( semigroup, options... )
     local dclass, rmax, lmax, emax;
     # Ensure options object exists

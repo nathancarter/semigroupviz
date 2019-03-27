@@ -8,7 +8,7 @@
 #! from the &GAP; REPL.
 #!
 #! When called from a Jupyter notebook input cell, functions like
-#! <Ref Func="ShowSemigroup"/> produce a visualization in the corresponding
+#! <Ref Func="ShowEggBoxDiagram"/> produce a visualization in the corresponding
 #! output cell.  When called from the &GAP; REPL, the same function would
 #! show the same visualization by opening it in the user's default web
 #! browser.
