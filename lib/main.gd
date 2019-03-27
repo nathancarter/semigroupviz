@@ -17,10 +17,14 @@
 #! @Arguments semigroup[, options]
 #! @Returns nothing
 #! @Description
-#!  This function displays a visualization of the given semigroup to the
-#!  user by calling the display tools in the underlying
-#!  <Package>JupyterViz</Package> package.  This means that one of two
-#!  methods will be used for showing the user the resulting visualization:
+#!  This function displays a visualization called an "egg-box diagram" of
+#!  the given semigroup to the user by calling the display tools in the
+#!  underlying <Package>JupyterViz</Package> package.  Egg-box diagrams
+#!  are described in Chapter <Ref Chap="Chapter_eggbox"/>.
+#!
+#!  Using the <Package>JupyterViz</Package> package means that one
+#!  of two methods will be used for showing the user the resulting
+#!  visualization:
 #!  <List>
 #!    <Item>If this function is called in a Jupyter Notebook, it returns
 #!      an object that, when rendered by that notebook, will result in
@@ -76,7 +80,55 @@
 #!      semigroup's H-classes have a reasonable number of elements
 #!      each).</Item>
 #!  </List>
-DeclareGlobalFunction( "ShowSemigroup" );
+DeclareGlobalFunction( "ShowEggBoxDiagram" );
+
+
+#! @Arguments semigroup[, options]
+#! @Returns nothing
+#! @Description
+#!  This function displays the Cayley graph of the given semigroup to the
+#!  user by calling the display tools in the underlying
+#!  <Package>JupyterViz</Package> package.  Cayley graphs
+#!  are described in Chapter <Ref Chap="Chapter_cayley"/>.
+#!
+#!  Using the <Package>JupyterViz</Package> package means that one
+#!  of two methods will be used for showing the user the resulting
+#!  visualization:
+#!  <List>
+#!    <Item>If this function is called in a Jupyter Notebook, it returns
+#!      an object that, when rendered by that notebook, will result in
+#!      the visualization appearing in the correct output cell.</Item>
+#!    <Item>If run outside of a Jupyter Notebook, such as in the &GAP;
+#!      REPL, this function creates an HTML page containing the given
+#!      visualization and then opens the page in the system default web
+#!      browser.</Item>
+#!  </List>
+#!
+#!  It accepts the following arguments.
+#!  <List>
+#!    <Item>The first parameter must be a semigroup, as created by &GAP;'s
+#!      <Package>Semigroups</Package> Package.</Item>
+#!    <Item>The second argument is optional but if it is present, it
+#!      should be a &GAP; record whose contents will
+#!      govern how this function does its work, as indicated below.</Item>
+#!  </List>
+#!
+#!  The fields you can provide in the <Code>options</Code> parameter are
+#!  as follows.  Each is optional, and its default value is documented
+#!  below.
+#!  <List>
+#!    <Item><Code>ToString</Code> can be a function mapping elements of
+#!      the semigroup to strings, as documented in
+#!      <Ref Func="SGPVIZ_HClassToRecord"/>.</Item>
+#!    <Item><Code>Generators</Code> can be a list of elements of the
+#!      semigroup to use as generators (which are drawn as arrows in the
+#!      Cayley graph).  If this is not provided, the function
+#!      <Code>GeneratorsOfSemigroup</Code> is called to find a
+#!      generating set (which is often not be minimal), and then a simple
+#!      greedy algorithm is run to try to reduce its size before using it.
+#!      </Item>
+#!  </List>
+DeclareGlobalFunction( "ShowCayleyGraph" );
 
 
 #! @Section Private API
@@ -210,3 +262,15 @@ DeclareGlobalFunction( "SGPVIZ_DClassToRecord" );
 #!      of the entire return value.)</Item>
 #!  </List>
 DeclareGlobalFunction( "SGPVIZ_EggBoxDiagramRecord" );
+
+
+# To be documented
+DeclareGlobalFunction( "SGPVIZ_HSV2RGB" );
+
+
+# To be documented
+DeclareGlobalFunction( "SGPVIZ_GeneratorsAreSufficient" );
+
+
+# To be documented
+DeclareGlobalFunction( "SGPVIZ_GeneratorsSmallSubset" );
