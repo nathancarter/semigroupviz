@@ -15,7 +15,7 @@
 #! @Section Public API
 
 #! @Arguments semigroup[, options]
-#! @Returns nothing
+#! @Returns nothing by default but see <Code>ReturnJSON</Code> option below
 #! @Description
 #!  This function displays a visualization called an "egg-box diagram" of
 #!  the given semigroup to the user by calling the display tools in the
@@ -79,6 +79,17 @@
 #!      This defaults to 20.  Set it to 0 for no limit (if you know your
 #!      semigroup's H-classes have a reasonable number of elements
 #!      each).</Item>
+#!    <Item><Code>ReturnJSON</Code> may be a boolean and it defaults
+#!      to false.  If set to true, then instead of calling the
+#!      <Code>CreateVisualization</Code> function in the
+#!      <Package>JupyterViz</Package> and returning its result,
+#!      this function will return the &GAP; record that it would have
+#!      passed to <Code>CreateVisualization</Code> for conversion into
+#!      JSON and rendering.  Such data will be in a form amenable to
+#!      rendering by the egg-box diagram visualization tool installed
+#!      by this package into <Package>JupyterViz</Package>, but can be
+#!      of value if you wish to inspect the data to be sure it is as
+#!      you expect, or for testing.</Item>
 #!  </List>
 DeclareGlobalFunction( "ShowEggBoxDiagram" );
 

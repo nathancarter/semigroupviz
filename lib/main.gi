@@ -105,7 +105,7 @@ end );
 
 InstallGlobalFunction( ShowEggBoxDiagram,
 function ( semigroup, options... )
-    local dclass, rmax, lmax, emax;
+    local dclass, rmax, lmax, emax, json;
     # Ensure options object exists
     if Length( options ) = 0 then
         options := rec();
@@ -127,6 +127,9 @@ function ( semigroup, options... )
     fi;
     if not IsBound( options.NrElementsIncludedPerHClass ) then
         options.NrElementsIncludedPerHClass := 20;
+    fi;
+    if not IsBound( options.ReturnJSON ) then
+        options.ReturnJSON := false;
     fi;
     # Ensure that the options have sensible values
     if options.NrDClassesIncluded < 0 then
@@ -163,11 +166,16 @@ function ( semigroup, options... )
         options.NrElementsIncludedPerHClass := emax;
     fi;
     # Create JSON and pass to visualization library
-    return CreateVisualization( rec(
+    json := rec(
         tool := "egg-box",
         data := GapToJsonString( SGPVIZ_EggBoxDiagramRecord(
             semigroup, options ) )
-    ) );
+    );
+    if options.ReturnJSON then
+        return json;
+    else
+        return CreateVisualization( json );
+    fi;
 end );
 
 
