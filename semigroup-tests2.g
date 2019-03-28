@@ -43,7 +43,8 @@ ShowCayleyGraph(
     Group( [ (1,2), (1,2,3) ] ),
     rec(
         # ToString := Pr,
-        ShowActionNames := true,
-        Multiplication := "left"
+        ShowActionNames := true#,
+        #Multiplication := "left",
+        #ReturnJSON := true
     )
 );

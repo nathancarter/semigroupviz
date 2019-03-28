@@ -84,7 +84,7 @@ DeclareGlobalFunction( "ShowEggBoxDiagram" );
 
 
 #! @Arguments semigroup[, options]
-#! @Returns nothing
+#! @Returns nothing by default but see <Code>ReturnJSON</Code> option below
 #! @Description
 #!  This function displays the Cayley graph of the given semigroup to the
 #!  user by calling the display tools in the underlying
@@ -136,6 +136,19 @@ DeclareGlobalFunction( "ShowEggBoxDiagram" );
 #!    <Item><Code>Multiplication</Code> may be a string indicating
 #!      whether the graph should show its action by left or right
 #!      multiplication.  The default is <Code>"right"</Code>.</Item>
+#!    <Item><Code>ReturnJSON</Code> may be a boolean and it defaults
+#!      to false.  If set to true, then instead of calling the
+#!      <Code>CreateVisualization</Code> function in the
+#!      <Package>JupyterViz</Package> and returning its result,
+#!      this function will return the &GAP; record that it would have
+#!      passed to <Code>CreateVisualization</Code> for conversion into
+#!      JSON and rendering.  Such data will be in a form amenable to
+#!      rendering by Cytoscape, as documented in the
+#!      <Package>JupyterViz</Package> package manual.  This option is
+#!      useful if you wish to make some custom changes to that data
+#!      before passing it to <Code>CreateVisualization</Code>, such
+#!      as positioning the vertices in the plane or changing vertex
+#!      or edge styles.</Item>
 #!  </List>
 DeclareGlobalFunction( "ShowCayleyGraph" );
 

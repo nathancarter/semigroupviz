@@ -1,12 +1,6 @@
 
 # To-do list
 
-## Cayley graphs
-
- * Add option for left-multiplication and document that.
- * Add option to return JSON form rather than render it, so the user can
-   manipulate the cytoscape options however they choose; document this.
-
 ## Polishing
 
  * Write code for testing this package together with a master test script.

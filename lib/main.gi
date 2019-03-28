@@ -283,6 +283,9 @@ function ( semigroup, options... )
     if not IsBound( options.ShowActionNames ) then
         options.ShowActionNames := false;
     fi;
+    if not IsBound( options.ReturnJSON ) then
+        options.ReturnJSON := false;
+    fi;
     # Create JSON for graph vertices
     elements := List( Elements( semigroup ), elt ->
         rec(
@@ -348,5 +351,9 @@ function ( semigroup, options... )
             )
         ) );
     fi;
-    return CreateVisualization( json );
+    if options.ReturnJSON then
+        return json;
+    else
+        return CreateVisualization( json );
+    fi;
 end );
