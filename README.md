@@ -16,8 +16,11 @@ used either in Jupyter notebooks or from the GAP REPL.
 
 ## Supported Visualizations
 
-At present, there is but one supported visualization of a semigroup, the
-egg-box diagram, defined as follows.
+There are two supported visualization of a semigroup:
+ 1. [Egg-box diagrams](#egg-box-diagrams)
+ 2. [Cayley graphs](#cayley-graphs)
+
+## Egg-box Diagrams
 
 Let _S_ be a semigroup and make the following definitions, which introduce
 [Green's Relations](https://en.wikipedia.org/wiki/Green%27s_relations),
@@ -63,15 +66,35 @@ This package produces diagrams like the one shown above (without the colorful ex
 Since semigroups can be very large, it also permits you to show just a portion of the diagram,
 and expand/contract certain portions as needed for inspection.
 
+## Cayley graphs
+
+A semigroup acts on itself by right multiplication if we associate with any element _s_ in
+the semigroup a function that maps any _t_ to _ts_ (right multiplication).  If the semigroup
+is a group, such functions are permutations, but in general they are not.
+
+Such functions can be graphed by defining a binary relation _R_ from such a function so that
+_aRb_ if and only if _as_=_b_.  The vertices of the graph will be the elements of the
+semigroup and its edges will be given by _R_.
+
+We can define such an _R_ for each of the generators of a semigroup and graph each as a set
+of edges with a different color, to distinguish them, all on the same graph.  This tends to
+be quite cluttered, so we might choose some subset of the generators, just enough to make
+the graph connected.
+
+Here are some example results.
+
+![Example Cayley graph 21 vertices](doc/sgp-S3-org.png =600x465)
+
+![Example Cayley graph 15 vertices](doc/sgp-P3-org.png =600x495)
+
+![Example Cayley graph 27 vertices](doc/sgp-F3-org.png =600x480)
+
 ## Usage
 
 The package does not need to be compiled.
 
-There will eventually be a link here to the package manual.
-<!--
 See the manual on [the package website](http://nathancarter.github.io/semigroupviz),
-which contains usage examples.
--->
+which contains other usage examples and full documentation.
 
 ## Maintainer
 
