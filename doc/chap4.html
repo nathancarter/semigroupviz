@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>GAP (SemigroupViz) - Chapter 4: Function reference</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap4"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap3.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chapInd.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p id="mathjaxlink" class="pcenter"><a href="chap4_mj.html">[MathJax on]</a></p>
+<p><a id="X7ECCCA82839EA283" name="X7ECCCA82839EA283"></a></p>
+<div class="ChapSects"><a href="chap4.html#X7ECCCA82839EA283">4 <span class="Heading">Function reference</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4.html#X784AA528839119B9">4.1 <span class="Heading">Public API</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X869B627A7C0B3464">4.1-1 ShowEggBoxDiagram</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7F698B6881AB1893">4.1-2 ShowCayleyGraph</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4.html#X8351F14187B272F6">4.2 <span class="Heading">Private API</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X871D85B07BA195D1">4.2-1 SGPVIZ_HClassToRecord</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X85B2DCA27EDB6485">4.2-2 SGPVIZ_DClassToRecord</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7A42386E7AAEB007">4.2-3 SGPVIZ_EggBoxDiagramRecord</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X845ECF86814CC166">4.2-4 SGPVIZ_HSV2RGB</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7914F34079A49FE5">4.2-5 SGPVIZ_GeneratorsAreSufficient</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7BFBA91D84D50CFF">4.2-6 SGPVIZ_GeneratorsSmallSubset</a></span>
+</div></div>
+</div>
+
+<h3>4 <span class="Heading">Function reference</span></h3>
+
+<p><a id="X784AA528839119B9" name="X784AA528839119B9"></a></p>
+
+<h4>4.1 <span class="Heading">Public API</span></h4>
+
+<p><a id="X869B627A7C0B3464" name="X869B627A7C0B3464"></a></p>
+
+<h5>4.1-1 ShowEggBoxDiagram</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ShowEggBoxDiagram</code>( <var class="Arg">semigroup</var>[, <var class="Arg">options</var>] )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p>Returns: nothing</p>
+
+<p>This function displays a visualization called an "egg-box diagram" of the given semigroup to the user by calling the display tools in the underlying <strong class="pkg">JupyterViz</strong> package. Egg-box diagrams are described in Chapter <a href="chap2.html#X7B2312BB8303BC71"><span class="RefLink">2</span></a>.</p>
+
+<p>Using the <strong class="pkg">JupyterViz</strong> package means that one of two methods will be used for showing the user the resulting visualization:</p>
+
+
+<ul>
+<li><p>If this function is called in a Jupyter Notebook, it returns an object that, when rendered by that notebook, will result in the visualization appearing in the correct output cell.</p>
+
+</li>
+<li><p>If run outside of a Jupyter Notebook, such as in the <strong class="pkg">GAP</strong> REPL, this function creates an HTML page containing the given visualization and then opens the page in the system default web browser.</p>
+
+</li>
+</ul>
+<p>It accepts the following arguments.</p>
+
+
+<ul>
+<li><p>The first parameter must be a semigroup, as created by <strong class="pkg">GAP</strong>'s <strong class="pkg">Semigroups</strong> Package.</p>
+
+</li>
+<li><p>The second argument is optional but if it is present, it should be a <strong class="pkg">GAP</strong> record whose contents will govern how this function does its work, as indicated below.</p>
+
+</li>
+</ul>
+<p>The fields you can provide in the <code class="code">options</code> parameter are as follows. Each is optional, and its default value is documented below.</p>
+
+
+<ul>
+<li><p><code class="code">ToString</code> can be a function mapping elements of the semigroup to strings, as documented in <code class="func">SGPVIZ_HClassToRecord</code> (<a href="chap4.html#X871D85B07BA195D1"><span class="RefLink">4.2-1</span></a>).</p>
+
+</li>
+<li><p><code class="code">NrDClassesIncluded</code> can be the maximum number of D-classes to compute and include in the JSON object to be visualized. This is useful if the semigroup is extremely large, and you want to send only a manageable amount of JSON data to be displayed, so that the computation becomes feasible. This defaults to 20. Set it to 0 for no limit (if you know your semigroup is of a reasonable size).</p>
+
+</li>
+<li><p><code class="code">NrRClassesIncludedPerDClass</code> can be the maximum number of R-classes to compute for any one D-class and include in the JSON, for the same reasons as described above for <code class="code">NrDClassesIncluded</code>. This defaults to 20. Set it to 0 for no limit (if you know your semigroup's D-classes have a reasonable number of R-classes each).</p>
+
+</li>
+<li><p><code class="code">NrLClassesIncludedPerRClass</code> can be the maximum number of L-classes to compute for any one D/R-class and include in the JSON, for the same reasons as described above for <code class="code">NrDClassesIncluded</code>. This defaults to 20. Set it to 0 for no limit (if you know your semigroup's D-classes have a reasonable number of L-classes each).</p>
+
+</li>
+<li><p><code class="code">NrElementsIncludedPerHClass</code> can be the maximum number of elements to compute for any one H-class and include in the JSON, for the same reasons as described above for <code class="code">NrDClassesIncluded</code>. This defaults to 20. Set it to 0 for no limit (if you know your semigroup's H-classes have a reasonable number of elements each).</p>
+
+</li>
+</ul>
+<p><a id="X7F698B6881AB1893" name="X7F698B6881AB1893"></a></p>
+
+<h5>4.1-2 ShowCayleyGraph</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ShowCayleyGraph</code>( <var class="Arg">semigroup</var>[, <var class="Arg">options</var>] )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p>Returns: nothing by default but see <code class="code">ReturnJSON</code> option below</p>
+
+<p>This function displays the Cayley graph of the given semigroup to the user by calling the display tools in the underlying <strong class="pkg">JupyterViz</strong> package. Cayley graphs are described in Chapter <a href="chap3.html#X789D5E5A8558AA07"><span class="RefLink">3</span></a>.</p>
+
+<p>Using the <strong class="pkg">JupyterViz</strong> package means that one of two methods will be used for showing the user the resulting visualization:</p>
+
+
+<ul>
+<li><p>If this function is called in a Jupyter Notebook, it returns an object that, when rendered by that notebook, will result in the visualization appearing in the correct output cell.</p>
+
+</li>
+<li><p>If run outside of a Jupyter Notebook, such as in the <strong class="pkg">GAP</strong> REPL, this function creates an HTML page containing the given visualization and then opens the page in the system default web browser.</p>
+
+</li>
+</ul>
+<p>It accepts the following arguments.</p>
+
+
+<ul>
+<li><p>The first parameter must be a semigroup, as created by <strong class="pkg">GAP</strong>'s <strong class="pkg">Semigroups</strong> Package.</p>
+
+</li>
+<li><p>The second argument is optional but if it is present, it should be a <strong class="pkg">GAP</strong> record whose contents will govern how this function does its work, as indicated below.</p>
+
+</li>
+</ul>
+<p>The fields you can provide in the <code class="code">options</code> parameter are as follows. Each is optional, and its default value is documented below.</p>
+
+
+<ul>
+<li><p><code class="code">ToString</code> can be a function mapping elements of the semigroup to strings, as documented in <code class="func">SGPVIZ_HClassToRecord</code> (<a href="chap4.html#X871D85B07BA195D1"><span class="RefLink">4.2-1</span></a>).</p>
+
+</li>
+<li><p><code class="code">Generators</code> can be a list of elements of the semigroup to use as generators (which are drawn as arrows in the Cayley graph). If this is not provided, the function <code class="code">GeneratorsOfSemigroup</code> is called to find a generating set and then a small subset of that is chosen, just enough to ensure the resulting graph is connected.</p>
+
+</li>
+<li><p><code class="code">ShowElementNames</code> may be a boolean, whether to show names of elements on the graph's vertices. The default is true.</p>
+
+</li>
+<li><p><code class="code">ShowActionNames</code> may be a boolean, whether to show names of elements on the graph's edges, indicating which element's multiplication the edge represents. The default is false.</p>
+
+</li>
+<li><p><code class="code">Multiplication</code> may be a string indicating whether the graph should show its action by left or right multiplication. The default is <code class="code">"right"</code>.</p>
+
+</li>
+<li><p><code class="code">ReturnJSON</code> may be a boolean and it defaults to false. If set to true, then instead of calling the <code class="code">CreateVisualization</code> function in the <strong class="pkg">JupyterViz</strong> and returning its result, this function will return the <strong class="pkg">GAP</strong> record that it would have passed to <code class="code">CreateVisualization</code> for conversion into JSON and rendering. Such data will be in a form amenable to rendering by Cytoscape, as documented in the <strong class="pkg">JupyterViz</strong> package manual. This option is useful if you wish to make some custom changes to that data before passing it to <code class="code">CreateVisualization</code>, such as positioning the vertices in the plane or changing vertex or edge styles.</p>
+
+</li>
+</ul>
+<p><a id="X8351F14187B272F6" name="X8351F14187B272F6"></a></p>
+
+<h4>4.2 <span class="Heading">Private API</span></h4>
+
+<p><em>None of these methods should need to be called by a client of this package. We provide this documentation here for completeness, not out of necessity.</em></p>
+
+<p><a id="X871D85B07BA195D1" name="X871D85B07BA195D1"></a></p>
+
+<h5>4.2-1 SGPVIZ_HClassToRecord</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SGPVIZ_HClassToRecord</code>( <var class="Arg">semigroup</var>, <var class="Arg">hclass</var>, <var class="Arg">options</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p>Returns: a <strong class="pkg">GAP</strong> record obeying the options passed in the third argument</p>
+
+<p>This function converts the given H-class from the given semigroup into a <strong class="pkg">GAP</strong> record amenable to conversion to JSON for passing to one of the HTML-based visualization tools from the <strong class="pkg">JupyterViz</strong> package. Such conversion can be done by <strong class="pkg">GAP</strong>'s <strong class="pkg">JSON</strong> package.</p>
+
+
+<ul>
+<li><p>The first parameter must be a semigroup, as created by <strong class="pkg">GAP</strong>'s <strong class="pkg">Semigroups</strong> Package.</p>
+
+</li>
+<li><p>The second argument must be a single H-class from that semigroup, which you can form in a number of ways, such as by choosing a D-class, lifting out its first R- and L-classes, and interesecting them.</p>
+
+</li>
+<li><p>The final argument should be a <strong class="pkg">GAP</strong> record whose contents will govern how this function does its work, as indicated below.</p>
+
+</li>
+</ul>
+<p>Attributes in the resulting record include:</p>
+
+
+<ul>
+<li><p><code class="code">size</code> is the number of elements in the H-class</p>
+
+</li>
+<li><p><code class="code">representative</code> is a string representation of the H-class's representative. The string representation will be computed by passing the H-class's representative element to the <code class="code">options.ToString</code> function.</p>
+
+</li>
+<li><p><code class="code">elements</code> is an array of string representations of all the elements in the class, by default, or some subset of them if <code class="code">options.NrElementsIncludedPerHClass &gt; 0</code> and smaller than the number of elements in this particular class. The representative is always first on this list. These string representations are also computed by <code class="code">options.ToString</code>.</p>
+
+</li>
+</ul>
+<p><a id="X85B2DCA27EDB6485" name="X85B2DCA27EDB6485"></a></p>
+
+<h5>4.2-2 SGPVIZ_DClassToRecord</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SGPVIZ_DClassToRecord</code>( <var class="Arg">semigroup</var>, <var class="Arg">dclass</var>, <var class="Arg">options</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p>Returns: a <strong class="pkg">GAP</strong> record obeying the options passed in the third argument</p>
+
+<p>This function converts the given D-class from the given semigroup into a <strong class="pkg">GAP</strong> record amenable to conversion to JSON for passing to one of the HTML-based visualization tools from the <strong class="pkg">JupyterViz</strong> package. Such conversion can be done by <strong class="pkg">GAP</strong>'s <strong class="pkg">JSON</strong> package.</p>
+
+
+<ul>
+<li><p>The first parameter must be a semigroup, as created by <strong class="pkg">GAP</strong>'s <strong class="pkg">Semigroups</strong> Package.</p>
+
+</li>
+<li><p>The second argument must be a single D-class from that semigroup, which you can form in a number of ways, such as <code class="code">Dclasses(semigroup)[1]</code>.</p>
+
+</li>
+<li><p>The final argument should be a <strong class="pkg">GAP</strong> record whose contents will govern how this function does its work, as indicated below.</p>
+
+</li>
+</ul>
+<p>Attributes in the resulting record include:</p>
+
+
+<ul>
+<li><p><code class="code">size</code> is the number of R-classes in the D-class</p>
+
+</li>
+<li><p><code class="code">RClasses</code> is an array of records, each of which has the following attributes:</p>
+
+
+<ul>
+<li><p><code class="code">size</code> is the number of L-classes in the R-class (though not all of these need be included in the return value; you can set a smaller limit in <code class="code">options.NrRClassesIncludedPerDClass</code>)</p>
+
+</li>
+<li><p><code class="code">HClasses</code> is an array of records, each of which is produced by a call to <code class="func">SGPVIZ_HClassToRecord</code> (<a href="chap4.html#X871D85B07BA195D1"><span class="RefLink">4.2-1</span></a>), passing this <code class="code">semigroup</code>, one of its H-classes, and the same <code class="code">options</code> object passed to us. See that function, above, for details on its output format. (Not all H-classes need be included in the return value; you can set a smaller limit in <code class="code">options.NrLClassesIncludedPerRClass</code>, recalling that choosing an L-class and an R-class determines an H-class.)</p>
+
+</li>
+</ul>
+</li>
+</ul>
+<p><a id="X7A42386E7AAEB007" name="X7A42386E7AAEB007"></a></p>
+
+<h5>4.2-3 SGPVIZ_EggBoxDiagramRecord</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SGPVIZ_EggBoxDiagramRecord</code>( <var class="Arg">semigroup</var>, <var class="Arg">options</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p>Returns: a <strong class="pkg">GAP</strong> record obeying the options passed in the third argument</p>
+
+<p>This function converts the given semigroup into a <strong class="pkg">GAP</strong> record amenable to conversion to JSON for passing to one of the HTML-based visualization tools from the <strong class="pkg">JupyterViz</strong> package. Such conversion can be done by <strong class="pkg">GAP</strong>'s <strong class="pkg">JSON</strong> package.</p>
+
+
+<ul>
+<li><p>The first parameter must be a semigroup, as created by <strong class="pkg">GAP</strong>'s <strong class="pkg">Semigroups</strong> Package.</p>
+
+</li>
+<li><p>The second argument should be a <strong class="pkg">GAP</strong> record whose contents will govern how this function does its work, as indicated below.</p>
+
+</li>
+</ul>
+<p>Attributes in the resulting record include:</p>
+
+
+<ul>
+<li><p><code class="code">name</code> is a string describing the semigroup. This will come directly from <code class="code">options.name</code> if you include such a field, or will be computed from <code class="code">ViewString(semigroup)</code> if you do not (by removing angle brackets and line break characters).</p>
+
+</li>
+<li><p><code class="code">size</code> is the number of D-classes in the semigroup</p>
+
+</li>
+<li><p><code class="code">DClasses</code> is an array of records, each of which is produced by a call to <code class="func">SGPVIZ_DClassToRecord</code> (<a href="chap4.html#X85B2DCA27EDB6485"><span class="RefLink">4.2-2</span></a>), passing this <code class="code">semigroup</code>, one of its D-classes, and the same <code class="code">options</code> object passed to us. See that function, above, for details on its output format. (Not all D-classes need be included in the return value; you can set a smaller limit in <code class="code">options.NrDClassesIncluded</code>.)</p>
+
+</li>
+<li><p><code class="code">options</code> is a copy of the options record passed as the second parameter, with the exception of its <code class="code">ToString</code> and <code class="code">name</code> fields. (This is because the <code class="code">ToString</code> field is a function, and thus not amenable to JSON conversion, and the <code class="code">name</code> field has already been included as the <code class="code">name</code> field of the entire return value.)</p>
+
+</li>
+</ul>
+<p><a id="X845ECF86814CC166" name="X845ECF86814CC166"></a></p>
+
+<h5>4.2-4 SGPVIZ_HSV2RGB</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SGPVIZ_HSV2RGB</code>( <var class="Arg">hue</var>, <var class="Arg">saturation</var>, <var class="Arg">value</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p>Returns: a <strong class="pkg">GAP</strong> list containing three integers in the range <code class="code">[0..255]</code>, to be interpreted as a point in RGB color space</p>
+
+<p>This function converts a point in HSV color space into a point in RGB color space using the standard algorithm for doing so, available from many sources on the web.</p>
+
+
+<ul>
+<li><p><code class="code">hue</code> should be a number in the range <code class="code">[0..360]</code>, where 0 is the beginning of the color wheel (red) and 360 is the end (violet, becoming red again).</p>
+
+</li>
+<li><p><code class="code">saturation</code> should be a float in the range <span class="Math">[0,1]</span>, where 0 means no saturation of the chosen hue (white/gray/black only) and 1 means full saturation (a vibrant color from the chosen hue).</p>
+
+</li>
+<li><p><code class="code">value</code> (sometimes called brightness or lightness) should be a float in the range <span class="Math">[0,1]</span>, where 0 means a fully dark color (always black) and 1 means a fully bright color (the brightest color in RGB color space, subject to the constraints set by <code class="code">hue</code> and <code class="code">saturation</code>).</p>
+
+</li>
+</ul>
+<p>This function is used internally by <code class="func">ShowCayleyGraph</code> (<a href="chap4.html#X7F698B6881AB1893"><span class="RefLink">4.1-2</span></a>) to create distinct colors for each generator's edges.</p>
+
+<p><a id="X7914F34079A49FE5" name="X7914F34079A49FE5"></a></p>
+
+<h5>4.2-5 SGPVIZ_GeneratorsAreSufficient</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SGPVIZ_GeneratorsAreSufficient</code>( <var class="Arg">semigroup</var>, <var class="Arg">generators</var>, <var class="Arg">options</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p>Returns: a boolean indicating whether the given list of generators is sufficient to make a Cayley graph for the given semigroup connected</p>
+
+<p>This function defines a binary relation on the elements of the semigroup, meaning "there is a generator connecting these elements." It then asks <strong class="pkg">GAP</strong> to compute the smallest equivalence relation containing that relation. If that equivalence relation has just one equivalence class, the Cayley graph would be connected.</p>
+
+
+<ul>
+<li><p><code class="code">semigroup</code> must be a semigroup, as defined by <strong class="pkg">GAP</strong>'s <strong class="pkg">Semigroups</strong> package.</p>
+
+</li>
+<li><p><code class="code">generators</code> should be a list of elements from that semigroup, to be treated as generators in this computation.</p>
+
+</li>
+<li><p><code class="code">options</code> should be the same options object passed to <code class="func">ShowCayleyGraph</code> (<a href="chap4.html#X7F698B6881AB1893"><span class="RefLink">4.1-2</span></a>), because that function replaces the <code class="code">options.Multiplication</code> option with a function that does either left or right multiplication, which this function then uses.</p>
+
+</li>
+</ul>
+<p>This function is used internally by <code class="func">ShowCayleyGraph</code> (<a href="chap4.html#X7F698B6881AB1893"><span class="RefLink">4.1-2</span></a>) to choose as few generators as possible to obtain a connected graph. See also <code class="func">SGPVIZ_GeneratorsSmallSubset</code> (<a href="chap4.html#X7BFBA91D84D50CFF"><span class="RefLink">4.2-6</span></a>).</p>
+
+<p><a id="X7BFBA91D84D50CFF" name="X7BFBA91D84D50CFF"></a></p>
+
+<h5>4.2-6 SGPVIZ_GeneratorsSmallSubset</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SGPVIZ_GeneratorsSmallSubset</code>( <var class="Arg">semigroup</var>, <var class="Arg">generators</var>, <var class="Arg">options</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p>Returns: a sublist of the given list of generators, one just large enough to ensure that the Cayley graph of the given semigroup is connected</p>
+
+<p>This function removes generators from the given list as long as doing so does not cause <code class="func">SGPVIZ_GeneratorsAreSufficient</code> (<a href="chap4.html#X7914F34079A49FE5"><span class="RefLink">4.2-5</span></a>) to return false. When it cannot remove any more generators without violating that constraint, it returns the list it reached. This is done recursively. Note that not all branches of the recursion are followed, for the sake of efficiency.</p>
+
+
+<ul>
+<li><p><code class="code">semigroup</code> must be a semigroup, as defined by <strong class="pkg">GAP</strong>'s <strong class="pkg">Semigroups</strong> package.</p>
+
+</li>
+<li><p><code class="code">generators</code> should be a list of elements from that semigroup, to be treated as generators in this computation.</p>
+
+</li>
+<li><p><code class="code">options</code> should be the same options object passed to <code class="func">ShowCayleyGraph</code> (<a href="chap4.html#X7F698B6881AB1893"><span class="RefLink">4.1-2</span></a>), because that function replaces the <code class="code">options.Multiplication</code> option with a function that does either left or right multiplication, which this function then uses.</p>
+
+</li>
+</ul>
+<p>This function is used internally by <code class="func">ShowCayleyGraph</code> (<a href="chap4.html#X7F698B6881AB1893"><span class="RefLink">4.1-2</span></a>) to choose as few generators as possible to obtain a connected graph. See also <code class="func">SGPVIZ_GeneratorsAreSufficient</code> (<a href="chap4.html#X7914F34079A49FE5"><span class="RefLink">4.2-5</span></a>).</p>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap3.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chapInd.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

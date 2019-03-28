@@ -1,0 +1,328 @@
+  
+  [1X4 [33X[0;0YFunction reference[133X[101X
+  
+  
+  [1X4.1 [33X[0;0YPublic API[133X[101X
+  
+  [1X4.1-1 ShowEggBoxDiagram[101X
+  
+  [33X[1;0Y[29X[2XShowEggBoxDiagram[102X( [3Xsemigroup[103X[, [3Xoptions[103X] ) [32X function[133X
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis  function  displays  a visualization called an "egg-box diagram" of the
+  given  semigroup  to the user by calling the display tools in the underlying
+  [5XJupyterViz[105X package. Egg-box diagrams are described in Chapter [14X2[114X.[133X
+  
+  [33X[0;0YUsing  the [5XJupyterViz[105X package means that one of two methods will be used for
+  showing the user the resulting visualization:[133X
+  
+  [30X    [33X[0;6YIf this function is called in a Jupyter Notebook, it returns an object
+        that, when rendered by that notebook, will result in the visualization
+        appearing in the correct output cell.[133X
+  
+  [30X    [33X[0;6YIf  run  outside  of a Jupyter Notebook, such as in the [5XGAP[105X REPL, this
+        function  creates  an HTML page containing the given visualization and
+        then opens the page in the system default web browser.[133X
+  
+  [33X[0;0YIt accepts the following arguments.[133X
+  
+  [30X    [33X[0;6YThe  first  parameter  must  be  a  semigroup,  as  created  by  [5XGAP[105X's
+        [5XSemigroups[105X Package.[133X
+  
+  [30X    [33X[0;6YThe  second  argument is optional but if it is present, it should be a
+        [5XGAP[105X record whose contents will govern how this function does its work,
+        as indicated below.[133X
+  
+  [33X[0;0YThe  fields you can provide in the [10Xoptions[110X parameter are as follows. Each is
+  optional, and its default value is documented below.[133X
+  
+  [30X    [33X[0;6Y[10XToString[110X  can  be  a  function  mapping  elements  of the semigroup to
+        strings, as documented in [2XSGPVIZ_HClassToRecord[102X ([14X4.2-1[114X).[133X
+  
+  [30X    [33X[0;6Y[10XNrDClassesIncluded[110X  can  be the maximum number of D-classes to compute
+        and include in the JSON object to be visualized. This is useful if the
+        semigroup  is  extremely large, and you want to send only a manageable
+        amount  of  JSON data to be displayed, so that the computation becomes
+        feasible.  This  defaults to 20. Set it to 0 for no limit (if you know
+        your semigroup is of a reasonable size).[133X
+  
+  [30X    [33X[0;6Y[10XNrRClassesIncludedPerDClass[110X  can be the maximum number of R-classes to
+        compute  for  any  one  D-class  and include in the JSON, for the same
+        reasons  as  described  above for [10XNrDClassesIncluded[110X. This defaults to
+        20.  Set  it to 0 for no limit (if you know your semigroup's D-classes
+        have a reasonable number of R-classes each).[133X
+  
+  [30X    [33X[0;6Y[10XNrLClassesIncludedPerRClass[110X  can be the maximum number of L-classes to
+        compute  for  any  one D/R-class and include in the JSON, for the same
+        reasons  as  described  above for [10XNrDClassesIncluded[110X. This defaults to
+        20.  Set  it to 0 for no limit (if you know your semigroup's D-classes
+        have a reasonable number of L-classes each).[133X
+  
+  [30X    [33X[0;6Y[10XNrElementsIncludedPerHClass[110X  can  be the maximum number of elements to
+        compute  for  any  one  H-class  and include in the JSON, for the same
+        reasons  as  described  above for [10XNrDClassesIncluded[110X. This defaults to
+        20.  Set  it to 0 for no limit (if you know your semigroup's H-classes
+        have a reasonable number of elements each).[133X
+  
+  [1X4.1-2 ShowCayleyGraph[101X
+  
+  [33X[1;0Y[29X[2XShowCayleyGraph[102X( [3Xsemigroup[103X[, [3Xoptions[103X] ) [32X function[133X
+  [6XReturns:[106X  [33X[0;10Ynothing by default but see [10XReturnJSON[110X option below[133X
+  
+  [33X[0;0YThis  function  displays the Cayley graph of the given semigroup to the user
+  by  calling  the  display tools in the underlying [5XJupyterViz[105X package. Cayley
+  graphs are described in Chapter [14X3[114X.[133X
+  
+  [33X[0;0YUsing  the [5XJupyterViz[105X package means that one of two methods will be used for
+  showing the user the resulting visualization:[133X
+  
+  [30X    [33X[0;6YIf this function is called in a Jupyter Notebook, it returns an object
+        that, when rendered by that notebook, will result in the visualization
+        appearing in the correct output cell.[133X
+  
+  [30X    [33X[0;6YIf  run  outside  of a Jupyter Notebook, such as in the [5XGAP[105X REPL, this
+        function  creates  an HTML page containing the given visualization and
+        then opens the page in the system default web browser.[133X
+  
+  [33X[0;0YIt accepts the following arguments.[133X
+  
+  [30X    [33X[0;6YThe  first  parameter  must  be  a  semigroup,  as  created  by  [5XGAP[105X's
+        [5XSemigroups[105X Package.[133X
+  
+  [30X    [33X[0;6YThe  second  argument is optional but if it is present, it should be a
+        [5XGAP[105X record whose contents will govern how this function does its work,
+        as indicated below.[133X
+  
+  [33X[0;0YThe  fields you can provide in the [10Xoptions[110X parameter are as follows. Each is
+  optional, and its default value is documented below.[133X
+  
+  [30X    [33X[0;6Y[10XToString[110X  can  be  a  function  mapping  elements  of the semigroup to
+        strings, as documented in [2XSGPVIZ_HClassToRecord[102X ([14X4.2-1[114X).[133X
+  
+  [30X    [33X[0;6Y[10XGenerators[110X  can  be  a  list  of  elements  of the semigroup to use as
+        generators (which are drawn as arrows in the Cayley graph). If this is
+        not  provided,  the function [10XGeneratorsOfSemigroup[110X is called to find a
+        generating  set and then a small subset of that is chosen, just enough
+        to ensure the resulting graph is connected.[133X
+  
+  [30X    [33X[0;6Y[10XShowElementNames[110X  may  be a boolean, whether to show names of elements
+        on the graph's vertices. The default is true.[133X
+  
+  [30X    [33X[0;6Y[10XShowActionNames[110X may be a boolean, whether to show names of elements on
+        the  graph's edges, indicating which element's multiplication the edge
+        represents. The default is false.[133X
+  
+  [30X    [33X[0;6Y[10XMultiplication[110X  may  be  a  string indicating whether the graph should
+        show  its  action  by  left  or  right  multiplication. The default is
+        [10X"right"[110X.[133X
+  
+  [30X    [33X[0;6Y[10XReturnJSON[110X  may be a boolean and it defaults to false. If set to true,
+        then  instead  of  calling  the  [10XCreateVisualization[110X  function  in the
+        [5XJupyterViz[105X and returning its result, this function will return the [5XGAP[105X
+        record that it would have passed to [10XCreateVisualization[110X for conversion
+        into  JSON  and  rendering.  Such  data  will be in a form amenable to
+        rendering  by  Cytoscape,  as  documented  in  the  [5XJupyterViz[105X package
+        manual.  This option is useful if you wish to make some custom changes
+        to  that  data  before  passing  it  to  [10XCreateVisualization[110X,  such as
+        positioning  the  vertices  in  the  plane  or changing vertex or edge
+        styles.[133X
+  
+  
+  [1X4.2 [33X[0;0YPrivate API[133X[101X
+  
+  [33X[0;0Y[13XNone  of these methods should need to be called by a client of this package.
+  We provide this documentation here for completeness, not out of necessity.[113X[133X
+  
+  [1X4.2-1 SGPVIZ_HClassToRecord[101X
+  
+  [33X[1;0Y[29X[2XSGPVIZ_HClassToRecord[102X( [3Xsemigroup[103X, [3Xhclass[103X, [3Xoptions[103X ) [32X function[133X
+  [6XReturns:[106X  [33X[0;10Ya [5XGAP[105X record obeying the options passed in the third argument[133X
+  
+  [33X[0;0YThis function converts the given H-class from the given semigroup into a [5XGAP[105X
+  record  amenable  to conversion to JSON for passing to one of the HTML-based
+  visualization tools from the [5XJupyterViz[105X package. Such conversion can be done
+  by [5XGAP[105X's [5XJSON[105X package.[133X
+  
+  [30X    [33X[0;6YThe  first  parameter  must  be  a  semigroup,  as  created  by  [5XGAP[105X's
+        [5XSemigroups[105X Package.[133X
+  
+  [30X    [33X[0;6YThe  second  argument  must  be  a single H-class from that semigroup,
+        which you can form in a number of ways, such as by choosing a D-class,
+        lifting out its first R- and L-classes, and interesecting them.[133X
+  
+  [30X    [33X[0;6YThe  final  argument should be a [5XGAP[105X record whose contents will govern
+        how this function does its work, as indicated below.[133X
+  
+  [33X[0;0YAttributes in the resulting record include:[133X
+  
+  [30X    [33X[0;6Y[10Xsize[110X is the number of elements in the H-class[133X
+  
+  [30X    [33X[0;6Y[10Xrepresentative[110X   is   a   string   representation   of  the  H-class's
+        representative.  The string representation will be computed by passing
+        the H-class's representative element to the [10Xoptions.ToString[110X function.[133X
+  
+  [30X    [33X[0;6Y[10Xelements[110X  is an array of string representations of all the elements in
+        the    class,    by    default,    or   some   subset   of   them   if
+        [10Xoptions.NrElementsIncludedPerHClass > 0[110X and smaller than the number of
+        elements  in this particular class. The representative is always first
+        on  this  list.  These  string  representations  are  also computed by
+        [10Xoptions.ToString[110X.[133X
+  
+  [1X4.2-2 SGPVIZ_DClassToRecord[101X
+  
+  [33X[1;0Y[29X[2XSGPVIZ_DClassToRecord[102X( [3Xsemigroup[103X, [3Xdclass[103X, [3Xoptions[103X ) [32X function[133X
+  [6XReturns:[106X  [33X[0;10Ya [5XGAP[105X record obeying the options passed in the third argument[133X
+  
+  [33X[0;0YThis function converts the given D-class from the given semigroup into a [5XGAP[105X
+  record  amenable  to conversion to JSON for passing to one of the HTML-based
+  visualization tools from the [5XJupyterViz[105X package. Such conversion can be done
+  by [5XGAP[105X's [5XJSON[105X package.[133X
+  
+  [30X    [33X[0;6YThe  first  parameter  must  be  a  semigroup,  as  created  by  [5XGAP[105X's
+        [5XSemigroups[105X Package.[133X
+  
+  [30X    [33X[0;6YThe  second  argument  must  be  a single D-class from that semigroup,
+        which    you    can    form   in   a   number   of   ways,   such   as
+        [10XDclasses(semigroup)[1][110X.[133X
+  
+  [30X    [33X[0;6YThe  final  argument should be a [5XGAP[105X record whose contents will govern
+        how this function does its work, as indicated below.[133X
+  
+  [33X[0;0YAttributes in the resulting record include:[133X
+  
+  [30X    [33X[0;6Y[10Xsize[110X is the number of R-classes in the D-class[133X
+  
+  [30X    [33X[0;6Y[10XRClasses[110X  is  an  array  of  records,  each of which has the following
+        attributes:[133X
+  
+        [30X    [33X[0;12Y[10Xsize[110X  is  the number of L-classes in the R-class (though not all
+              of  these  need  be  included in the return value; you can set a
+              smaller limit in [10Xoptions.NrRClassesIncludedPerDClass[110X)[133X
+  
+        [30X    [33X[0;12Y[10XHClasses[110X  is an array of records, each of which is produced by a
+              call  to  [2XSGPVIZ_HClassToRecord[102X ([14X4.2-1[114X), passing this [10Xsemigroup[110X,
+              one  of its H-classes, and the same [10Xoptions[110X object passed to us.
+              See that function, above, for details on its output format. (Not
+              all  H-classes need be included in the return value; you can set
+              a    smaller   limit   in   [10Xoptions.NrLClassesIncludedPerRClass[110X,
+              recalling  that choosing an L-class and an R-class determines an
+              H-class.)[133X
+  
+  [1X4.2-3 SGPVIZ_EggBoxDiagramRecord[101X
+  
+  [33X[1;0Y[29X[2XSGPVIZ_EggBoxDiagramRecord[102X( [3Xsemigroup[103X, [3Xoptions[103X ) [32X function[133X
+  [6XReturns:[106X  [33X[0;10Ya [5XGAP[105X record obeying the options passed in the third argument[133X
+  
+  [33X[0;0YThis  function  converts  the  given semigroup into a [5XGAP[105X record amenable to
+  conversion  to JSON for passing to one of the HTML-based visualization tools
+  from  the  [5XJupyterViz[105X  package.  Such  conversion  can be done by [5XGAP[105X's [5XJSON[105X
+  package.[133X
+  
+  [30X    [33X[0;6YThe  first  parameter  must  be  a  semigroup,  as  created  by  [5XGAP[105X's
+        [5XSemigroups[105X Package.[133X
+  
+  [30X    [33X[0;6YThe  second argument should be a [5XGAP[105X record whose contents will govern
+        how this function does its work, as indicated below.[133X
+  
+  [33X[0;0YAttributes in the resulting record include:[133X
+  
+  [30X    [33X[0;6Y[10Xname[110X  is  a  string  describing the semigroup. This will come directly
+        from  [10Xoptions.name[110X  if  you  include such a field, or will be computed
+        from  [10XViewString(semigroup)[110X  if you do not (by removing angle brackets
+        and line break characters).[133X
+  
+  [30X    [33X[0;6Y[10Xsize[110X is the number of D-classes in the semigroup[133X
+  
+  [30X    [33X[0;6Y[10XDClasses[110X  is  an array of records, each of which is produced by a call
+        to  [2XSGPVIZ_DClassToRecord[102X  ([14X4.2-2[114X), passing this [10Xsemigroup[110X, one of its
+        D-classes,  and  the  same  [10Xoptions[110X  object  passed  to  us.  See that
+        function,  above, for details on its output format. (Not all D-classes
+        need  be  included in the return value; you can set a smaller limit in
+        [10Xoptions.NrDClassesIncluded[110X.)[133X
+  
+  [30X    [33X[0;6Y[10Xoptions[110X  is  a  copy  of  the  options  record  passed  as  the second
+        parameter,  with  the exception of its [10XToString[110X and [10Xname[110X fields. (This
+        is  because the [10XToString[110X field is a function, and thus not amenable to
+        JSON  conversion,  and the [10Xname[110X field has already been included as the
+        [10Xname[110X field of the entire return value.)[133X
+  
+  [1X4.2-4 SGPVIZ_HSV2RGB[101X
+  
+  [33X[1;0Y[29X[2XSGPVIZ_HSV2RGB[102X( [3Xhue[103X, [3Xsaturation[103X, [3Xvalue[103X ) [32X function[133X
+  [6XReturns:[106X  [33X[0;10Ya  [5XGAP[105X list containing three integers in the range [10X[0..255][110X, to be
+            interpreted as a point in RGB color space[133X
+  
+  [33X[0;0YThis  function converts a point in HSV color space into a point in RGB color
+  space using the standard algorithm for doing so, available from many sources
+  on the web.[133X
+  
+  [30X    [33X[0;6Y[10Xhue[110X should be a number in the range [10X[0..360][110X, where 0 is the beginning
+        of  the  color  wheel  (red)  and 360 is the end (violet, becoming red
+        again).[133X
+  
+  [30X    [33X[0;6Y[10Xsaturation[110X  should  be  a  float  in the range [23X[0,1][123X, where 0 means no
+        saturation  of the chosen hue (white/gray/black only) and 1 means full
+        saturation (a vibrant color from the chosen hue).[133X
+  
+  [30X    [33X[0;6Y[10Xvalue[110X  (sometimes called brightness or lightness) should be a float in
+        the range [23X[0,1][123X, where 0 means a fully dark color (always black) and 1
+        means  a  fully  bright color (the brightest color in RGB color space,
+        subject to the constraints set by [10Xhue[110X and [10Xsaturation[110X).[133X
+  
+  [33X[0;0YThis  function  is  used  internally  by  [2XShowCayleyGraph[102X  ([14X4.1-2[114X) to create
+  distinct colors for each generator's edges.[133X
+  
+  [1X4.2-5 SGPVIZ_GeneratorsAreSufficient[101X
+  
+  [33X[1;0Y[29X[2XSGPVIZ_GeneratorsAreSufficient[102X( [3Xsemigroup[103X, [3Xgenerators[103X, [3Xoptions[103X ) [32X function[133X
+  [6XReturns:[106X  [33X[0;10Ya  boolean  indicating  whether  the  given  list of generators is
+            sufficient  to  make  a  Cayley  graph  for  the  given  semigroup
+            connected[133X
+  
+  [33X[0;0YThis  function  defines  a binary relation on the elements of the semigroup,
+  meaning  "there  is a generator connecting these elements." It then asks [5XGAP[105X
+  to  compute  the  smallest equivalence relation containing that relation. If
+  that  equivalence  relation has just one equivalence class, the Cayley graph
+  would be connected.[133X
+  
+  [30X    [33X[0;6Y[10Xsemigroup[110X must be a semigroup, as defined by [5XGAP[105X's [5XSemigroups[105X package.[133X
+  
+  [30X    [33X[0;6Y[10Xgenerators[110X  should  be  a  list of elements from that semigroup, to be
+        treated as generators in this computation.[133X
+  
+  [30X    [33X[0;6Y[10Xoptions[110X  should  be  the same options object passed to [2XShowCayleyGraph[102X
+        ([14X4.1-2[114X),  because  that  function  replaces the [10Xoptions.Multiplication[110X
+        option  with a function that does either left or right multiplication,
+        which this function then uses.[133X
+  
+  [33X[0;0YThis function is used internally by [2XShowCayleyGraph[102X ([14X4.1-2[114X) to choose as few
+  generators   as   possible   to   obtain   a   connected   graph.  See  also
+  [2XSGPVIZ_GeneratorsSmallSubset[102X ([14X4.2-6[114X).[133X
+  
+  [1X4.2-6 SGPVIZ_GeneratorsSmallSubset[101X
+  
+  [33X[1;0Y[29X[2XSGPVIZ_GeneratorsSmallSubset[102X( [3Xsemigroup[103X, [3Xgenerators[103X, [3Xoptions[103X ) [32X function[133X
+  [6XReturns:[106X  [33X[0;10Ya  sublist  of the given list of generators, one just large enough
+            to  ensure  that  the  Cayley  graph  of  the  given  semigroup is
+            connected[133X
+  
+  [33X[0;0YThis  function  removes  generators  from the given list as long as doing so
+  does  not cause [2XSGPVIZ_GeneratorsAreSufficient[102X ([14X4.2-5[114X) to return false. When
+  it  cannot  remove any more generators without violating that constraint, it
+  returns  the  list  it  reached. This is done recursively. Note that not all
+  branches of the recursion are followed, for the sake of efficiency.[133X
+  
+  [30X    [33X[0;6Y[10Xsemigroup[110X must be a semigroup, as defined by [5XGAP[105X's [5XSemigroups[105X package.[133X
+  
+  [30X    [33X[0;6Y[10Xgenerators[110X  should  be  a  list of elements from that semigroup, to be
+        treated as generators in this computation.[133X
+  
+  [30X    [33X[0;6Y[10Xoptions[110X  should  be  the same options object passed to [2XShowCayleyGraph[102X
+        ([14X4.1-2[114X),  because  that  function  replaces the [10Xoptions.Multiplication[110X
+        option  with a function that does either left or right multiplication,
+        which this function then uses.[133X
+  
+  [33X[0;0YThis function is used internally by [2XShowCayleyGraph[102X ([14X4.1-2[114X) to choose as few
+  generators   as   possible   to   obtain   a   connected   graph.  See  also
+  [2XSGPVIZ_GeneratorsAreSufficient[102X ([14X4.2-5[114X).[133X
+  

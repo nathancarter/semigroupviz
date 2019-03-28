@@ -1,0 +1,191 @@
+  
+  [1X3 [33X[0;0YCayley Graphs[133X[101X
+  
+  
+  [1X3.1 [33X[0;0YPreliminaries: Semigroups acting on themselves[133X[101X
+  
+  [33X[0;0YA  semigroup  [23XS[123X  can  be said to act on itself by right multiplication if we
+  associate  with any element [23Xs\in S[123X a function [23Xf_s:S\to S[123X that performs right
+  multiplication  by  the  element [23Xs[123X, that is, [23Xf(t)=ts[123X. Similarly, a semigroup
+  can  act  on  itself  by  left  multiplication  if  with any given [23Xs\in S[123X we
+  associate a function [23Xf_s(t)=st[123X.[133X
+  
+  [33X[0;0YFor now, we will discuss actions only by right multiplication.[133X
+  
+  [33X[0;0YIf  [23XS[123X  is  a group, each of these functions (or "actions") is a permutation,
+  and is thus often written [23X\phi_s[123X rather than [23Xf_s[123X.[133X
+  
+  [33X[0;0YWe  can  illustrate any [23Xf_s[123X by considering the elements of [23XS[123X as the vertices
+  in  a  graph  and letting there be an edge between two elements [23Xt,t'\in S[123X if
+  and  only if [23Xf_s(t)=t'[123X. Such a graph draws an arrow from each [23Xt[123X to its image
+  [23Xt'[123X under [23Xf_s[123X.[133X
+  
+  [33X[0;0YIf  we  have  a  set  of  elements  [23X\left\{  s_1,\ldots,s_n \right\}[123X, we can
+  illustrate  all  the  actions [23Xf_{s_1},\ldots,f_{s_n}[123X on one graph by keeping
+  the same vertex set (all elements of [23XS[123X) and letting there be a different set
+  of  edges  for  each  [23Xf_{s_i}[123X.  Typically  we  distinguish  the edge sets by
+  assigning  each  a different color, and then it is possible to draw them all
+  on the same graph and still distinguish them.[133X
+  
+  [33X[0;0YIf  we choose [23X\left\{ s_1,\ldots,s_n \right\}[123X to be a generating set for the
+  semigroup,  then  the  resulting  graph will be connected. (In fact, in many
+  cases,  a  proper  subset  of  the  generators will ensure that the graph is
+  connected.)[133X
+  
+  
+  [1X3.2 [33X[0;0YGenerating Cayley graphs[133X[101X
+  
+  [33X[0;0YAs  an  example,  consider  the  semigroup of non-invertible transformations
+  generated  by  the  six  idempotents  of  degree 3 and rank 2, which you can
+  compute with the following [5XGAP[105X code.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28XLoadPackage( "semigroups" );[128X[104X
+    [4X[28XS := SingularTransformationSemigroup( 3 );[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YA  Cayley graph of this semigroup can be connected with just two generators.
+  Generating  that diagram using one of the tools from this package yields the
+  following result.[133X
+  
+  [33X[0;0YImage of a Cayley graph not available in this medium.[133X
+  
+  [33X[0;0YIn section [14X3.4[114X we will cover how to organize such diagrams better.[133X
+  
+  [33X[0;0YYou  can  optionally  include  labels  for each edge in the diagram as well,
+  although  this  can  often  make  it  quite  cluttered, so it is disabled by
+  default.  (See  the options for [2XShowCayleyGraph[102X ([14X4.1-2[114X) for details.) But it
+  is also possible to infer the elements from the graph in two different ways.[133X
+  
+  [30X    [33X[0;6YFor  many  semigroups, it will be obvious which element is represented
+        by each color, because there is only one element in the semigroup that
+        could  act  on the semigroup's elements in the way shown by the arrows
+        in  question. (This is always true in groups, but is not true for some
+        elements of some semigroups.)[133X
+  
+  [30X    [33X[0;6YIf you provided a generators list when generating the semigroup, those
+        generators   were  assigned  colors  evenly  spaced  along  the  color
+        spectrum,  in  increasing frequencies (red first, violet last). So the
+        red  generator  is  always  first, the second will usually be green or
+        greenish blue, and so on.[133X
+  
+  [33X[0;0YWhen in doubt, simply regenerate the diagram with the option enabled to show
+  the names of the elements on each edge.[133X
+  
+  [33X[0;0YIf  the semigroup is sufficiently large, attempting to create a Cayley graph
+  will  tend  to  lead  to  an  image so busy with vertices and edges that the
+  viewer  cannot  take  any  useful  information from it. The typical limit is
+  somewhere around 100 elements. For instance, the following Cayley graph of a
+  semigroup  with  256 elements is almost completely useless due to the number
+  of visual elements present.[133X
+  
+  [33X[0;0YImage of a Cayley graph not available in this medium.[133X
+  
+  
+  [1X3.3 [33X[0;0YFormatting element names[133X[101X
+  
+  [33X[0;0YIf  the  elements  of your semigroup have a compact representation, then the
+  [2XShowCayleyGraph[102X  ([14X4.1-2[114X)  function  introduced  in  Section [14X3.2[114X will produce
+  readable  graphs. But if the elements of the semigroup have very long names,
+  then  the  text  at each vertex of the graph will clutter the graph and make
+  its structure less apparent (and the overall result less attractive).[133X
+  
+  [33X[0;0YTo solve this problem, you can provide a function that maps elements of your
+  semigroup to whatever (typically more compact) notation you'd like to use in
+  the diagram. You pass this as one of the options to [2XShowCayleyGraph[102X ([14X4.1-2[114X),
+  under the name [10XToString[110X.[133X
+  
+  [33X[0;0YAn  example  appears in Section [14X2.3[114X, where the same option is documented for
+  [2XShowEggBoxDiagram[102X ([14X4.1-1[114X).[133X
+  
+  [33X[0;0YDetailed  documentation  of  all  the options of the [2XShowCayleyGraph[102X ([14X4.1-2[114X)
+  function can be found in its documentation in Section [14X4[114X.[133X
+  
+  
+  [1X3.4 [33X[0;0YInteracting with Cayley graphs[133X[101X
+  
+  [33X[0;0YThe  [5XSemigroupViz[105X  package  uses  the  Cytoscape ([7Xhttp://www.cytoscape.org/[107X)
+  graph-drawing library to render Cayley graphs. You can interact with them in
+  any of the ways provided by that library, including:[133X
+  
+  [30X    [33X[0;6YClick and drag a vertex to reposition it.[133X
+  
+  [30X    [33X[0;6YClick  a  vertex  to  select  it,  then  Shift-Click  or Control-Click
+        (Command-Click  on  Mac)  other vertices to add to the selection. Drag
+        the  entire  selection  to  reposition  it. Click on the background to
+        deselect.[133X
+  
+  [30X    [33X[0;6YUse the mouse wheel to zoom in or out.[133X
+  
+  [30X    [33X[0;6YClick and drag on the background to reposition the entire graph.[133X
+  
+  [30X    [33X[0;6YShift-Click  or Control-Click (Command-Click on Mac) on the background
+        and  drag  to  create  a  selection  rectangle  to  select  a group of
+        vertices. Reposition/unselect as described above.[133X
+  
+  [33X[0;0YThis  package  does  not  contain  any  mechanism for creating aesthetically
+  pleasing Cayley graph layouts. Cytoscape automatically lays out the graph in
+  a  way  that is somewhat balanced, but there is typically much more symmetry
+  inherent  in  a  semigroup  than  cytoscape's  default layout makes evident.
+  Consider the following examples.[133X
+  
+  
+  [1X3.4-1 [33X[0;0YA singular transformation semigroup[133X[101X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28XLoadPackage( "semigroupviz" );[128X[104X
+    [4X[28XS := SingularTransformationSemigroup( 3 );[128X[104X
+    [4X[28Xcompact := x ->[128X[104X
+    [4X[28X    ReplacedString( String( ListTransformation( x ) ), " ", "" );[128X[104X
+    [4X[28XShowCayleyGraph( S, rec( ToString := compact ) );[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis produces the rather disorganized figure shown in Section [14X3.2[114X. But if we
+  put in some manual effort to drag the nodes around, we can often find a more
+  aesthetically pleasing arrangement of them.[133X
+  
+  [33X[0;0YImage of a Cayley graph not available in this medium.[133X
+  
+  
+  [1X3.4-2 [33X[0;0YAn abelian group[133X[101X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28XP := DirectProduct([128X[104X
+    [4X[28X    Semigroup( [ Transformation( [ 2, 3, 1 ] ) ] ), # group Z_3[128X[104X
+    [4X[28X    Semigroup( [ Transformation( [ 3, 5, 4, 2, 6, 3 ] ) ] ) # group Z_5[128X[104X
+    [4X[28X); # group Z_3 x Z_5[128X[104X
+    [4X[28XShowCayleyGraph( P, rec( ToString := compact ) );[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  produces  the  following  somewhat  organized initial image due to the
+  inherent symmetry in the Cayley graphs of groups.[133X
+  
+  [33X[0;0YImage of a Cayley graph not available in this medium.[133X
+  
+  [33X[0;0YBut  even  so,  we can still make it more attractive (sometimes in more than
+  one way) by rearranging the vertices, as shown in the following images.[133X
+  
+  [33X[0;0YImage of a Cayley graph not available in this medium.[133X
+  
+  [33X[0;0YImage of a Cayley graph not available in this medium.[133X
+  
+  
+  [1X3.4-3 [33X[0;0YA full transformation semigroup[133X[101X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28XP := DirectProduct([128X[104X
+    [4X[28X    Semigroup( [ Transformation( [ 2, 3, 1 ] ) ] ), # group Z_3[128X[104X
+    [4X[28X    Semigroup( [ Transformation( [ 3, 5, 4, 2, 6, 3 ] ) ] ) # group Z_5[128X[104X
+    [4X[28X); # group Z_3 x Z_5[128X[104X
+    [4X[28XShowCayleyGraph( P, rec( ToString := compact ) );[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis produces the disorganized initial image shown below.[133X
+  
+  [33X[0;0YImage of a Cayley graph not available in this medium.[133X
+  
+  [33X[0;0YBut  we can make it more attractive by rearranging the vertices, as shown in
+  the following image.[133X
+  
+  [33X[0;0YImage of a Cayley graph not available in this medium.[133X
+  

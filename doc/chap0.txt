@@ -1,1 +1,62 @@
-Placeholder
+  
+  
+                                 [1X SemigroupViz [101X
+  
+  
+                      [1X Visualization Tools for Semigroups [101X
+  
+  
+                                     1.0.0
+  
+  
+                                 21 March 2019
+  
+  
+                                 Nathan Carter
+  
+  
+  
+  Nathan Carter
+      Email:    [7Xmailto:ncarter@bentley.edu[107X
+      Homepage: [7Xhttp://nathancarter.github.io[107X
+      Address:  [33X[0;14Y175 Forest St.[133X
+                [33X[0;14YWaltham, MA 02452[133X
+                [33X[0;14YUSA[133X
+  
+  
+  
+  -------------------------------------------------------
+  
+  
+  [1XContents (SemigroupViz)[101X
+  
+  1 [33X[0;0YPurpose[133X
+  2 [33X[0;0YEgg-Box Diagrams[133X
+    2.1 [33X[0;0YPreliminaries: Green's relations[133X
+    2.2 [33X[0;0YGenerating egg-box diagrams[133X
+    2.3 [33X[0;0YFormatting element names[133X
+    2.4 [33X[0;0YInteracting with egg-box diagrams[133X
+      2.4-1 [33X[0;0YGenerating only a portion of a diagram[133X
+      2.4-2 [33X[0;0YExpanding and contracting diagrams[133X
+  3 [33X[0;0YCayley Graphs[133X
+    3.1 [33X[0;0YPreliminaries: Semigroups acting on themselves[133X
+    3.2 [33X[0;0YGenerating Cayley graphs[133X
+    3.3 [33X[0;0YFormatting element names[133X
+    3.4 [33X[0;0YInteracting with Cayley graphs[133X
+      3.4-1 [33X[0;0YA singular transformation semigroup[133X
+      3.4-2 [33X[0;0YAn abelian group[133X
+      3.4-3 [33X[0;0YA full transformation semigroup[133X
+  4 [33X[0;0YFunction reference[133X
+    4.1 [33X[0;0YPublic API[133X
+      4.1-1 ShowEggBoxDiagram
+      4.1-2 ShowCayleyGraph
+    4.2 [33X[0;0YPrivate API[133X
+      4.2-1 SGPVIZ_HClassToRecord
+      4.2-2 SGPVIZ_DClassToRecord
+      4.2-3 SGPVIZ_EggBoxDiagramRecord
+      4.2-4 SGPVIZ_HSV2RGB
+      4.2-5 SGPVIZ_GeneratorsAreSufficient
+      4.2-6 SGPVIZ_GeneratorsSmallSubset
+  
+  
+  [32X
