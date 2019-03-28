@@ -65,7 +65,7 @@ Keywords := [
 Dependencies := rec(
   GAP := ">= 4.9",
   NeededOtherPackages := [
-    [ "JupyterViz",    "1.5.0"   ],
+    [ "JupyterViz",    "1.5.1"   ],
     [ "semigroups",    "3.0.20"  ],
     [ "GAPDoc",        "1.3"     ]
   ],
