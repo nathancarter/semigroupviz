@@ -9,5 +9,4 @@
       visualization?  (Note the `Generators()` function in the
       semigroups package.)
  * Make any improvements he suggests.
- * Publish this to GitHub.
  * Ask Alex if we can include this in the next GAP release.
