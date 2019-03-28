@@ -208,28 +208,32 @@ function ( hue, sat, val ) # hue, saturation, value
     return build( val, tmp, diff * ( 60 - in6 ) / 60 + tmp );
 end );
 
+
 InstallGlobalFunction( SGPVIZ_GeneratorsAreSufficient,
-function ( semigroup, generators )
+function ( semigroup, generators, options )
     local generator, connections;
     connections := [ ];
     for generator in generators do
         connections := Concatenation( connections,
-            List( Elements( semigroup ),
-                  elt -> [ elt, elt * generator ] ) );
+            List( Elements( semigroup ), elt -> [ elt,
+                options.Multiplication( elt, generator ) ] ) );
     od;
     return Size( EquivalenceClasses( EquivalenceRelationByPairs(
         semigroup, connections ) ) ) = 1;
 end );
 
+
 InstallGlobalFunction( SGPVIZ_GeneratorsSmallSubset,
-function ( semigroup, generators )
+function ( semigroup, generators, options )
     local i, withouti;
     for i in [ 1 .. Length( generators ) ] do
         withouti := generators{ Concatenation(
             [ 1 .. i-1 ], [ i+1 .. Length( generators ) ] ) };
-        if SGPVIZ_GeneratorsAreSufficient( semigroup, withouti ) then
+        if SGPVIZ_GeneratorsAreSufficient(
+                semigroup, withouti, options ) then
             # greedy algorithm, just to save time
-            return SGPVIZ_GeneratorsSmallSubset( semigroup, withouti );
+            return SGPVIZ_GeneratorsSmallSubset(
+                semigroup, withouti, options );
         fi;
     od;
     return generators;
@@ -246,12 +250,32 @@ function ( semigroup, options... )
         options := options[1];
     fi;
     # Fill in defaults for unspecified options
+    # and convert mult option to corresponding functions
     if not IsBound( options.ToString ) then
         options.ToString := PrintString;
     fi;
+    if not IsBound( options.Multiplication ) then
+        options.Multiplication := "right";
+    fi;
+    if options.Multiplication = "right" then
+        options.Multiplication :=
+            function ( a, b ) return a * b; end;
+        options.MultString := function ( a, b )
+            return Concatenation( options.ToString( a ), "*",
+                options.ToString( b ) );
+        end;
+    else
+        options.Multiplication :=
+            function ( a, b ) return b * a; end;
+        options.MultString := function ( a, b )
+            return Concatenation( options.ToString( b ), "*",
+                options.ToString( a ) );
+        end;
+    fi;
     if not IsBound( options.Generators ) then
         options.Generators := SGPVIZ_GeneratorsSmallSubset(
-            semigroup, GeneratorsOfSemigroup( semigroup ) );
+            semigroup, GeneratorsOfSemigroup( semigroup ),
+            options );
     fi;
     if not IsBound( options.ShowElementNames ) then
         options.ShowElementNames := true;
@@ -276,11 +300,11 @@ function ( semigroup, options... )
             List( Elements( semigroup ), elt ->
                 rec(
                     data := rec(
-                        id := Concatenation( options.ToString( elt ),
-                            "*", options.ToString( generator ) ),
+                        id := options.MultString( elt, generator ),
                         label := options.ToString( generator ),
                         source := options.ToString( elt ),
-                        target := options.ToString( elt * generator ),
+                        target := options.ToString(
+                            options.Multiplication( elt, generator ) ),
                         bgcolor := color
                     ),
                     style := rec(

@@ -133,6 +133,9 @@ DeclareGlobalFunction( "ShowEggBoxDiagram" );
 #!      show names of elements on the graph's edges, indicating which
 #!      element's multiplication the edge represents.  The default is
 #!      false.</Item>
+#!    <Item><Code>Multiplication</Code> may be a string indicating
+#!      whether the graph should show its action by left or right
+#!      multiplication.  The default is <Code>"right"</Code>.</Item>
 #!  </List>
 DeclareGlobalFunction( "ShowCayleyGraph" );
 
@@ -299,7 +302,7 @@ DeclareGlobalFunction( "SGPVIZ_EggBoxDiagramRecord" );
 DeclareGlobalFunction( "SGPVIZ_HSV2RGB" );
 
 
-#! @Arguments semigroup, generators
+#! @Arguments semigroup, generators, options
 #! @Returns a boolean indicating whether the given list of generators is
 #!   sufficient to make a Cayley graph for the given semigroup connected
 #! @Description
@@ -315,6 +318,11 @@ DeclareGlobalFunction( "SGPVIZ_HSV2RGB" );
 #!    <Item><Code>generators</Code> should be a list of elements from
 #!      that semigroup, to be treated as generators in this
 #!      computation.</Item>
+#!    <Item><Code>options</Code> should be the same options object
+#!      passed to <Ref Func="ShowCayleyGraph"/>, because that function
+#!      replaces the <Code>options.Multiplication</Code> option with
+#!      a function that does either left or right multiplication,
+#!      which this function then uses.</Item>
 #!  </List>
 #!
 #!  This function is used internally by <Ref Func="ShowCayleyGraph"/>
@@ -323,7 +331,7 @@ DeclareGlobalFunction( "SGPVIZ_HSV2RGB" );
 DeclareGlobalFunction( "SGPVIZ_GeneratorsAreSufficient" );
 
 
-#! @Arguments semigroup, generators
+#! @Arguments semigroup, generators, options
 #! @Returns a sublist of the given list of generators, one just large
 #!   enough to ensure that the Cayley graph of the given semigroup is
 #!   connected
@@ -341,6 +349,11 @@ DeclareGlobalFunction( "SGPVIZ_GeneratorsAreSufficient" );
 #!    <Item><Code>generators</Code> should be a list of elements from
 #!      that semigroup, to be treated as generators in this
 #!      computation.</Item>
+#!    <Item><Code>options</Code> should be the same options object
+#!      passed to <Ref Func="ShowCayleyGraph"/>, because that function
+#!      replaces the <Code>options.Multiplication</Code> option with
+#!      a function that does either left or right multiplication,
+#!      which this function then uses.</Item>
 #!  </List>
 #!
 #!  This function is used internally by <Ref Func="ShowCayleyGraph"/>
