@@ -83,7 +83,9 @@ function ( semigroup, options )
         size := NrDClasses( semigroup ),
         DClasses := [ ]
     );
-    if not IsBound( result.name ) then
+    if IsBound( options.name ) then
+        result.name := options.name;
+    else
         name := StripLineBreakCharacters(
             ViewString( semigroup ) );
         name := name{[ 2 .. Length(name)-1 ]};
