@@ -181,6 +181,96 @@ gap> SGPVIZ_GeneratorsSmallSubset( S, [ g2, g3, g4 ], opts );
 gap> SGPVIZ_GeneratorsSmallSubset( S, [ g1, g2, g3, g4 ], opts );
 [ Transformation( [ 3, 2, 4, 4 ] ) ]
 
+# Check the ShowCayleyGraph function by asking for its JSON.
+# Ensure several properties of that resulting JSON.
+gap> tmp := ShowCayleyGraph( S, rec( ReturnJSON := true ) );;
+gap> tmp.tool;
+"cytoscape"
+gap> tmpdata := tmp.data;;
+gap> IsBound( tmpdata.elements );
+true
+gap> IsBound( tmpdata.layout );
+true
+gap> IsBound( tmpdata.style );
+true
+
+# Ensure the first node is the first element of the semigroup,
+# represented using the default PrintString function.
+gap> firstVertex := tmpdata.elements[1];;
+gap> firstVertex.group;
+"nodes"
+gap> firstVertex.data.id;
+"\>IdentityTransformation\<"
+
+# Ensure the first edge is the first element times the first generator,
+# represented using the default PrintString function.
+gap> firstEdge := tmpdata.elements[Size(S)+1];;
+gap> IsBound( firstEdge.group );
+false
+gap> firstEdge.data.id;
+"\>IdentityTransformation\<*\>Transformation( [ \>4\<,\> 2\<,\> 3\<,\> 4\< ] )\<"
+
+# Ask for the same data structure, but providing my own ToString method.
+gap> AsIndex := elt -> String(Position(Elements(S),elt));;
+gap> tmp := ShowCayleyGraph( S, rec( ReturnJSON := true, ToString := AsIndex ) );;
+gap> tmpdata := tmp.data;;
+
+# Verify that it was used when creating node names.
+gap> firstVertex := tmpdata.elements[1];;
+gap> firstVertex.group;
+"nodes"
+gap> firstVertex.data.id;
+"1"
+
+# Verify that it was used when creating edge names.
+gap> firstEdge := tmpdata.elements[Size(S)+1];;
+gap> IsBound( firstEdge.group );
+false
+gap> firstEdge.data.id; # turns out elements 6,7 are used as generators
+"1*6"
+
+# Ask for the same data structure, but with left multiplication.
+gap> AsIndex := elt -> String(Position(Elements(S),elt));;
+gap> tmp := ShowCayleyGraph( S, rec( ReturnJSON := true, ToString := AsIndex, Multiplication := "left" ) );;
+gap> tmpdata2 := tmp.data;;
+
+# Ensure the result is not the same.
+gap> tmpdata2.elements[20] = tmpdata.elements[20];
+false
+
+# Ask for the same data structure, but using my own generators.
+gap> AsIndex := elt -> String(Position(Elements(S),elt));;
+gap> tmp := ShowCayleyGraph( S, rec( ReturnJSON := true, Generators := [ g1, g2 ] ) );;
+gap> tmpdata2 := tmp.data;;
+
+# Ensure that the collection of edges respects my choice.
+gap> firstEdge := tmpdata2.elements[Size(S)+1];;
+gap> firstEdge.data.label;
+"\>Transformation( [ \>4\<,\> 2\<,\> 3\<,\> 4\< ] )\<"
+gap> firstEdgeOfGen2 := tmpdata2.elements[2*Size(S)+1];;
+gap> firstEdgeOfGen2.data.label;
+"\>Transformation( [ \>3\<,\> 2\<,\> 1\< ] )\<"
+
+# Check to be sure the node styles were included by default.
+gap> tmpdata.style[1].selector;
+"node"
+
+# Check to be sure the edge styles were excluded by default.
+gap> Length( tmpdata.style );
+1
+
+# Now ask for the edge styles but not the node styles.
+gap> tmp := ShowCayleyGraph( S, rec( ReturnJSON := true, ShowElementNames := false, ShowActionNames := true ) );;
+gap> tmpdata := tmp.data;;
+
+# Ensure the edge styles were included this time.
+gap> tmpdata.style[1].selector;
+"edge"
+
+# Ensure the node styles were excluded this time.
+gap> Length( tmpdata.style );
+1
+
 
 ## Each test file should finish with the call of STOP_TEST.
 ## The first argument of STOP_TEST should be the name of the test file.
