@@ -16,7 +16,6 @@ Write code for testing this package together with a master test script.
       is judged sufficient, add something, and ensure something is
       dropped)
  * `SGPVIZ_HClassToRecord`
-    * should fill in the correct size (not the imposed limit)
     * should fill in a representative, respecting the `ToString` option
     * should fill in all elements if the options permit, again
       respecting `ToString`
@@ -24,13 +23,6 @@ Write code for testing this package together with a master test script.
       respecting `ToString`
     * should guarantee that the representative is the first element,
       even if it was specified in options as something different
- * `SGPVIZ_DClassToRecord`
-    * should fill in the correct size (not the imposed limit)
-    * should fill in all R-classes if the options permit
-    * should fill in fewer R-classes if the options require it
-    * should give each R-class the correct size (not the imposed limit)
-    * each R-class should fill in all H-classes if the options permit
-    * each R-class should fill in fewer H-classes if the options require
  * `ShowCayleyGraph` with `ReturnJSON:=true`
     * should provide empty options object if none
     * should set correct defaults for missing options

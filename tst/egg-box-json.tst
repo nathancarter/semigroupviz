@@ -125,13 +125,13 @@ false
 gap> tmp := SGPVIZ_EggBoxDiagramRecord( larger, rec( ToString := x -> String( ListTransformation( x ) ), NrDClassesIncluded := 2, NrRClassesIncludedPerDClass := 2, NrLClassesIncludedPerRClass := 2, NrElementsIncludedPerHClass := 2 ) );;
 gap> tmp.options.NrDClassesIncluded; # option was set to 2
 2
-gap> tmp.size; # thus we included only 2 D-classes
+gap> tmp.size; # thus we included only 2 D-classes out of 3
 3
 gap> Length( tmp.DClasses );
 2
 gap> tmp.options.NrRClassesIncludedPerDClass; # option set to 2
 2
-gap> tmp.DClasses[1].size; # so each D-class has up to 2 of its R-classes
+gap> tmp.DClasses[1].size; # this D-class has 2 of its 6 R-classes
 6
 gap> Length( tmp.DClasses[1].RClasses );
 2
@@ -141,17 +141,17 @@ gap> Length( tmp.DClasses[2].RClasses );
 2
 gap> tmp.options.NrLClassesIncludedPerRClass; # option set to 2
 2
-gap> tmp.DClasses[1].RClasses[1].size; # so each R-class has up to 2 of its L-classes
+gap> tmp.DClasses[1].RClasses[1].size; # this R-class has 2 of its 4 L-classes
 4
 gap> Length( tmp.DClasses[1].RClasses[1].HClasses );
 2
-gap> tmp.DClasses[2].RClasses[1].size;
+gap> tmp.DClasses[2].RClasses[1].size; # this one has 2 of 6
 6
 gap> Length( tmp.DClasses[2].RClasses[1].HClasses );
 2
 gap> tmp.options.NrElementsIncludedPerHClass; # option set to 2
 2
-gap> tmp.DClasses[1].RClasses[1].HClasses[1].size; # so each H-class has up to 2 of its elements
+gap> tmp.DClasses[1].RClasses[1].HClasses[1].size; # this H-class has 2 of its 6 elements
 6
 gap> Length( tmp.DClasses[1].RClasses[1].HClasses[1].elements );
 2
