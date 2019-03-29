@@ -191,8 +191,8 @@ function ( hue, sat, val ) # hue, saturation, value
     # hue must be an integer in the range [0,360]
     hue := Int( hue ) mod 360;
     # sat and val must be in the range [0.0,1.0]
-    sat := Minimum( Maximum( sat, 0.0 ), 1.0 );
-    val := Minimum( Maximum( val, 0.0 ), 1.0 );
+    sat := Minimum( Maximum( sat * 1.0, 0.0 ), 1.0 );
+    val := Minimum( Maximum( val * 1.0, 0.0 ), 1.0 );
     # handle grayscale situation
     if ( sat = 0.0 ) then return build( val, val, val ); fi;
     # compute intermediate values
