@@ -21,8 +21,6 @@ Write code for testing this package together with a master test script.
       respecting `ToString`
     * should fill in fewer elements if the options require it, again
       respecting `ToString`
-    * should guarantee that the representative is the first element,
-      even if it was specified in options as something different
  * `ShowCayleyGraph` with `ReturnJSON:=true`
     * should provide empty options object if none
     * should set correct defaults for missing options
