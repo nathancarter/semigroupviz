@@ -75,7 +75,10 @@ function elt ( html, tag, attrs, children ) {
  */
 function renderHClass ( hclass ) {
     const options = hclass.semigroup.options;
-    const elements = hclass.elements.slice();
+    const elements = hclass.elements.map( text =>
+        text.replace( /&/g, '&amp;' )
+            .replace( />/g, '&gt;' )
+            .replace( /</g, '&lt;' ) );
     if ( hclass.elements.length < hclass.size )
         elements.push(
             `There are ${hclass.size-hclass.elements.length} more elements\n`
