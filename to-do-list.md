@@ -5,13 +5,6 @@
 
 Write code for testing this package together with a master test script.
 
- * `SGPVIZ_GeneratorsAreSufficient`
-    * should judge correctly whether a given set of generators creates
-      a connected graph
- * `SGPVIZ_GeneratorsSmallSubset`
-    * should drop a redundant generator (start with something that
-      is judged sufficient, add something, and ensure something is
-      dropped)
  * `ShowCayleyGraph` with `ReturnJSON:=true`
     * should provide empty options object if none
     * should set correct defaults for missing options

@@ -85,6 +85,103 @@ gap> SGPVIZ_HSV2RGB(75,0,0.25);
 gap> SGPVIZ_HSV2RGB(352,0,0.125);
 [ 31, 31, 31 ]
 
+# Now we begin tests for SGPVIZ_GeneratorsAreSufficient.
+# I create a small semigroup with 7 elements.
+gap> g1 := Transformation( [ 4, 2, 3, 4 ] );;
+gap> g2 := Transformation( [ 3, 2, 1 ] );;
+gap> mul := function ( a, b ) return a * b; end;;
+gap> g3 := mul( g1, g2 );
+Transformation( [ 4, 2, 1, 4 ] )
+gap> g4 := mul( g2, g1 );
+Transformation( [ 3, 2, 4, 4 ] )
+gap> S := SemigroupByGenerators( [ g1, g2 ] );;
+gap> Size( S );
+7
+gap> opts := rec( Multiplication := mul );;
+gap> SGPVIZ_GeneratorsAreSufficient( S, [ ], opts );
+false
+gap> SGPVIZ_GeneratorsAreSufficient( S, [ g1 ], opts );
+false
+gap> SGPVIZ_GeneratorsAreSufficient( S, [ g2 ], opts );
+false
+gap> SGPVIZ_GeneratorsAreSufficient( S, [ g3 ], opts );
+true
+gap> SGPVIZ_GeneratorsAreSufficient( S, [ g4 ], opts );
+true
+gap> SGPVIZ_GeneratorsAreSufficient( S, [ g1, g2 ], opts );
+true
+gap> SGPVIZ_GeneratorsAreSufficient( S, [ g1, g3 ], opts );
+true
+gap> SGPVIZ_GeneratorsAreSufficient( S, [ g1, g4 ], opts );
+true
+gap> SGPVIZ_GeneratorsAreSufficient( S, [ g2, g3 ], opts );
+true
+gap> SGPVIZ_GeneratorsAreSufficient( S, [ g2, g4 ], opts );
+true
+gap> SGPVIZ_GeneratorsAreSufficient( S, [ g3, g4 ], opts );
+true
+gap> SGPVIZ_GeneratorsAreSufficient( S, [ g1, g2, g3 ], opts );
+true
+gap> SGPVIZ_GeneratorsAreSufficient( S, [ g1, g2, g4 ], opts );
+true
+gap> SGPVIZ_GeneratorsAreSufficient( S, [ g1, g3, g4 ], opts );
+true
+gap> SGPVIZ_GeneratorsAreSufficient( S, [ g2, g3, g4 ], opts );
+true
+gap> SGPVIZ_GeneratorsAreSufficient( S, [ g1, g2, g3, g4 ], opts );
+true
+
+# Does the SGP_GeneratorsSmallSubset function process all the above
+# cases correctly, that is, by removing the first generator on the
+# list that isn't needed, iteratively?
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ ], opts );
+[ ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g1 ], opts );
+[ Transformation( [ 4, 2, 3, 4 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g2 ], opts );
+[ Transformation( [ 3, 2, 1 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g3 ], opts );
+[ Transformation( [ 4, 2, 1, 4 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g4 ], opts );
+[ Transformation( [ 3, 2, 4, 4 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g1, g2 ], opts );
+[ Transformation( [ 4, 2, 3, 4 ] ), Transformation( [ 3, 2, 1 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g1, g3 ], opts );
+[ Transformation( [ 4, 2, 1, 4 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g3, g1 ], opts );
+[ Transformation( [ 4, 2, 1, 4 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g1, g4 ], opts );
+[ Transformation( [ 3, 2, 4, 4 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g4, g1 ], opts );
+[ Transformation( [ 3, 2, 4, 4 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g2, g3 ], opts );
+[ Transformation( [ 4, 2, 1, 4 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g3, g2 ], opts );
+[ Transformation( [ 4, 2, 1, 4 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g2, g4 ], opts );
+[ Transformation( [ 3, 2, 4, 4 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g4, g2 ], opts );
+[ Transformation( [ 3, 2, 4, 4 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g3, g4 ], opts );
+[ Transformation( [ 3, 2, 4, 4 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g4, g3 ], opts );
+[ Transformation( [ 4, 2, 1, 4 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g1, g2, g3 ], opts );
+[ Transformation( [ 4, 2, 1, 4 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g3, g1, g2 ], opts );
+[ Transformation( [ 4, 2, 3, 4 ] ), Transformation( [ 3, 2, 1 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g1, g2, g4 ], opts );
+[ Transformation( [ 3, 2, 4, 4 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g4, g1, g2 ], opts );
+[ Transformation( [ 4, 2, 3, 4 ] ), Transformation( [ 3, 2, 1 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g1, g3, g4 ], opts );
+[ Transformation( [ 3, 2, 4, 4 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g2, g3, g4 ], opts );
+[ Transformation( [ 3, 2, 4, 4 ] ) ]
+gap> SGPVIZ_GeneratorsSmallSubset( S, [ g1, g2, g3, g4 ], opts );
+[ Transformation( [ 3, 2, 4, 4 ] ) ]
+
+
 ## Each test file should finish with the call of STOP_TEST.
 ## The first argument of STOP_TEST should be the name of the test file.
 ## The second argument is redundant and is used for backwards compatibility.
