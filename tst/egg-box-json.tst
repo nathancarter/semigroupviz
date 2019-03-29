@@ -7,7 +7,6 @@ gap> START_TEST("SemigroupViz package: egg-box-json.tst");
 # Ensure that the JSON form produced by EggBoxDiagramJSON is correct.
 
 gap> LoadPackage( "semigroupviz", false );
-#I  method installed for Matrix matches more than one declaration
 true
 
 # Verify the function exists

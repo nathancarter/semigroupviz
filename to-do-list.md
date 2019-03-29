@@ -5,9 +5,6 @@
 
 Write code for testing this package together with a master test script.
 
- * `SGPVIZ_HSV2RGB`
-    * should give the correct results on a wide array of example
-      input values taken from actual color examples on the web
  * `SGPVIZ_GeneratorsAreSufficient`
     * should judge correctly whether a given set of generators creates
       a connected graph
