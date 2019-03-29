@@ -31,13 +31,6 @@ Write code for testing this package together with a master test script.
     * should give each R-class the correct size (not the imposed limit)
     * each R-class should fill in all H-classes if the options permit
     * each R-class should fill in fewer H-classes if the options require
- * `ShowEggBoxDiagram` with `ReturnJSON:=true`
-    * should provide empty options object if none
-    * should set correct defaults for missing options
-    * should put correct boundaries on numerical options
-    * should create JSON with `tool:="egg-box"`
-    * no need to test more, because that's tested in the tests of
-      `SGPVIZ_EggBoxDiagramRecord`
  * `ShowCayleyGraph` with `ReturnJSON:=true`
     * should provide empty options object if none
     * should set correct defaults for missing options

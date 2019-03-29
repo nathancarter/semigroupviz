@@ -116,9 +116,9 @@ gap> tmp.DClasses[3].RClasses[1].HClasses[1].size;
 1
 gap> Length( tmp.DClasses[3].RClasses[1].HClasses[1].elements );
 1
-gap> tmp.name;
+gap> tmp.name; # did it copy the name we specified?
 "testing name"
-gap> IsBound( tmp.options.name );
+gap> IsBound( tmp.options.name ); # but not into the options record
 false
 
 # Compute a portion of the same Egg Box Diagram and verify the sizes of things.
@@ -159,6 +159,39 @@ gap> tmp.DClasses[2].RClasses[1].HClasses[1].size;
 2
 gap> Length( tmp.DClasses[2].RClasses[1].HClasses[1].elements );
 2
+
+# Let's try getting the same data a different way.
+# This time we provide a minimal options record, and defaults are filled in.
+gap> tmp := ShowEggBoxDiagram( larger, rec( ReturnJSON := true ) );;
+gap> tmp.tool;
+"egg-box"
+gap> IsString( tmp.data );
+true
+gap> tmpdata := JsonStringToGap( tmp.data );;
+gap> tmpdata.options.NrDClassesIncluded;
+3
+gap> tmpdata.options.NrRClassesIncludedPerDClass;
+7
+gap> tmpdata.options.NrLClassesIncludedPerRClass;
+6
+gap> tmpdata.options.NrElementsIncludedPerHClass;
+6
+gap> tmpdata.options.ReturnJSON;
+true
+
+# This time we provide a bounds too large, and they get shrunk.
+gap> tmp := ShowEggBoxDiagram( larger, rec( ReturnJSON := true, NrDClassesIncluded := 1000, NrRClassesIncludedPerDClass := 1000, NrLClassesIncludedPerRClass := 1000, NrElementsIncludedPerHClass := 1000 ) );;
+gap> tmpdata := JsonStringToGap( tmp.data );;
+gap> tmpdata.options.NrDClassesIncluded;
+3
+gap> tmpdata.options.NrRClassesIncludedPerDClass;
+7
+gap> tmpdata.options.NrLClassesIncludedPerRClass;
+6
+gap> tmpdata.options.NrElementsIncludedPerHClass;
+6
+gap> tmpdata.options.ReturnJSON;
+true
 
 ## Each test file should finish with the call of STOP_TEST.
 ## The first argument of STOP_TEST should be the name of the test file.
