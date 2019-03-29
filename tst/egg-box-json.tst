@@ -6,7 +6,6 @@ gap> START_TEST("SemigroupViz package: egg-box-json.tst");
 
 # Ensure that the JSON form produced by EggBoxDiagramJSON is correct.
 
-# Tell the package we're inside a Jupyter notebook.
 gap> LoadPackage( "semigroupviz", false );
 #I  method installed for Matrix matches more than one declaration
 true
