@@ -1,8 +1,8 @@
 ############################################################################
 ##
-#A  json-form.tst      SemigroupViz Package           Nathan Carter
+#A  egg-box-json.tst      SemigroupViz Package           Nathan Carter
 ##
-gap> START_TEST("SemigroupViz package: json-form.tst");
+gap> START_TEST("SemigroupViz package: egg-box-json.tst");
 
 # Ensure that the JSON form produced by EggBoxDiagramJSON is correct.
 
@@ -159,7 +159,7 @@ gap> Length( tmp.DClasses[2].RClasses[1].HClasses[1].elements );
 ## Each test file should finish with the call of STOP_TEST.
 ## The first argument of STOP_TEST should be the name of the test file.
 ## The second argument is redundant and is used for backwards compatibility.
-gap> STOP_TEST( "json-form.tst", 10000 );
+gap> STOP_TEST( "egg-box-json.tst", 10000 );
 
 ############################################################################
 ##
