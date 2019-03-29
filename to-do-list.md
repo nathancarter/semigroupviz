@@ -15,12 +15,6 @@ Write code for testing this package together with a master test script.
     * should drop a redundant generator (start with something that
       is judged sufficient, add something, and ensure something is
       dropped)
- * `SGPVIZ_HClassToRecord`
-    * should fill in a representative, respecting the `ToString` option
-    * should fill in all elements if the options permit, again
-      respecting `ToString`
-    * should fill in fewer elements if the options require it, again
-      respecting `ToString`
  * `ShowCayleyGraph` with `ReturnJSON:=true`
     * should provide empty options object if none
     * should set correct defaults for missing options

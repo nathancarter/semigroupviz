@@ -193,6 +193,36 @@ gap> tmpdata.options.NrElementsIncludedPerHClass;
 gap> tmpdata.options.ReturnJSON;
 true
 
+# Now we test the inner SGPVIZ_HClassToRecord function
+gap> G := Group( [ (1,2,3) ] );;
+gap> opts := rec(ToString:=PrintString);;
+gap> D := DClasses(G)[1];;
+gap> H := Intersection(RClasses(D)[1],LClasses(D)[1]);;
+gap> Size(H);
+3
+gap> Elements(H);
+[ (), (1,2,3), (1,3,2) ]
+gap> opts.NrElementsIncludedPerHClass := 10;;
+gap> SGPVIZ_HClassToRecord(G,H,opts);
+rec( elements := [ "()", "(1,2,3)", "(1,3,2)" ],
+  representative := "()", size := 3 )
+gap> opts.NrElementsIncludedPerHClass := 1;;
+gap> SGPVIZ_HClassToRecord(G,H,opts);
+rec( elements := [ "()" ],
+  representative := "()", size := 3 )
+gap> opts.NrElementsIncludedPerHClass := 2;;
+gap> SGPVIZ_HClassToRecord(G,H,opts);
+rec( elements := [ "()", "(1,2,3)" ],
+  representative := "()", size := 3 )
+gap> opts.NrElementsIncludedPerHClass := 3;;
+gap> SGPVIZ_HClassToRecord(G,H,opts);
+rec( elements := [ "()", "(1,2,3)", "(1,3,2)" ],
+  representative := "()", size := 3 )
+gap> opts.ToString := x -> ReplacedString(PrintString(x),",",".");;
+gap> SGPVIZ_HClassToRecord(G,H,opts);
+rec( elements := [ "()", "(1.2.3)", "(1.3.2)" ],
+  representative := "()", size := 3 )
+
 ## Each test file should finish with the call of STOP_TEST.
 ## The first argument of STOP_TEST should be the name of the test file.
 ## The second argument is redundant and is used for backwards compatibility.
