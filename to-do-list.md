@@ -31,14 +31,6 @@ Write code for testing this package together with a master test script.
     * should give each R-class the correct size (not the imposed limit)
     * each R-class should fill in all H-classes if the options permit
     * each R-class should fill in fewer H-classes if the options require
- * `SGPVIZ_EggBoxDiagramRecord`
-    * should fill in the correct size (not the imposed limit)
-    * should copy the options record into its result, minus `ToString`
-      and `name`
-    * should respect the name given in the options if there is one
-    * should create a name if none given in the options
-    * should fill in all D-classes if the options permit
-    * should fill in fewer D-classes if the options require it
  * `ShowEggBoxDiagram` with `ReturnJSON:=true`
     * should provide empty options object if none
     * should set correct defaults for missing options

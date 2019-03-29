@@ -67,7 +67,7 @@ rec(
 gap> larger := SingularTransformationSemigroup( 4 );;
 
 # Compute its full Egg Box Diagram and verify the sizes of things.
-gap> tmp := SGPVIZ_EggBoxDiagramRecord( larger, rec( ToString := x -> String( ListTransformation( x ) ), NrDClassesIncluded := 0, NrRClassesIncludedPerDClass := 0, NrLClassesIncludedPerRClass := 0, NrElementsIncludedPerHClass := 0 ) );;
+gap> tmp := SGPVIZ_EggBoxDiagramRecord( larger, rec( ToString := x -> String( ListTransformation( x ) ), NrDClassesIncluded := 0, NrRClassesIncludedPerDClass := 0, NrLClassesIncludedPerRClass := 0, NrElementsIncludedPerHClass := 0, name := "testing name" ) );;
 gap> tmp.options.NrDClassesIncluded; # option was set to 0
 0
 gap> tmp.size; # thus we included all three D-classes
@@ -116,6 +116,10 @@ gap> tmp.DClasses[3].RClasses[1].HClasses[1].size;
 1
 gap> Length( tmp.DClasses[3].RClasses[1].HClasses[1].elements );
 1
+gap> tmp.name;
+"testing name"
+gap> IsBound( tmp.options.name );
+false
 
 # Compute a portion of the same Egg Box Diagram and verify the sizes of things.
 gap> tmp := SGPVIZ_EggBoxDiagramRecord( larger, rec( ToString := x -> String( ListTransformation( x ) ), NrDClassesIncluded := 2, NrRClassesIncludedPerDClass := 2, NrLClassesIncludedPerRClass := 2, NrElementsIncludedPerHClass := 2 ) );;
