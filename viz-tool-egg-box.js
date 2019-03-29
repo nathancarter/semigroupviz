@@ -827,7 +827,7 @@ function initializeSemigroup ( semigroup ) {
 window.VisualizationTools['egg-box'] =
 function ( element, json, callback ) {
     const diagram = wrapDiagram( renderEggBoxDiagram(
-        initializeSemigroup( JSON.parse( json.data ) ) ) );
+        initializeSemigroup( json.data ) ) );
     element.appendChild( diagram );
     setupControlsFromModel();
     callback( element, diagram );

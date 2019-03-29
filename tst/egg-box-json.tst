@@ -163,9 +163,9 @@ gap> Length( tmp.DClasses[2].RClasses[1].HClasses[1].elements );
 gap> tmp := ShowEggBoxDiagram( larger, rec( ReturnJSON := true ) );;
 gap> tmp.tool;
 "egg-box"
-gap> IsString( tmp.data );
+gap> IsRecord( tmp.data );
 true
-gap> tmpdata := JsonStringToGap( tmp.data );;
+gap> tmpdata := tmp.data;;
 gap> tmpdata.options.NrDClassesIncluded;
 3
 gap> tmpdata.options.NrRClassesIncludedPerDClass;
@@ -179,7 +179,7 @@ true
 
 # This time we provide a bounds too large, and they get shrunk.
 gap> tmp := ShowEggBoxDiagram( larger, rec( ReturnJSON := true, NrDClassesIncluded := 1000, NrRClassesIncludedPerDClass := 1000, NrLClassesIncludedPerRClass := 1000, NrElementsIncludedPerHClass := 1000 ) );;
-gap> tmpdata := JsonStringToGap( tmp.data );;
+gap> tmpdata := tmp.data;;
 gap> tmpdata.options.NrDClassesIncluded;
 3
 gap> tmpdata.options.NrRClassesIncludedPerDClass;

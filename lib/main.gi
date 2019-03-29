@@ -170,8 +170,7 @@ function ( semigroup, options... )
     # Create JSON and pass to visualization library
     json := rec(
         tool := "egg-box",
-        data := GapToJsonString( SGPVIZ_EggBoxDiagramRecord(
-            semigroup, options ) )
+        data := SGPVIZ_EggBoxDiagramRecord( semigroup, options )
     );
     if options.ReturnJSON then
         return json;
